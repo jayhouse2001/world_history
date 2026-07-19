@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="고대부터 현대까지 세계사의 주요 사건을 시간과 지역의 흐름으로 살펴보는 타임라인">
+  <title>세계사 타임라인</title>
+  <style>
+    :root {
+      --ink: #20231f;
+      --muted: #686d65;
+      --paper: #f2eee5;
+      --paper-deep: #e4dccd;
+      --card: #f8f5ed;
+      --accent: #a64132;
+      --accent-dark: #792d24;
+      --line: rgba(48, 50, 44, 0.17);
+      --shadow: 0 24px 60px rgba(45, 39, 29, 0.13);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.8), transparent 28rem),
+        linear-gradient(135deg, rgba(67, 61, 49, 0.025) 25%, transparent 25%) 0 0 / 18px 18px,
+        var(--paper);
+      font-family: "Apple SD Gothic Neo", "Noto Sans KR", Pretendard, system-ui, sans-serif;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.32;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page-shell {
+      width: min(1240px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 90px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-family: Georgia, "Noto Serif KR", serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(32, 35, 31, 0.55);
+      border-radius: 50%;
+      font-size: 0.78rem;
+      letter-spacing: 0;
+    }
+
+    .header-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+    }
+
+    .header-note::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.62fr);
+      gap: clamp(40px, 8vw, 110px);
+      align-items: end;
+      padding: clamp(70px, 11vw, 145px) 0 74px;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin: 0 0 22px;
+      color: var(--accent-dark);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(166, 65, 50, 0.12);
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-family: Georgia, "Noto Serif KR", serif;
+      font-size: clamp(3.2rem, 8.2vw, 7.4rem);
+      font-weight: 600;
+      line-height: 0.98;
+      letter-spacing: -0.07em;
+      word-break: keep-all;
+    }
+
+    h1 span {
+      display: block;
+      margin-top: 0.13em;
+      color: var(--accent);
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .hero-copy {
+      padding-bottom: 10px;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      color: #51564f;
+      font-family: Georgia, "Noto Serif KR", serif;
+      font-size: clamp(1.06rem, 1.8vw, 1.35rem);
+      line-height: 1.85;
+      word-break: keep-all;
+    }
+
+    .hero-copy strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .period-rule {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 32px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.12em;
+    }
+
+    .period-rule::before {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .archive {
+      padding: 20px 0 120px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-family: Georgia, "Noto Serif KR", serif;
+      font-size: clamp(1.55rem, 3vw, 2.3rem);
+      letter-spacing: -0.04em;
+    }
+
+    .section-heading p {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: 0.87rem;
+    }
+
+    .event-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 22px;
+    }
+
+    .event-card {
+      position: relative;
+      grid-column: span 4;
+      min-height: 500px;
+      overflow: hidden;
+      color: #fff;
+      background: #343831;
+      border: 0;
+      border-radius: 4px;
+      box-shadow: 0 12px 30px rgba(42, 38, 31, 0.11);
+      isolation: isolate;
+      text-decoration: none;
+      transition: transform 260ms ease, box-shadow 260ms ease;
+    }
+
+    .event-card {
+      grid-column: span 3;
+      min-height: 570px;
+    }
+
+    .event-card.is-featured {
+      grid-column: span 6;
+      min-height: 570px;
+    }
+
+    .event-card:hover,
+    .event-card:focus-visible {
+      transform: translateY(-7px);
+      box-shadow: var(--shadow);
+    }
+
+    .event-card:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .card-art,
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+    }
+
+    .card-art {
+      width: 100%;
+      height: 100%;
+      transition: transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 300ms ease;
+    }
+
+    .event-card > svg.card-art {
+      display: none;
+    }
+
+    img.card-art {
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .downloaded-composite {
+      overflow: hidden;
+      background: #28332f;
+    }
+
+    .downloaded-composite img {
+      position: absolute;
+      display: block;
+    }
+
+    .downloaded-composite .europe-map {
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: sepia(.32) saturate(.66) brightness(.67) contrast(1.12);
+    }
+
+    .downloaded-composite .tank-photo {
+      right: -2%;
+      bottom: 20%;
+      width: 54%;
+      height: 39%;
+      object-fit: cover;
+      border: 1px solid rgba(238, 226, 191, .52);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, .38);
+      filter: sepia(.5) saturate(.52) contrast(1.12);
+      transform: rotate(-2deg);
+    }
+
+    img.korea-art {
+      object-fit: contain;
+      object-position: center 38%;
+      padding: 30px 18px 118px;
+      background: #35464a;
+      filter: sepia(.24) saturate(.7) brightness(.78) contrast(1.12);
+    }
+
+    .war-composite {
+      overflow: hidden;
+      background: #20241f;
+    }
+
+    .war-composite img {
+      position: absolute;
+      display: block;
+      width: 100%;
+    }
+
+    .war-composite .war-map {
+      inset: 0;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: grayscale(1) brightness(.72) contrast(1.34);
+      opacity: 1;
+      transform: scale(1.04);
+    }
+
+    .war-composite .war-photo {
+      inset: 0 0 auto;
+      height: 69%;
+      object-fit: cover;
+      object-position: center;
+      filter: grayscale(.72) sepia(.16) brightness(.82) contrast(1.12);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 56%, rgba(0, 0, 0, .82) 72%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 0%, #000 56%, rgba(0, 0, 0, .82) 72%, transparent 100%);
+    }
+
+    .war-composite::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(11, 13, 11, .18), transparent 55%),
+        linear-gradient(180deg, transparent 34%, rgba(16, 18, 15, .08) 57%, rgba(16, 18, 15, .36) 100%);
+      pointer-events: none;
+    }
+
+    .war-composite.ww1 .war-photo {
+      object-position: 52% center;
+    }
+
+    .war-composite.ww2 .war-photo {
+      object-position: center 47%;
+    }
+
+    .war-composite.korean-war .war-map {
+      object-fit: contain;
+      object-position: center 66%;
+      padding: 6% 0 0;
+      background: #354047;
+      transform: scale(1.58);
+    }
+
+    .war-composite.korean-war .war-photo {
+      object-position: center 42%;
+    }
+
+    .war-composite.vietnam-war .war-map {
+      object-fit: cover;
+      object-position: center 58%;
+      transform: scale(1.12);
+    }
+
+    .war-composite.vietnam-war .war-photo {
+      object-position: center 48%;
+    }
+
+    .event-card:hover .card-art,
+    .event-card:focus-visible .card-art {
+      transform: scale(1.045);
+      filter: saturate(1.12);
+    }
+
+    .card-overlay {
+      z-index: 1;
+      background:
+        linear-gradient(180deg, rgba(13, 16, 14, 0.08), rgba(13, 16, 14, 0.11) 38%, rgba(13, 16, 14, 0.82) 100%),
+        linear-gradient(90deg, rgba(13, 16, 14, 0.2), transparent);
+    }
+
+    .event-card.is-upcoming .card-art {
+      filter: grayscale(0.78) contrast(0.9);
+    }
+
+    .event-card.is-upcoming:hover .card-art,
+    .event-card.is-upcoming:focus-visible .card-art {
+      filter: grayscale(0.45) contrast(0.96);
+    }
+
+    .card-top,
+    .card-body {
+      position: absolute;
+      z-index: 2;
+      left: 0;
+      right: 0;
+      padding: 26px;
+    }
+
+    .card-top {
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .card-index {
+      font-family: Georgia, serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+    }
+
+    .status {
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.52);
+      border-radius: 999px;
+      background: rgba(18, 20, 18, 0.23);
+      backdrop-filter: blur(7px);
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .event-card:not(.is-upcoming) .status::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-right: 7px;
+      border-radius: 50%;
+      background: #e0b769;
+      box-shadow: 0 0 0 4px rgba(224, 183, 105, 0.18);
+      vertical-align: 1px;
+    }
+
+    .card-body {
+      bottom: 0;
+    }
+
+    .event-period {
+      display: block;
+      margin-bottom: 9px;
+      color: rgba(255, 255, 255, 0.76);
+      font-family: Georgia, serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.16em;
+    }
+
+    .card-body h3 {
+      margin: 0;
+      font-family: Georgia, "Noto Serif KR", serif;
+      font-size: clamp(1.75rem, 3.4vw, 2.7rem);
+      line-height: 1.16;
+      letter-spacing: -0.045em;
+      word-break: keep-all;
+    }
+
+    .event-card:not(.is-featured) .card-body h3 {
+      font-size: clamp(1.45rem, 2.5vw, 2rem);
+    }
+
+    .card-description {
+      max-width: 520px;
+      margin: 15px 0 0;
+      color: rgba(255, 255, 255, 0.77);
+      font-size: 0.9rem;
+      line-height: 1.65;
+      word-break: keep-all;
+    }
+
+    .card-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      font-size: 0.79rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .card-action::after {
+      content: "→";
+      display: grid;
+      place-items: center;
+      width: 31px;
+      height: 31px;
+      border: 1px solid rgba(255, 255, 255, 0.46);
+      border-radius: 50%;
+      transition: transform 220ms ease, background 220ms ease;
+    }
+
+    .event-card:hover .card-action::after,
+    .event-card:focus-visible .card-action::after {
+      transform: translateX(4px);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .is-upcoming .card-action {
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    .is-upcoming .card-action::after {
+      content: "·";
+    }
+
+    .site-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 30px 0 42px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 0.74rem;
+      letter-spacing: 0.06em;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 26px;
+      z-index: 10;
+      padding: 13px 18px;
+      color: #fff;
+      background: rgba(27, 30, 26, 0.93);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.23);
+      font-size: 0.84rem;
+      opacity: 0;
+      transform: translate(-50%, 16px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 38px;
+      }
+
+      .hero-copy {
+        max-width: 620px;
+      }
+
+      .event-card.is-featured {
+        grid-column: span 12;
+        min-height: 540px;
+      }
+
+      .event-card:not(.is-featured) {
+        grid-column: span 6;
+        min-height: 480px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-shell {
+        width: min(100% - 28px, 1240px);
+      }
+
+      .site-header {
+        min-height: 72px;
+      }
+
+      .header-note {
+        display: none;
+      }
+
+      .hero {
+        padding: 65px 0 58px;
+      }
+
+      h1 {
+        font-size: clamp(3.15rem, 18vw, 5rem);
+      }
+
+      .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .event-grid {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .event-card,
+      .event-card.is-featured,
+      .event-card:not(.is-featured) {
+        min-height: 480px;
+      }
+
+      .card-top,
+      .card-body {
+        padding: 22px;
+      }
+
+      .archive {
+        padding-bottom: 80px;
+      }
+
+      .site-footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header page-shell">
+    <a class="brand" href="./" aria-label="세계사 타임라인 홈">
+      <span class="brand-mark" aria-hidden="true">WH</span>
+      <span>세계사 타임라인</span>
+    </a>
+    <span class="header-note">시간과 지역으로 읽는 역사</span>
+  </header>
+
+  <main>
+    <section class="hero page-shell" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">World History Archive</p>
+        <h1 id="page-title">역사는 한곳에서만<span>일어나지 않았다.</span></h1>
+      </div>
+      <div class="hero-copy">
+        <p><strong>같은 시간, 서로 다른 지역.</strong><br>고대부터 현대까지 주요 사건과 그 사이의 영향을 따라가며 역사의 전체 흐름을 살펴보세요.</p>
+        <div class="period-rule" aria-hidden="true">ANCIENT — PRESENT</div>
+      </div>
+    </section>
+
+    <section class="archive page-shell" aria-labelledby="archive-title">
+      <div class="section-heading">
+        <h2 id="archive-title">탐색할 역사</h2>
+        <p>대표 이미지를 선택하면 상세 타임라인으로 이동합니다.</p>
+      </div>
+
+      <div class="event-grid" aria-label="시작 시점이 오래된 순서로 정렬된 역사 주제">
+        <a class="event-card is-upcoming" href="#world-war-1" data-start-year="1914" data-upcoming="true" aria-label="제1차 세계대전, 준비 중">
+          <div class="card-art war-composite ww1" role="img" aria-label="1914년 유럽 군사동맹 지도 위로 1916년 솜 전투 참호 사진이 겹쳐진 이미지">
+            <img class="war-map" src="images/ww1-europe-alliances-1914.svg" alt="">
+            <img class="war-photo" src="images/ww1-somme-trench.jpg" alt="">
+          </div>
+          <svg class="card-art" viewBox="0 0 460 700" preserveAspectRatio="xMidYMid slice" role="img" aria-label="제1차 세계대전의 참호와 철조망을 형상화한 일러스트">
+            <defs>
+              <linearGradient id="ww1-bg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#8b8266"/>
+                <stop offset=".52" stop-color="#5c5844"/>
+                <stop offset="1" stop-color="#252920"/>
+              </linearGradient>
+              <filter id="ww1-grain"><feTurbulence baseFrequency=".5" numOctaves="3"/><feBlend in="SourceGraphic" mode="multiply"/></filter>
+            </defs>
+            <rect width="460" height="700" fill="url(#ww1-bg)"/>
+            <circle cx="363" cy="124" r="67" fill="#d7c48e" opacity=".26"/>
+            <g fill="#292e25" opacity=".7">
+              <path d="M43 324c16-26 32-35 50-33 14 2 25 12 34 27l-12 66H61z"/>
+              <circle cx="86" cy="267" r="25"/>
+              <path d="M64 249c14-19 36-17 48 2l-5 7H68z"/>
+              <path d="M104 314l69-50 7 9-65 67z"/>
+            </g>
+            <path d="M0 410l79-31 63 18 72-46 101 55 54-14 91 53v255H0z" fill="#34392d"/>
+            <path d="M0 525l90-34 63 29 80-39 111 49 116-41v211H0z" fill="#20251e"/>
+            <g stroke="#121612" fill="none" stroke-width="5">
+              <path d="M-20 451C77 399 151 479 248 417s162 19 235-16"/>
+              <path d="M-20 474C77 422 151 502 248 440s162 19 235-16"/>
+              <path d="M82 381v145M326 356v169"/>
+            </g>
+            <g fill="none" stroke="#151a15" stroke-width="2.4">
+              <path d="M42 450l77-23-64-16 92-24-72-13M278 432l89-25-73-18 100-29-76-12"/>
+              <path d="M20 425c20-27 41-27 62 0s42 27 63 0 42-27 63 0 42 27 63 0 42-27 63 0 42 27 63 0"/>
+              <path d="M20 441c20-27 41-27 62 0s42 27 63 0 42-27 63 0 42 27 63 0 42-27 63 0 42 27 63 0"/>
+            </g>
+            <g stroke="#80785f" stroke-width="8" opacity=".65">
+              <path d="M37 579l121-40M103 629l126-61M251 587l126-45M309 652l117-58"/>
+            </g>
+            <g opacity=".12" filter="url(#ww1-grain)"><rect width="460" height="700" fill="#fff"/></g>
+          </svg>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="card-index">1914</span>
+            <span class="status">준비 중</span>
+          </div>
+          <div class="card-body">
+            <span class="event-period">1914 — 1918</span>
+            <h3>제1차 세계대전</h3>
+            <p class="card-description">참호전과 제국의 붕괴, 새로운 세계 질서의 시작.</p>
+            <span class="card-action">곧 공개됩니다</span>
+          </div>
+        </a>
+
+        <a class="event-card is-featured" href="world-war-2.html" data-start-year="1939" aria-label="제2차 세계대전 상세 타임라인 보기">
+          <div class="card-art war-composite ww2" role="img" aria-label="1942년 유럽 세력 지도 위로 1941년 우크라이나의 독일 4호 전차 사진이 겹쳐진 이미지">
+            <img class="war-map" src="images/ww2-europe-1942.svg" alt="">
+            <img class="war-photo" src="images/ww2-panzer-iv-ukraine.jpg" alt="">
+          </div>
+          <svg class="card-art" viewBox="0 0 800 700" preserveAspectRatio="xMidYMid slice" role="img" aria-label="제2차 세계대전 당시 유럽과 북아프리카를 형상화한 지도 일러스트">
+            <defs>
+              <linearGradient id="ww2-bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#596658"/>
+                <stop offset="0.52" stop-color="#2f403d"/>
+                <stop offset="1" stop-color="#172521"/>
+              </linearGradient>
+              <filter id="ww2-noise">
+                <feTurbulence baseFrequency=".025" numOctaves="4" seed="8"/>
+                <feDisplacementMap in="SourceGraphic" scale="12"/>
+              </filter>
+            </defs>
+            <rect width="800" height="700" fill="url(#ww2-bg)"/>
+            <g fill="#b7b99d" stroke="#e0ddc5" stroke-width="2" opacity=".82" filter="url(#ww2-noise)">
+              <path d="M63 229l25-70 72-43 83 12 35 45-20 43-69 20-63 36-54-13z"/>
+              <path d="M253 201l43-38 57 7 20 57-38 49-59-16z"/>
+              <path d="M327 145l27-62 48-13 22 31-18 80-38 14z"/>
+              <path d="M386 182l37-75 33-50 40 9 11 66-43 64z"/>
+              <path d="M381 220l62-36 91 16 31 65-48 73-81-3-48-55z"/>
+              <path d="M522 201l79-69 102 11 54 73-35 82-85 23-70-43z"/>
+              <path d="M435 336l35 17 25 54 30 19-12 39-31-11-18-55-39-27z"/>
+              <path d="M266 279l75-7 41 54-22 63-73 18-59-52z"/>
+              <path d="M69 397l135-56 114 68 116 19 67 101H55z" opacity=".55"/>
+            </g>
+            <g fill="#d9bd7d" opacity=".9">
+              <circle cx="340" cy="234" r="7"/><circle cx="429" cy="252" r="7"/><circle cx="548" cy="245" r="7"/>
+            </g>
+            <g fill="none" stroke="#d6b36a" stroke-linecap="round">
+              <path d="M564 245c-61 33-104 68-136 110" stroke-width="4"/>
+              <path d="M440 335l-12 20 23-2" stroke-width="4"/>
+              <path d="M332 230c-58 35-94 71-121 113" stroke-width="3" stroke-dasharray="5 10"/>
+            </g>
+            <g transform="translate(141 400)" fill="#1a2521" stroke="#c9b87b" stroke-width="3">
+              <path d="M38 89h315l34 51H17z"/>
+              <path d="M83 35h175l47 54H54z"/>
+              <path d="M143 8h80l35 27H118z"/>
+              <rect x="220" y="18" width="181" height="12" rx="6"/>
+              <circle cx="78" cy="143" r="35"/><circle cx="165" cy="143" r="35"/><circle cx="252" cy="143" r="35"/><circle cx="335" cy="143" r="32"/>
+              <path d="M39 113h319" fill="none" stroke-width="13"/>
+            </g>
+            <g opacity=".16" stroke="#fff">
+              <path d="M0 116h800M0 232h800M0 348h800M0 464h800M0 580h800"/>
+              <path d="M133 0v700M266 0v700M399 0v700M532 0v700M665 0v700"/>
+            </g>
+          </svg>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="card-index">1939</span>
+            <span class="status">열람 가능</span>
+          </div>
+          <div class="card-body">
+            <span class="event-period">1939 — 1945</span>
+            <h3>제2차 세계대전</h3>
+            <p class="card-description">유럽, 지중해·북아프리카, 동부전선, 아시아·태평양에서 동시에 전개된 전쟁의 흐름을 살펴봅니다.</p>
+            <span class="card-action">타임라인 보기</span>
+          </div>
+        </a>
+
+        <a class="event-card is-upcoming" href="#korean-war" data-start-year="1950" data-upcoming="true" aria-label="6·25 전쟁, 준비 중">
+          <div class="card-art war-composite korean-war" role="img" aria-label="한국전쟁 제1단계 전선 지도 위로 1950년 서울 전투 사진이 겹쳐진 이미지">
+            <img class="war-map" src="images/korean-war-phase-1.svg" alt="">
+            <img class="war-photo" src="images/korean-war-seoul.jpg" alt="">
+          </div>
+          <svg class="card-art" viewBox="0 0 460 700" preserveAspectRatio="xMidYMid slice" role="img" aria-label="한반도와 전선 이동을 형상화한 6·25 전쟁 지도 일러스트">
+            <defs>
+              <linearGradient id="kw-bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#54646a"/>
+                <stop offset=".48" stop-color="#334a4e"/>
+                <stop offset="1" stop-color="#192a2c"/>
+              </linearGradient>
+              <filter id="kw-warp"><feTurbulence baseFrequency=".035" numOctaves="3" seed="4"/><feDisplacementMap in="SourceGraphic" scale="8"/></filter>
+            </defs>
+            <rect width="460" height="700" fill="url(#kw-bg)"/>
+            <g opacity=".13" stroke="#fff">
+              <path d="M0 100h460M0 200h460M0 300h460M0 400h460M0 500h460M0 600h460"/>
+              <path d="M92 0v700M184 0v700M276 0v700M368 0v700"/>
+            </g>
+            <g fill="#aeb69e" stroke="#d7dbc5" stroke-width="2.5" opacity=".9" filter="url(#kw-warp)">
+              <path d="M285 38l-25 32-1 43-24 20 4 35-22 26 14 28-17 25 18 26-7 35 24 30-2 38 21 31-8 35 17 25-3 31 21 20 8 47 24 28 21-12-4-44 17-30-11-36 17-24-3-37-21-22 8-35-22-31 5-43-27-25 10-36-24-31 8-43-17-37 3-45-20-39 4-45-19-33z"/>
+              <path d="M332 569l25 18 13 37-18 30-27-14-10-38z"/>
+            </g>
+            <path d="M206 340c49-17 98-15 151 4" stroke="#d4b86d" stroke-width="6" stroke-dasharray="8 9" fill="none"/>
+            <g fill="none" stroke="#d4b86d" stroke-width="3" stroke-linecap="round">
+              <path d="M275 210c-31 59-30 105-4 157"/>
+              <path d="M258 344l13 23 13-23"/>
+              <path d="M301 482c25-43 25-75 5-111"/>
+              <path d="M318 394l-12-23-12 23"/>
+            </g>
+            <circle cx="275" cy="331" r="8" fill="#cf765d"/>
+            <circle cx="301" cy="510" r="7" fill="#d4b86d"/>
+            <g fill="#f2ead0" font-family="sans-serif" font-size="15" font-weight="700" opacity=".78">
+              <text x="294" y="324">서울</text>
+              <text x="320" y="517">부산</text>
+            </g>
+          </svg>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="card-index">1950</span>
+            <span class="status">준비 중</span>
+          </div>
+          <div class="card-body">
+            <span class="event-period">1950 — 1953</span>
+            <h3>6·25 전쟁</h3>
+            <p class="card-description">한반도를 오르내린 전선과 국제전으로 확장된 전쟁.</p>
+            <span class="card-action">곧 공개됩니다</span>
+          </div>
+        </a>
+
+        <a class="event-card is-upcoming" href="#vietnam-war" data-start-year="1955" data-upcoming="true" aria-label="베트남전쟁, 준비 중">
+          <div class="card-art war-composite vietnam-war" role="img" aria-label="1968~1969년 베트남전쟁 전황 지도 위로 1969년 정글에서 작전 중인 미군 사진이 겹쳐진 이미지">
+            <img class="war-map" src="images/vietnam-war-map-1968-1969.svg" alt="">
+            <img class="war-photo" src="images/vietnam-war-jungle-combat.jpg" alt="">
+          </div>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="card-index">1955</span>
+            <span class="status">준비 중</span>
+          </div>
+          <div class="card-body">
+            <span class="event-period">1955 — 1975</span>
+            <h3>베트남전쟁</h3>
+            <p class="card-description">분단된 베트남과 냉전의 대리전, 정글과 도시를 오간 장기전.</p>
+            <span class="card-action">곧 공개됩니다</span>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer page-shell">
+    <span>WORLD HISTORY TIMELINE</span>
+    <span>고대부터 현대까지 · 시간 · 지역 · 연결</span>
+  </footer>
+
+  <div class="toast" role="status" aria-live="polite">이 타임라인은 현재 준비 중입니다.</div>
+
+  <script>
+    const toast = document.querySelector('.toast');
+    let toastTimer;
+
+    const eventGrid = document.querySelector('.event-grid');
+    const eventCards = [...eventGrid.querySelectorAll('.event-card')];
+
+    eventCards
+      .sort((a, b) => Number(a.dataset.startYear) - Number(b.dataset.startYear))
+      .forEach((card) => eventGrid.appendChild(card));
+
+    document.querySelectorAll('[data-upcoming="true"]').forEach((card) => {
+      card.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.clearTimeout(toastTimer);
+        toast.classList.add('is-visible');
+        toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 2200);
+      });
+    });
+  </script>
+</body>
+</html>
