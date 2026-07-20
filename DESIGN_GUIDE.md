@@ -115,6 +115,18 @@
 
 ## 5. 전쟁별 현재 이미지 조합
 
+### 조선왕조
+
+- 사진: `images/joseon-scholars-1863.jpg`
+- 지도: `images/daedongyeojido.png`
+- 사진 내용: 1863년 조선 사람들을 담은 초기 단체사진
+- 지도 내용: 김정호의 1861년 대동여지도
+- 사진 위치: `object-position: center 42%`
+- 지도 위치: `object-position: center 74%`
+- 지도 확대: `transform: scale(1.42)`
+
+조선처럼 전쟁이 아닌 장기 역사 주제도 `대표 역사사진 + 당대 지도`의 두 레이어 원칙을 적용한다.
+
 ### 제1차 세계대전
 
 - 사진: `images/ww1-somme-trench.jpg`

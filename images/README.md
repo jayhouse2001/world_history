@@ -1,5 +1,17 @@
 # 이미지 출처
 
+- `joseon-scholars-1863.jpg`
+  - Koreans oldest pic group.jpg
+  - 조선 사람들을 담은 초기 단체사진, 1863년, 작자 미상
+  - Public domain / Public Domain Mark 1.0
+  - https://commons.wikimedia.org/wiki/File:Koreans_oldest_pic_group.jpg
+
+- `daedongyeojido.png`
+  - 대동여지도
+  - 김정호, 1861년
+  - Public domain
+  - https://commons.wikimedia.org/wiki/File:Daedongyeojido_(Gyujanggak).jpg
+
 - `ww1-somme-trench.jpg`
   - The Battle of the Somme film image2.jpg
   - Geoffrey Malins, Imperial War Museums, 1916

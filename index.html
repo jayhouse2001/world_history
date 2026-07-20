@@ -389,6 +389,19 @@
       object-position: center 48%;
     }
 
+    .war-composite.joseon .war-map {
+      object-fit: contain;
+      object-position: center 74%;
+      background: #26332c;
+      transform: scale(1.42);
+    }
+
+    .war-composite.joseon .war-photo {
+      height: 64%;
+      object-position: center 42%;
+      filter: grayscale(1) sepia(.12) brightness(.78) contrast(1.16);
+    }
+
     .event-card:hover .card-art,
     .event-card:focus-visible .card-art {
       transform: scale(1.045);
@@ -675,6 +688,24 @@
       </div>
 
       <div class="event-grid" aria-label="시작 시점이 오래된 순서로 정렬된 역사 주제">
+        <a class="event-card is-featured" href="joseon-dynasty.html" data-start-year="1392" aria-label="조선왕조 상세 타임라인 보기">
+          <div class="card-art war-composite joseon" role="img" aria-label="대동여지도 위로 1863년 조선 사람들의 흑백사진이 겹쳐진 이미지">
+            <img class="war-map" src="images/daedongyeojido.png" alt="">
+            <img class="war-photo" src="images/joseon-scholars-1863.jpg" alt="">
+          </div>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="card-index">1392</span>
+            <span class="status">열람 가능</span>
+          </div>
+          <div class="card-body">
+            <span class="event-period">1392 — 1910</span>
+            <h3>조선왕조</h3>
+            <p class="card-description">태조부터 순종까지 27명의 왕과 조선의 흐름을 바꾼 큰 사건을 왕대별로 살펴봅니다.</p>
+            <span class="card-action">타임라인 보기</span>
+          </div>
+        </a>
+
         <a class="event-card is-upcoming" href="#world-war-1" data-start-year="1914" data-upcoming="true" aria-label="제1차 세계대전, 준비 중">
           <div class="card-art war-composite ww1" role="img" aria-label="1914년 유럽 군사동맹 지도 위로 1916년 솜 전투 참호 사진이 겹쳐진 이미지">
             <img class="war-map" src="images/ww1-europe-alliances-1914.svg" alt="">
