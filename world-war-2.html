@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="제2차 세계대전의 네 전선을 세로 타임라인과 사건별 지도로 비교하는 페이지">
+  <title>제2차 세계대전 · 세계사 타임라인</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --ink:#20231f; --muted:#686d65; --paper:#f2eee5; --panel:#f8f5ed;
+      --land:#d8d1c5; --water:#ebe6dc; --accent:#a64132; --accent-dark:#792d24;
+      --line:rgba(48,50,44,.2); --route:#a64132; --shadow:0 20px 54px rgba(45,39,29,.13);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-width:320px;color:var(--ink);background:var(--paper);font-family:"Apple SD Gothic Neo","Noto Sans KR",Pretendard,system-ui,sans-serif;line-height:1.55}
+    button,a{font:inherit;-webkit-tap-highlight-color:transparent} a{color:inherit}.page-shell{width:min(1380px,calc(100% - 48px));margin:auto}
+    .site-header{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:84px;border-bottom:1px solid var(--line)}
+    .brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;font-family:Georgia,"Noto Serif KR",serif;font-weight:700}.brand-mark{display:grid;place-items:center;width:36px;height:36px;border:1px solid currentColor;border-radius:50%;font-size:.78rem}.back-link{color:var(--muted);text-decoration:none;font-size:.84rem}.back-link:hover,.back-link:focus-visible{color:var(--accent)}
+    .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.5fr);gap:clamp(34px,7vw,100px);align-items:end;padding:clamp(58px,8vw,104px) 0 50px}.eyebrow{margin:0 0 16px;color:var(--accent-dark);font-size:.74rem;font-weight:800;letter-spacing:.2em}h1{margin:0;font-family:Georgia,"Noto Serif KR",serif;font-size:clamp(2.8rem,6.6vw,6rem);font-weight:600;line-height:1;letter-spacing:-.065em;word-break:keep-all}.hero-copy{margin:0 0 8px;color:var(--muted);word-break:keep-all}
+    .timeline-section{padding:8px 0 88px}.section-heading{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}.section-heading h2{margin:0;font-family:Georgia,"Noto Serif KR",serif;font-size:clamp(1.55rem,3vw,2.3rem);letter-spacing:-.04em}.section-heading p{margin:0;color:var(--muted);font-size:.82rem}
+    .sticky-theater-bar{position:sticky;top:0;z-index:20;overflow:hidden;height:64px;background:color-mix(in srgb,var(--paper) 96%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}.sticky-theater-track{display:grid;grid-template-columns:repeat(4,minmax(270px,1fr));gap:18px;min-width:1260px;height:64px;padding-left:92px;will-change:transform}.sticky-theater-label{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-top:3px solid var(--accent)}.sticky-theater-label strong{font-family:Georgia,"Noto Serif KR",serif;font-size:1.16rem}.sticky-theater-label span{color:var(--muted);font-size:.72rem}
+    .timeline-scroll{overflow-x:auto;padding:0 0 18px;scrollbar-color:var(--muted) transparent}.timeline-board{--timeline-height:2860px;position:relative;display:grid;grid-template-columns:repeat(4,minmax(270px,1fr));gap:18px;min-width:1260px;padding-left:92px;align-items:start}
+    .time-rules{position:absolute;z-index:0;top:0;left:0;right:0;height:var(--timeline-height);pointer-events:none}.time-rule{position:absolute;left:0;right:0;height:1px}.time-rule.is-year{height:2px}.time-label{position:absolute;left:0;top:0;width:76px;color:var(--muted);font-family:Georgia,"Noto Serif KR",serif;font-size:.72rem;line-height:1.25;transform:translateY(-50%)}.time-label strong{display:block;color:var(--ink);font-size:.86rem}.time-rule::after{content:"";position:absolute;left:80px;right:0;top:0;border-top:1px solid var(--line)}.time-rule.is-year::after{border-top:2px solid color-mix(in srgb,var(--accent) 48%,var(--line))}
+    .theater-lane{position:relative;z-index:1;padding:0 4px 30px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .timeline{position:relative;height:var(--timeline-height);padding-left:26px;touch-action:pan-x pan-y}.timeline::before{content:"";position:absolute;z-index:0;left:11px;top:0;bottom:0;width:3px;background:var(--line)}.timeline.is-pressed::before{background:var(--accent)}.duration-layer{position:absolute;z-index:1;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}.duration-line{fill:none;stroke-width:3;stroke-linecap:round}.duration-end-label{paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round;font-size:11px;font-weight:700}
+    .event{position:absolute;z-index:2;left:26px;right:0}.event::before{content:"";position:absolute;left:-15px;top:28px;width:16px;height:1px;background:var(--accent)}.event::after{content:"";position:absolute;left:-20px;top:24px;width:9px;height:9px;border:2px solid var(--panel);border-radius:50%;background:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+    .event-card{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:12px;align-items:stretch;min-height:138px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:7px;box-shadow:0 8px 24px rgba(45,39,29,.08);touch-action:pan-x pan-y;user-select:none}.event-card.no-map{grid-template-columns:1fr}.event-card.is-pressed{border-color:var(--accent)}.event-date{display:block;margin-bottom:6px;color:var(--accent-dark);font-family:Georgia,serif;font-size:.78rem;font-weight:700;letter-spacing:.03em}.event-title{margin:0 0 7px;font-family:Georgia,"Noto Serif KR",serif;font-size:1.02rem;line-height:1.3;word-break:keep-all}.event-summary{margin:0;color:var(--muted);font-size:.78rem;line-height:1.5;word-break:keep-all}
+    .map-thumb{align-self:stretch;display:grid;grid-template-rows:1fr auto;gap:5px;width:100%;min-height:108px;padding:5px;color:var(--muted);background:var(--water);border:1px solid var(--line);border-radius:5px;cursor:zoom-in}.map-thumb:hover,.map-thumb:focus-visible{color:var(--accent);border-color:var(--accent);outline:none}.map-thumb svg{display:block;width:100%;height:78px}.map-thumb span{font-size:.68rem;font-weight:700}.country{fill:var(--land);stroke:var(--line);stroke-width:.55;vector-effect:non-scaling-stroke}.graticule{fill:none;stroke:var(--line);stroke-width:.45;opacity:.5;vector-effect:non-scaling-stroke}.route{fill:none;stroke:var(--route);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.start-dot,.end-mark{fill:var(--route);stroke:var(--panel);stroke-width:1;vector-effect:non-scaling-stroke}.place-label{fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:3px;stroke-linejoin:round;font-size:12px;font-weight:700}
+    .timeline-note{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:14px;color:var(--muted);font-size:.74rem}.edit-hint{color:var(--accent-dark);font-weight:700}
+    .event-menu{position:fixed;z-index:60;display:none;min-width:176px;padding:6px;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow)}.event-menu.is-open{display:grid}.event-menu button{padding:10px 12px;text-align:left;color:var(--ink);background:transparent;border:0;border-radius:5px;cursor:pointer}.event-menu button:hover,.event-menu button:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:none}.event-menu .delete-action{color:var(--accent-dark)}
+    .editor-dialog{width:min(560px,calc(100% - 28px))}.editor-form{display:grid;gap:14px;padding:20px}.form-field{display:grid;gap:6px}.form-field span{font-size:.76rem;font-weight:700;color:var(--muted)}.form-field input,.form-field select,.form-field textarea{width:100%;padding:10px 11px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px}.form-field textarea{min-height:90px;resize:vertical}.form-actions{display:flex;justify-content:flex-end;gap:8px}.form-actions button{padding:9px 16px;border:1px solid var(--line);border-radius:5px;cursor:pointer}.cancel-edit{color:var(--ink);background:transparent}.save-edit{color:var(--panel);background:var(--accent);border-color:var(--accent)!important}.editor-help{margin:0;color:var(--muted);font-size:.74rem}.map-editor{display:grid;gap:10px;padding:14px;border:1px solid var(--line);border-radius:6px}.map-editor[hidden]{display:none}.map-editor-toggle{display:flex;align-items:center;gap:8px;font-size:.8rem;font-weight:700}.map-editor-toggle input{width:18px;height:18px}.route-picker{display:block;width:100%;height:auto;aspect-ratio:16/8;background:var(--water);border:1px solid var(--line);border-radius:5px;cursor:crosshair;touch-action:none}.picker-actions{display:flex;gap:8px;flex-wrap:wrap}.picker-actions button{padding:8px 11px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:5px;cursor:pointer}.picker-actions button.is-active{color:var(--panel);background:var(--accent);border-color:var(--accent)}.picker-actions .clear-route{margin-left:auto;color:var(--accent-dark)}.route-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.coordinate-readout{color:var(--muted);font-size:.72rem}
+    dialog{width:min(1040px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 32px 90px rgba(0,0,0,.36)}dialog::backdrop{background:rgba(13,15,13,.72);backdrop-filter:blur(3px)}.dialog-header{display:flex;align-items:start;justify-content:space-between;gap:22px;padding:18px 20px;border-bottom:1px solid var(--line)}.dialog-date{display:block;color:var(--accent-dark);font-size:.78rem;font-weight:700}.dialog-header h3{margin:3px 0 0;font-family:Georgia,"Noto Serif KR",serif;font-size:clamp(1.2rem,2.8vw,1.8rem)}.close-button{min-width:42px;min-height:42px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:50%;cursor:pointer}.close-button:hover,.close-button:focus-visible{border-color:var(--accent);outline:none}.dialog-map-wrap{padding:18px}.interactive-map{position:relative;overflow:hidden;border-radius:5px}.dialog-map{display:block;width:100%;height:auto;aspect-ratio:16/8.5;background:var(--water);border:1px solid var(--line);border-radius:5px;touch-action:none;cursor:grab}.dialog-map:active,.route-picker:active{cursor:grabbing}.map-zoom-controls{position:absolute;z-index:3;top:10px;right:10px;display:grid;gap:5px}.map-zoom-controls button{display:grid;place-items:center;width:38px;height:38px;padding:0;color:var(--ink);background:color-mix(in srgb,var(--panel) 94%,transparent);border:1px solid var(--line);border-radius:5px;box-shadow:0 4px 14px rgba(45,39,29,.12);cursor:pointer;font-size:1.18rem;font-weight:700}.map-zoom-controls button:hover,.map-zoom-controls button:focus-visible{border-color:var(--accent);outline:none}.dialog-summary{margin:0;padding:0 20px 20px;color:var(--muted)}
+    .site-footer{display:flex;justify-content:space-between;gap:24px;padding:28px 0 40px;color:var(--muted);border-top:1px solid var(--line);font-size:.74rem}
+    @media(max-width:760px){.page-shell{width:min(100% - 28px,1380px)}.hero{grid-template-columns:1fr;gap:22px;padding-top:54px}.section-heading{align-items:start;flex-direction:column;gap:5px}.timeline-board{grid-template-columns:repeat(4,270px);min-width:1260px}.event-card{grid-template-columns:minmax(0,1fr) 104px}.dialog-map{aspect-ratio:4/3}.site-footer{flex-direction:column;gap:4px}}
+    @media(max-width:430px){.site-header{min-height:70px}.brand-mark{display:none}.timeline-scroll{margin-right:-14px}.dialog-header{padding:14px}.dialog-map-wrap{padding:10px}.dialog-summary{padding:0 14px 14px}}
+    @media(prefers-color-scheme:dark){:root{--ink:#eee9df;--muted:#b7b0a4;--paper:#1e201d;--panel:#272925;--land:#3b3f39;--water:#20231f;--accent:#c96757;--accent-dark:#e08b7d;--line:rgba(236,231,220,.18);--route:#e17664;--shadow:0 20px 54px rgba(0,0,0,.3)}}
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">WH</span><span>세계사 타임라인</span></a><a class="back-link" href="index.html">← 사건 목록</a></header>
+    <main>
+      <section class="hero"><div><p class="eyebrow">1939 — 1945 · FOUR THEATERS</p><h1>제2차<br>세계대전</h1></div><p class="hero-copy">네 전선의 사건을 한 화면에서 비교합니다. 지도 축소판을 누르면 이동 경로를 확대해서 볼 수 있습니다.</p></section>
+      <section class="timeline-section" aria-labelledby="timeline-heading">
+        <div class="section-heading"><h2 id="timeline-heading">전선별 타임라인 · 1943년까지</h2><p>시간은 위에서 아래로 흐릅니다</p></div>
+        <div id="sticky-theater-bar" class="sticky-theater-bar" aria-hidden="true"><div id="sticky-theater-track" class="sticky-theater-track"></div></div>
+        <div id="timeline-scroll" class="timeline-scroll" aria-label="네 전선 가로 스크롤 영역"><div id="timeline-board" class="timeline-board"><div id="time-rules" class="time-rules" aria-hidden="true"></div></div></div>
+        <div class="timeline-note"><span class="edit-hint">지역 타임라인·여백 길게 누르기: 그 위치에 사건 추가</span><span>사건 카드 길게 누르기: 추가·편집·삭제</span><span>가로선: 네 지역 공통 날짜 기준</span><span>사건 밀도에 따라 날짜 사이 간격 조정</span><span>지도: 현대 국경 기준 · 이동 방향 개략 표시 · Natural Earth 1:110m</span></div>
+      </section>
+    </main>
+    <footer class="site-footer"><span>WORLD HISTORY ARCHIVE</span><span>제2차 세계대전 전선 지도</span></footer>
+  </div>
+
+  <dialog id="map-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-header"><div><span id="dialog-date" class="dialog-date"></span><h3 id="dialog-title"></h3></div><button id="close-dialog" class="close-button" type="button" aria-label="확대 지도 닫기">✕</button></div>
+    <div class="dialog-map-wrap"><div class="interactive-map"><svg id="dialog-map" class="dialog-map" role="img" aria-labelledby="dialog-map-title dialog-map-desc"></svg><div class="map-zoom-controls" aria-label="지도 확대 축소"><button id="dialog-zoom-in" type="button" aria-label="지도 확대">＋</button><button id="dialog-zoom-out" type="button" aria-label="지도 축소">−</button></div></div></div>
+    <p id="dialog-summary" class="dialog-summary"></p>
+  </dialog>
+
+  <div id="event-menu" class="event-menu" role="menu" aria-label="사건 편집 메뉴">
+    <button type="button" data-action="add" role="menuitem">＋ 사건 추가</button>
+    <button type="button" data-action="edit" role="menuitem">✎ 사건 편집</button>
+    <button type="button" data-action="delete" class="delete-action" role="menuitem">− 사건 삭제</button>
+  </div>
+
+  <dialog id="editor-dialog" class="editor-dialog" aria-labelledby="editor-title">
+    <form id="editor-form" class="editor-form">
+      <div class="dialog-header"><div><span class="dialog-date">내 타임라인</span><h3 id="editor-title">사건 편집</h3></div><button id="close-editor" class="close-button" type="button" aria-label="편집 창 닫기">✕</button></div>
+      <label class="form-field"><span>지역</span><select id="edit-theater" required></select></label>
+      <label class="form-field"><span>날짜 (정렬 기준)</span><input id="edit-sort-date" type="date" min="1937-01-01" max="1943-12-31" required></label>
+      <label class="form-field"><span>종료 날짜 (기간 사건만)</span><input id="edit-end-date" type="date" min="1937-01-01" max="1943-12-31"></label>
+      <label class="form-field"><span>카드에 표시할 날짜</span><input id="edit-date" type="text" required placeholder="예: 1943년 7월 5일~8월 23일"></label>
+      <label class="form-field"><span>사건명</span><input id="edit-title" type="text" required maxlength="60"></label>
+      <label class="form-field"><span>요약</span><textarea id="edit-summary" required maxlength="220"></textarea></label>
+      <label class="map-editor-toggle"><input id="edit-has-map" type="checkbox">지도 이동 경로 추가</label>
+      <div id="map-editor" class="map-editor" hidden>
+        <div class="interactive-map"><svg id="route-picker" class="route-picker" role="img" aria-label="출발점과 도착점을 선택하는 지도"></svg><div class="map-zoom-controls" aria-label="경로 선택 지도 확대 축소"><button id="picker-zoom-in" type="button" aria-label="경로 선택 지도 확대">＋</button><button id="picker-zoom-out" type="button" aria-label="경로 선택 지도 축소">−</button></div></div>
+        <div class="picker-actions"><button id="pick-start" class="is-active" type="button">① 출발점 선택</button><button id="pick-end" type="button">② 도착점 선택</button><button id="clear-route" class="clear-route" type="button">경로 제거</button></div>
+        <div class="route-fields"><label class="form-field"><span>출발지 이름</span><input id="edit-start-name" type="text" placeholder="예: 런던"></label><label class="form-field"><span>도착지 이름</span><input id="edit-end-name" type="text" placeholder="예: 파리"></label></div>
+        <div id="coordinate-readout" class="coordinate-readout">지도에서 출발점과 도착점을 차례로 선택하세요.</div>
+      </div>
+      <p class="editor-help">지도 경로를 켜고 출발점·도착점을 지도에서 차례로 누르면 화살표 지도가 생성됩니다.</p>
+      <div class="form-actions"><button id="cancel-edit" class="cancel-edit" type="button">취소</button><button class="save-edit" type="submit">저장</button></div>
+    </form>
+  </dialog>
+
+  <script type="module">
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+    import { feature } from "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm";
+    import world from "https://esm.sh/@d3-maps/atlas@1.0.0/world/countries/countries-110m";
+
+    const theaterDefs = [
+      {id:"west",name:"유럽 서부",bounds:[[-7,43],[18,58]]},
+      {id:"east",name:"유럽 동부",bounds:[[8,34],[50,69]]},
+      {id:"africa",name:"북아프리카·지중해",bounds:[[-12,25],[31,46]]},
+      {id:"pacific",name:"아시아·태평양",bounds:[[100,-12],[-145,55]],rotate:[-160,0]}
+    ];
+    const baseEvents = [
+      {id:"pacific-china",theater:"pacific",sortDate:"1937-07-07",date:"1937년 7월 7일 이후",title:"중일전쟁 확대",summary:"루거우차오 사건 뒤 전쟁이 전면화되고 일본군이 중국 해안과 주요 도시로 진격.",routes:[["규슈",130.5,32.5,"상하이",121.47,31.23],["상하이",121.47,31.23,"난징",118.8,32.06]]},
+      {id:"east-poland",theater:"east",sortDate:"1939-09-01",date:"1939년 9월 1일·17일",title:"폴란드 침공",summary:"독일은 1일 서쪽에서, 소련은 17일 동쪽에서 폴란드로 진격.",routes:[["베를린",13.41,52.52,"바르샤바",21.01,52.23],["민스크",27.56,53.9,"브레스트",23.69,52.1]]},
+      {id:"east-winter",theater:"east",sortDate:"1939-11-30",date:"1939년 11월 30일~1940년 3월 13일",title:"겨울전쟁",summary:"소련이 핀란드를 공격하고 강화 조약으로 카렐리야 일부를 획득.",routes:[["레닌그라드",30.32,59.93,"비푸리",28.75,60.71]]},
+      {id:"africa-italy-egypt",theater:"africa",sortDate:"1940-09-13",date:"1940년 9월 13일",title:"이탈리아군의 이집트 침공",summary:"리비아의 이탈리아군이 이집트로 진격했지만 시디바라니 부근에서 멈춤.",routes:[["토브루크",23.96,32.08,"시디바라니",25.93,31.61]]},
+      {id:"west-ardennes",theater:"west",sortDate:"1940-05-10",date:"1940년 5월 10일",title:"아르덴 돌파",summary:"독일군이 저지대 국가를 공격하고 스당을 거쳐 프랑스 북부로 진격.",routes:[["쾰른",6.96,50.94,"스당",4.94,49.7],["스당",4.94,49.7,"파리",2.35,48.86]]},
+      {id:"west-dunkirk",theater:"west",sortDate:"1940-05-26",date:"1940년 5월 26일~6월 4일",title:"덩케르크 철수",summary:"포위된 영국·프랑스 연합군 주력이 영국 본토로 철수.",routes:[["덩케르크",2.38,51.03,"도버",1.31,51.13]]},
+      {id:"west-france",theater:"west",sortDate:"1940-06-22",date:"1940년 6월 22일",title:"프랑스 휴전",summary:"프랑스가 독일과 휴전하고 북부 점령지와 남부 비시 정부로 나뉨.",routes:[["파리",2.35,48.86,"비시",3.43,46.13]]},
+      {id:"west-britain",theater:"west",sortDate:"1940-07-10",date:"1940년 7월 10일~10월 31일",title:"영국 본토 항공전",summary:"독일 공군의 영국 제공권 장악 시도가 실패.",routes:[["칼레",1.86,50.95,"런던",-.13,51.51]]},
+      {id:"africa-compass",theater:"africa",sortDate:"1940-12-09",date:"1940년 12월 9일~1941년 2월 9일",title:"컴퍼스 작전",summary:"영국군이 이탈리아군을 격파하고 이집트에서 리비아 동부까지 진격.",routes:[["시디바라니",25.93,31.61,"벵가지",20.07,32.12]]},
+      {id:"africa-rommel",theater:"africa",sortDate:"1941-02-12",date:"1941년 2월 12일",title:"롬멜의 리비아 도착",summary:"롬멜이 리비아에 도착하고 독일 아프리카 군단 증원이 이어짐.",routes:[["나폴리",14.27,40.85,"트리폴리",13.19,32.89]]},
+      {id:"west-lendlease",theater:"west",sortDate:"1941-03-11",date:"1941년 3월 11일",title:"미국 무기대여법",summary:"미국이 영국을 비롯한 연합국에 대규모 군수 지원을 제공할 법적 기반을 마련.",routes:[]},
+      {id:"africa-rommel-east",theater:"africa",sortDate:"1941-03-24",date:"1941년 3월 24일",title:"롬멜의 동진",summary:"독일·이탈리아군이 리비아에서 이집트 국경까지 진격.",routes:[["엘아게일라",20.07,30.18,"토브루크",23.96,32.08],["토브루크",23.96,32.08,"살룸",25.14,31.55]]},
+      {id:"east-balkans",theater:"east",sortDate:"1941-04-06",date:"1941년 4월 6일~6월 1일",title:"발칸반도 공략",summary:"독일군이 유고슬라비아와 그리스를 거쳐 크레타로 진격.",routes:[["빈",16.37,48.21,"베오그라드",20.46,44.82],["베오그라드",20.46,44.82,"아테네",23.73,37.98],["아테네",23.73,37.98,"크레타",24.81,35.24]]},
+      {id:"east-barbarossa",theater:"east",sortDate:"1941-06-22",date:"1941년 6월 22일",title:"바르바로사 작전",summary:"독일과 추축군이 발트해에서 흑해에 이르는 전선에서 소련을 침공.",routes:[["바르샤바",21.01,52.23,"스몰렌스크",32.05,54.78],["루마니아",26.1,44.43,"키이우",30.52,50.45]]},
+      {id:"west-atlantic-charter",theater:"west",sortDate:"1941-08-14",date:"1941년 8월 14일",title:"대서양 헌장",summary:"루스벨트와 처칠이 전후 국제질서의 공동 원칙을 발표.",routes:[]},
+      {id:"east-leningrad",theater:"east",sortDate:"1941-09-08",date:"1941년 9월 8일",title:"레닌그라드 포위 시작",summary:"독일군과 핀란드군의 압박으로 레닌그라드의 육상 보급로가 차단.",routes:[["프스코프",28.33,57.82,"레닌그라드",30.32,59.93]]},
+      {id:"east-moscow",theater:"east",sortDate:"1941-10-02",date:"1941년 10월 2일",title:"모스크바 공방전",summary:"독일군의 태풍 작전이 모스크바 앞에서 소련의 저항과 겨울 반격에 막힘.",routes:[["스몰렌스크",32.05,54.78,"모스크바",37.62,55.75]]},
+      {id:"africa-crusader",theater:"africa",sortDate:"1941-11-18",date:"1941년 11월 18일",title:"크루세이더 작전",summary:"연합군의 반격으로 토브루크 포위가 풀리고 롬멜군이 서부 리비아로 후퇴.",routes:[["살룸",25.14,31.55,"엘아게일라",20.07,30.18]]},
+      {id:"pacific-pearl",theater:"pacific",sortDate:"1941-12-07",date:"1941년 12월 7일",title:"진주만 공격",summary:"일본 기동부대가 하와이 진주만을 기습해 미국의 태평양전쟁 참전을 불러옴.",routes:[["히토카푸만",147.63,44.98,"진주만",-157.95,21.35]]},
+      {id:"pacific-philippines",theater:"pacific",sortDate:"1941-12-08",date:"1941년 12월 8일~1942년 5월 8일",title:"필리핀 전역",summary:"일본군이 루손과 민다나오로 진격해 필리핀의 미군·필리핀군을 제압.",routes:[["타이완",121,23.7,"루손",121,16],["팔라우",134.58,7.52,"민다나오",125.5,7.5]]},
+      {id:"pacific-rabaul",theater:"pacific",sortDate:"1942-01-23",date:"1942년 1월 23일",title:"라바울 점령",summary:"일본군이 뉴브리튼섬 라바울을 점령해 남태평양의 주요 기지로 사용.",routes:[["트루크",151.84,7.45,"라바울",152.17,-4.2]]},
+      {id:"pacific-singapore",theater:"pacific",sortDate:"1942-02-15",date:"1942년 2월 15일",title:"싱가포르 함락",summary:"말레이반도를 남하한 일본군에게 영국군이 싱가포르에서 항복.",routes:[["코타바루",102.24,6.13,"싱가포르",103.82,1.35]]},
+      {id:"pacific-coral",theater:"pacific",sortDate:"1942-05-04",date:"1942년 5월 4~8일",title:"산호해 해전",summary:"미·일 항모 전력이 교전해 일본의 포트모르즈비 해상 침공 계획을 저지.",routes:[["라바울",152.17,-4.2,"산호해",154,-18]]},
+      {id:"africa-gazala",theater:"africa",sortDate:"1942-05-26",date:"1942년 5월 26일~6월 21일",title:"가잘라 전투와 토브루크 함락",summary:"롬멜군이 연합군 방어선을 돌파하고 토브루크를 점령.",routes:[["가잘라",23.32,32.15,"토브루크",23.96,32.08]]},
+      {id:"pacific-midway",theater:"pacific",sortDate:"1942-06-04",date:"1942년 6월 4~7일",title:"미드웨이 해전",summary:"미 해군이 일본 항공모함 네 척을 격침해 태평양의 주도권 전환점을 마련.",routes:[["일본 함대",170,30,"미드웨이",-177.37,28.21]]},
+      {id:"east-caseblue",theater:"east",sortDate:"1942-06-28",date:"1942년 6월 28일",title:"청색 작전",summary:"독일군이 볼가강과 코카서스 유전을 목표로 소련 남부에서 공세를 시작.",routes:[["하르키우",36.23,49.99,"로스토프",39.7,47.24],["로스토프",39.7,47.24,"마이코프",40.1,44.61]]},
+      {id:"africa-first-elalamein",theater:"africa",sortDate:"1942-07-01",date:"1942년 7월 1~27일",title:"제1차 엘 알라메인 전투",summary:"연합군이 이집트 깊숙이 진격한 롬멜군을 엘 알라메인에서 저지.",routes:[["메르사마트루",27.24,31.35,"엘알라메인",28.95,30.84]]},
+      {id:"pacific-guadalcanal",theater:"pacific",sortDate:"1942-08-07",date:"1942년 8월 7일~1943년 2월 9일",title:"과달카날 전역",summary:"미 해병대 상륙 뒤 수개월의 육해공전 끝에 일본군이 섬에서 철수.",routes:[["에스피리투산토",167.18,-15.38,"과달카날",160.15,-9.58]]},
+      {id:"west-dieppe",theater:"west",sortDate:"1942-08-19",date:"1942년 8월 19일",title:"디에프 기습",summary:"연합군이 프랑스 디에프에 상륙했으나 큰 피해를 입고 철수.",routes:[["뉴헤이븐",.05,50.8,"디에프",1.08,49.92]]},
+      {id:"east-stalingrad",theater:"east",sortDate:"1942-08-23",date:"1942년 8월 23일~1943년 2월 2일",title:"스탈린그라드 전투",summary:"독일군이 시가전을 벌였으나 소련군의 포위 뒤 제6군이 항복.",routes:[["하르키우",36.23,49.99,"스탈린그라드",44.5,48.71]]},
+      {id:"africa-second-elalamein",theater:"africa",sortDate:"1942-10-23",date:"1942년 10월 23일~11월 11일",title:"제2차 엘 알라메인 전투",summary:"몽고메리의 영국 제8군이 롬멜군을 격파해 서쪽으로 후퇴시킴.",routes:[["엘알라메인",28.95,30.84,"메르사마트루",27.24,31.35]]},
+      {id:"africa-torch",theater:"africa",sortDate:"1942-11-08",date:"1942년 11월 8일",title:"횃불 작전",summary:"미·영 연합군이 모로코와 알제리에 상륙해 추축군을 동서에서 압박.",routes:[["대서양",-10,34,"카사블랑카",-7.59,33.57],["지중해",2,38,"알제",3.06,36.75]]},
+      {id:"east-uranus",theater:"east",sortDate:"1942-11-19",date:"1942년 11월 19일",title:"천왕성 작전",summary:"소련군이 스탈린그라드 북서와 남쪽에서 돌파해 독일 제6군을 포위.",routes:[["세라피모비치",42.74,49.58,"칼라치",43.53,48.69],["사르파",44.41,48.38,"칼라치",43.53,48.69]]},
+      {id:"west-casablanca",theater:"west",sortDate:"1943-01-14",date:"1943년 1월 14~24일",title:"카사블랑카 회담",summary:"루스벨트와 처칠이 추축국의 무조건 항복 원칙과 다음 작전을 협의.",routes:[]},
+      {id:"east-stalingrad-end",theater:"east",sortDate:"1943-02-02",date:"1943년 2월 2일",title:"스탈린그라드 독일군 항복",summary:"포위된 독일 제6군의 잔여 병력이 항복하고 남부 전선의 흐름이 소련 쪽으로 기움.",routes:[["스탈린그라드",44.5,48.71,"포로수용지",45.1,49.2]]},
+      {id:"pacific-guadalcanal-end",theater:"pacific",sortDate:"1943-02-09",date:"1943년 2월 9일",title:"과달카날 전역 종료",summary:"일본군의 철수가 끝나며 연합군이 남태평양 공세의 발판을 확보.",routes:[["과달카날",160.15,-9.58,"부건빌",155.38,-6.2]]},
+      {id:"africa-tunisia-end",theater:"africa",sortDate:"1943-05-13",date:"1943년 5월 13일",title:"튀니지 추축군 항복",summary:"튀니지의 독일·이탈리아군이 항복해 북아프리카 전역이 끝남.",routes:[["튀니스",10.18,36.81,"비제르테",9.87,37.27]]},
+      {id:"pacific-cartwheel",theater:"pacific",sortDate:"1943-06-30",date:"1943년 6월 30일 시작",title:"카트휠 작전",summary:"연합군이 뉴기니와 솔로몬제도를 따라 진격하며 라바울을 고립시키기 시작.",routes:[["과달카날",160.15,-9.58,"부건빌",155.38,-6.2],["포트모르즈비",147.18,-9.44,"라에",146.98,-6.73]]},
+      {id:"east-kursk",theater:"east",sortDate:"1943-07-05",date:"1943년 7월 5일~8월 23일",title:"쿠르스크 전투",summary:"독일의 성채 작전이 실패하고 소련군이 동부전선의 전략적 주도권을 굳힘.",routes:[["오룔",36.06,52.97,"쿠르스크",36.19,51.74],["벨고로드",36.59,50.6,"쿠르스크",36.19,51.74]]},
+      {id:"africa-sicily",theater:"africa",sortDate:"1943-07-10",date:"1943년 7월 10일",title:"시칠리아 상륙",summary:"연합군이 시칠리아에 상륙해 이탈리아 본토 진격의 길을 엶.",routes:[["튀니스",10.18,36.81,"시칠리아",14.1,37.5]]},
+      {id:"africa-italy",theater:"africa",sortDate:"1943-09-03",date:"1943년 9월 3일",title:"이탈리아 본토 상륙",summary:"연합군이 메시나 해협을 건너 칼라브리아에 상륙.",routes:[["메시나",15.55,38.19,"레조칼라브리아",15.65,38.11]]},
+      {id:"africa-armistice",theater:"africa",sortDate:"1943-09-08",date:"1943년 9월 8일",title:"이탈리아 휴전 발표",summary:"이탈리아의 연합군과의 휴전이 발표되고 독일군이 이탈리아 주요 지역을 장악.",routes:[]},
+      {id:"africa-salerno",theater:"africa",sortDate:"1943-09-09",date:"1943년 9월 9일",title:"살레르노 상륙",summary:"연합군 주력이 살레르노에 상륙해 독일군의 반격을 막고 교두보를 확보.",routes:[["시칠리아",14.1,37.5,"살레르노",14.77,40.68]]},
+      {id:"east-kyiv",theater:"east",sortDate:"1943-11-06",date:"1943년 11월 6일",title:"소련군의 키이우 탈환",summary:"소련군이 드니프로강을 건너 키이우를 탈환하고 서쪽으로 진격.",routes:[["쿠르스크",36.19,51.74,"키이우",30.52,50.45]]},
+      {id:"pacific-tarawa",theater:"pacific",sortDate:"1943-11-20",date:"1943년 11월 20~23일",title:"타라와 전투",summary:"미 해병대가 치열한 상륙전 끝에 길버트제도의 타라와 환초를 점령.",routes:[["하와이",-157.95,21.35,"타라와",172.98,1.35]]},
+      {id:"west-tehran",theater:"west",sortDate:"1943-11-28",date:"1943년 11월 28일~12월 1일",title:"테헤란 회담",summary:"미·영·소 정상이 서유럽 제2전선 개설과 전후 구상을 협의.",routes:[]}
+    ];
+
+    const storageKey = "world-history-ww2-events-v1";
+    const emptyState = {updates:{},deleted:[],added:[]};
+    function loadState(){try{return {...emptyState,...JSON.parse(localStorage.getItem(storageKey)||"{}")}}catch{return structuredClone(emptyState)}}
+    let userState = loadState();
+    const countries = feature(world,world.objects.features).features;
+    const board = document.getElementById("timeline-board");
+    const rules = document.getElementById("time-rules");
+    const timelineScroll = document.getElementById("timeline-scroll");
+    const stickyTrack = document.getElementById("sticky-theater-track");
+    const dialog = document.getElementById("map-dialog");
+    const dialogSvg = d3.select("#dialog-map");
+    dialogSvg.append("title").attr("id","dialog-map-title");
+    dialogSvg.append("desc").attr("id","dialog-map-desc");
+    let dialogZoomTransform=d3.zoomIdentity;
+    const dialogZoom=d3.zoom().scaleExtent([.35,8]).on("zoom",event=>{dialogZoomTransform=event.transform;dialogSvg.select(".map-viewport").attr("transform",event.transform);keepMarkerSize(dialogSvg,event.transform.k)});
+    dialogSvg.call(dialogZoom);
+
+    function pointInTheater(theater,point){const [[west,south],[east,north]]=theater.bounds;const [lon,lat]=point;const inLongitude=west<=east?(lon>=west&&lon<=east):(lon>=west||lon<=east);return inLongitude&&lat>=south&&lat<=north}
+    function projectionFor(theater,width,height,event=null){
+      const projection=d3.geoMercator(); if(theater.rotate) projection.rotate(theater.rotate);
+      const b=theater.bounds;let corners={type:"MultiPoint",coordinates:[[b[0][0],b[0][1]],[b[1][0],b[0][1]],[b[1][0],b[1][1]],[b[0][0],b[1][1]]]};const savedView=(event?.mapView||[]).map(point=>[Number(point[0]),Number(point[1])]).filter(point=>point.every(Number.isFinite));const routePoints=(event?.routes||[]).flatMap(route=>[[Number(route[1]),Number(route[2])],[Number(route[4]),Number(route[5])]]).filter(point=>point.every(Number.isFinite));
+      if(savedView.length>=4){corners={type:"MultiPoint",coordinates:savedView}}else if(routePoints.length>=2&&routePoints.some(point=>!pointInTheater(theater,point))){const longitudes=routePoints.map(point=>point[0]),latitudes=routePoints.map(point=>point[1]),minLon=Math.min(...longitudes),maxLon=Math.max(...longitudes),minLat=Math.min(...latitudes),maxLat=Math.max(...latitudes),lonPad=Math.max(3,(maxLon-minLon)*.18),latPad=Math.max(2,(maxLat-minLat)*.22);corners={type:"MultiPoint",coordinates:[[minLon-lonPad,minLat-latPad],[maxLon+lonPad,minLat-latPad],[maxLon+lonPad,maxLat+latPad],[minLon-lonPad,maxLat+latPad]]}}
+      const padding=Math.max(8,Math.min(width,height)*.08);return projection.fitExtent([[padding,padding],[width-padding,height-padding]],corners);
+    }
+    function routeFeature(route){return {type:"LineString",coordinates:[[route[1],route[2]],[route[4],route[5]]]}}
+    function keepMarkerSize(map,scale){
+      map.selectAll(".start-dot[data-base-r]").attr("r",function(){return Number(this.dataset.baseR)/scale});
+      map.selectAll(".end-mark[data-base-transform]").attr("transform",function(){return `${this.dataset.baseTransform} scale(${1/scale})`});
+    }
+    function drawMap(svgElement,theater,event,width,height,labels){
+      const map=d3.select(svgElement); map.attr("viewBox",`0 0 ${width} ${height}`); map.selectAll("g").remove();
+      const projection=projectionFor(theater,width,height,event); const path=d3.geoPath(projection);const viewport=map.append("g").attr("class","map-viewport"); const base=viewport.append("g");
+      base.append("path").datum(d3.geoGraticule10()).attr("class","graticule").attr("d",path);
+      base.selectAll("path.country").data(countries).join("path").attr("class","country").attr("d",path);
+      const routes=viewport.append("g"); event.routes.forEach(route=>{
+        routes.append("path").datum(routeFeature(route)).attr("class","route").attr("d",path);
+        const start=projection([route[1],route[2]]),end=projection([route[4],route[5]]); if(!start||!end)return;
+        routes.append("circle").attr("class","start-dot").attr("data-base-r",labels?5:3).attr("cx",start[0]).attr("cy",start[1]).attr("r",labels?5:3);
+        const angle=Math.atan2(end[1]-start[1],end[0]-start[0])*180/Math.PI+90;
+        const endTransform=`translate(${end[0]},${end[1]}) rotate(${angle})`;routes.append("path").attr("class","end-mark").attr("data-base-transform",endTransform).attr("d",labels?"M0,-8 L7,7 L-7,7 Z":"M0,-5 L4,4 L-4,4 Z").attr("transform",endTransform);
+        if(labels){routes.append("text").attr("class","place-label").attr("x",start[0]+7).attr("y",start[1]-7).text(route[0]);routes.append("text").attr("class","place-label").attr("x",end[0]+8).attr("y",end[1]+15).text(route[3])}
+      });
+    }
+    function openMap(theater,event){
+      document.getElementById("dialog-date").textContent=event.date;
+      document.getElementById("dialog-title").textContent=`${theater.name} · ${event.title}`;
+      document.getElementById("dialog-summary").textContent=event.summary;
+      dialogSvg.select("title").text(`${theater.name}: ${event.date} ${event.title}`);
+      dialogSvg.select("desc").text(event.summary);
+      drawMap(dialogSvg.node(),theater,event,960,510,true);dialogZoomTransform=d3.zoomIdentity;dialogSvg.call(dialogZoom.transform,dialogZoomTransform); dialog.showModal();
+    }
+
+    const menu=document.getElementById("event-menu");
+    const editor=document.getElementById("editor-dialog");
+    const editorForm=document.getElementById("editor-form");
+    const theaterSelect=document.getElementById("edit-theater");
+    theaterDefs.forEach(theater=>{const option=document.createElement("option");option.value=theater.id;option.textContent=theater.name;theaterSelect.appendChild(option)});
+    let selectedEventId=null;
+    let editorMode="edit";
+    let currentTimelineMeta=null;
+    let pickerMode="start",pickerProjection=null,pickerProjectionEvent=null,pickerPoints={start:null,end:null},pickerZoomTransform=d3.zoomIdentity;
+    const hasMapInput=document.getElementById("edit-has-map");
+    const mapEditor=document.getElementById("map-editor");
+    const routePicker=document.getElementById("route-picker");
+    const pickerSvg=d3.select(routePicker);
+    const pickerZoom=d3.zoom().scaleExtent([.35,8]).on("zoom",event=>{pickerZoomTransform=event.transform;pickerSvg.select(".map-viewport").attr("transform",event.transform);keepMarkerSize(pickerSvg,event.transform.k)});
+    pickerSvg.call(pickerZoom);
+
+    function saveState(){localStorage.setItem(storageKey,JSON.stringify(userState))}
+    function allEvents(){
+      const deleted=new Set(userState.deleted||[]);
+      const defaults=baseEvents.filter(event=>!deleted.has(event.id)).map(event=>({...event,...(userState.updates?.[event.id]||{})}));
+      return [...defaults,...(userState.added||[])].sort((a,b)=>a.sortDate.localeCompare(b.sortDate)||a.title.localeCompare(b.title,"ko"));
+    }
+    function eventById(id){return allEvents().find(event=>event.id===id)}
+    function inferEndDate(label,startDate){
+      if(!label?.includes("~"))return null;const startYear=Number(startDate.slice(0,4));let match=label.match(/~\s*(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일/);let year,month,day;
+      if(match){year=Number(match[1]);month=Number(match[2]);day=Number(match[3])}else if((match=label.match(/~\s*(\d{1,2})월\s*(\d{1,2})일/))){year=startYear;month=Number(match[1]);day=Number(match[2])}else if((match=label.match(/(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})(?:일)?\s*~\s*(\d{1,2})일/))){year=Number(match[1]);month=Number(match[2]);day=Number(match[4])}else{return null}
+      const result=`${String(year).padStart(4,"0")}-${String(month).padStart(2,"0")}-${String(day).padStart(2,"0")}`;return result>startDate?result:null;
+    }
+    function eventEndDate(event){return Object.hasOwn(event,"endDate")?(event.endDate||null):inferEndDate(event.date,event.sortDate)}
+    function milestoneDates(events){
+      const years=["1937-01-01","1939-01-01","1940-01-01","1941-01-01","1942-01-01","1943-01-01"];
+      return [...new Set([...years,...events.flatMap(event=>[event.sortDate,eventEndDate(event)]).filter(Boolean)])].sort();
+    }
+    function formatRule(date){const [year,month,day]=date.split("-").map(Number);return {year:String(year),label:month===1&&day===1?"1월":`${month}월 ${day}일`,yearLine:month===1&&day===1}}
+    function durationColor(index){const hue=Math.round((index*137.508+18)%360),light=matchMedia("(prefers-color-scheme: dark)").matches?68:39;return `hsl(${hue} 62% ${light}%)`}
+    function addDurationLayer(timeline,theaterEvents,slotY,timelineHeight,colorMap){
+      const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.classList.add("duration-layer");svg.setAttribute("height",timelineHeight);svg.setAttribute("aria-hidden","true");const defs=document.createElementNS(svg.namespaceURI,"defs");svg.appendChild(defs);
+      theaterEvents.filter(event=>eventEndDate(event)).forEach((event,index)=>{const endDate=eventEndDate(event),startY=slotY.get(event.sortDate),endY=slotY.get(endDate);if(startY==null||endY==null||endY<=startY)return;const color=colorMap.get(event.id),x=8+(index%4)*4,markerId=`duration-arrow-${event.id.replace(/[^a-zA-Z0-9_-]/g,"-")}`;
+        const marker=document.createElementNS(svg.namespaceURI,"marker");marker.id=markerId;marker.setAttribute("markerWidth","10");marker.setAttribute("markerHeight","10");marker.setAttribute("refX","8");marker.setAttribute("refY","5");marker.setAttribute("orient","auto");marker.setAttribute("markerUnits","userSpaceOnUse");const tip=document.createElementNS(svg.namespaceURI,"path");tip.setAttribute("d","M0,0 L10,5 L0,10 Z");tip.setAttribute("fill",color);marker.appendChild(tip);defs.appendChild(marker);
+        const line=document.createElementNS(svg.namespaceURI,"line");line.classList.add("duration-line");line.setAttribute("x1",x);line.setAttribute("x2",x);line.setAttribute("y1",startY+7);line.setAttribute("y2",endY-7);line.setAttribute("stroke",color);line.setAttribute("marker-end",`url(#${markerId})`);svg.appendChild(line);
+        const label=document.createElementNS(svg.namespaceURI,"text");label.classList.add("duration-end-label");label.setAttribute("x","28");label.setAttribute("y",endY+4);label.setAttribute("fill",color);label.textContent=`${event.title.length>12?`${event.title.slice(0,12)}…`:event.title} · 끝`;svg.appendChild(label);
+      });timeline.appendChild(svg);
+    }
+
+    function render(){
+      const scrollLeft=timelineScroll.scrollLeft;
+      const events=allEvents();
+      const milestones=milestoneDates(events);
+      const slotGap=252,slotTop=76;
+      const timelineHeight=slotTop*2+(milestones.length-1)*slotGap;
+      const slotY=new Map(milestones.map((date,index)=>[date,slotTop+index*slotGap]));
+      currentTimelineMeta={milestones,slotY};
+      const durationEvents=events.filter(event=>eventEndDate(event));const durationColors=new Map(durationEvents.map((event,index)=>[event.id,durationColor(index)]));
+      board.style.setProperty("--timeline-height",`${timelineHeight}px`);
+      rules.replaceChildren();
+      milestones.forEach(date=>{
+        const info=formatRule(date);const rule=document.createElement("div");rule.className=`time-rule${info.yearLine?" is-year":""}`;rule.dataset.milestone=date;rule.style.top=`${slotY.get(date)}px`;
+        const label=document.createElement("span");label.className="time-label";
+        if(info.yearLine){const strong=document.createElement("strong");strong.textContent=info.year;label.appendChild(strong)}
+        label.append(info.label);rule.appendChild(label);rules.appendChild(rule);
+      });
+      board.querySelectorAll(".theater-lane").forEach(node=>node.remove());
+      stickyTrack.replaceChildren();
+      theaterDefs.forEach(theater=>{
+        const theaterEvents=events.filter(event=>event.theater===theater.id);
+        const stickyLabel=document.createElement("div");stickyLabel.className="sticky-theater-label";
+        const name=document.createElement("strong");name.textContent=theater.name;const count=document.createElement("span");count.textContent=`${theaterEvents.length}개 사건`;stickyLabel.append(name,count);stickyTrack.appendChild(stickyLabel);
+        const lane=document.createElement("section");lane.className="theater-lane";lane.setAttribute("aria-labelledby",`${theater.id}-title`);
+        const heading=document.createElement("h3");heading.id=`${theater.id}-title`;heading.className="sr-only";heading.textContent=theater.name;
+        const timeline=document.createElement("div");timeline.className="timeline";timeline.setAttribute("aria-label",`${theater.name} 사건 추가 영역. 길게 누르거나 우클릭하세요.`);lane.append(heading,timeline);
+        addDurationLayer(timeline,theaterEvents,slotY,timelineHeight,durationColors);
+        theaterEvents.forEach(event=>{
+          const article=document.createElement("article");article.className="event";article.dataset.eventId=event.id;article.style.top=`${slotY.get(event.sortDate)-28}px`;
+          const card=document.createElement("div");card.className=`event-card${event.routes?.length?"":" no-map"}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
+          const copy=document.createElement("div");const time=document.createElement("time");time.className="event-date";time.textContent=event.date;
+          const title=document.createElement("h4");title.className="event-title";title.textContent=event.title;const summary=document.createElement("p");summary.className="event-summary";summary.textContent=event.summary;copy.append(time,title,summary);card.appendChild(copy);
+          if(event.routes?.length){const button=document.createElement("button");button.className="map-thumb";button.type="button";button.setAttribute("aria-label",`${theater.name} ${event.date} ${event.title} 지도 확대`);const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("role","img");svg.setAttribute("aria-label",`${event.title} 이동 경로 축소 지도`);const text=document.createElement("span");text.textContent="지도 확대";button.append(svg,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button);drawMap(svg,theater,event,130,88,false)}
+          attachEditGesture(card,event);article.appendChild(card);timeline.appendChild(article);
+        });
+        attachLaneGesture(timeline,theater);
+        board.appendChild(lane);
+      });
+      timelineScroll.scrollLeft=scrollLeft;
+    }
+
+    function attachEditGesture(card,event){
+      let timer=null,startX=0,startY=0,longPressed=false;
+      const cancel=()=>{clearTimeout(timer);timer=null;card.classList.remove("is-pressed")};
+      card.addEventListener("pointerdown",e=>{if(e.button!==0)return;startX=e.clientX;startY=e.clientY;longPressed=false;card.classList.add("is-pressed");timer=setTimeout(()=>{longPressed=true;openMenu(event.id,e.clientX,e.clientY);card.classList.remove("is-pressed")},620)});
+      card.addEventListener("pointermove",e=>{if(Math.hypot(e.clientX-startX,e.clientY-startY)>10)cancel()});
+      card.addEventListener("pointerup",cancel);card.addEventListener("pointercancel",cancel);card.addEventListener("pointerleave",cancel);
+      card.addEventListener("click",e=>{if(longPressed){e.preventDefault();e.stopPropagation();longPressed=false}},true);
+      card.addEventListener("contextmenu",e=>{e.preventDefault();cancel();openMenu(event.id,e.clientX,e.clientY)});
+      card.addEventListener("keydown",e=>{if(e.key==="ContextMenu"||(e.shiftKey&&e.key==="F10")){e.preventDefault();const box=card.getBoundingClientRect();openMenu(event.id,box.left+24,box.top+24)}});
+    }
+    function dateAtPosition(timeline,clientY){
+      const y=clientY-timeline.getBoundingClientRect().top;const {milestones,slotY}=currentTimelineMeta;
+      if(y<=slotY.get(milestones[0]))return milestones[0];if(y>=slotY.get(milestones.at(-1)))return milestones.at(-1);
+      for(let index=0;index<milestones.length-1;index++){
+        const first=milestones[index],second=milestones[index+1],y1=slotY.get(first),y2=slotY.get(second);if(y<y1||y>y2)continue;
+        const t=(y-y1)/(y2-y1),start=new Date(`${first}T00:00:00Z`).getTime(),end=new Date(`${second}T00:00:00Z`).getTime();return new Date(start+(end-start)*t).toISOString().slice(0,10);
+      }
+      return milestones.at(-1);
+    }
+    function attachLaneGesture(timeline,theater){
+      let timer=null,startX=0,startY=0;
+      const cancel=()=>{clearTimeout(timer);timer=null;timeline.classList.remove("is-pressed")};
+      timeline.addEventListener("pointerdown",event=>{if(event.button!==0||event.target.closest(".event-card"))return;startX=event.clientX;startY=event.clientY;timeline.classList.add("is-pressed");timer=setTimeout(()=>{const sortDate=dateAtPosition(timeline,startY);cancel();openEditor("add",null,{theater:theater.id,sortDate})},620)});
+      timeline.addEventListener("pointermove",event=>{if(timer&&Math.hypot(event.clientX-startX,event.clientY-startY)>10)cancel()});timeline.addEventListener("pointerup",cancel);timeline.addEventListener("pointercancel",cancel);timeline.addEventListener("pointerleave",cancel);
+      timeline.addEventListener("contextmenu",event=>{if(event.target.closest(".event-card"))return;event.preventDefault();cancel();openEditor("add",null,{theater:theater.id,sortDate:dateAtPosition(timeline,event.clientY)})});
+    }
+    function openMenu(eventId,x,y){
+      selectedEventId=eventId;menu.classList.add("is-open");menu.style.left="0";menu.style.top="0";
+      const box=menu.getBoundingClientRect();menu.style.left=`${Math.max(8,Math.min(x,innerWidth-box.width-8))}px`;menu.style.top=`${Math.max(8,Math.min(y,innerHeight-box.height-8))}px`;menu.querySelector("button").focus();
+    }
+    function closeMenu(){menu.classList.remove("is-open")}
+    function koreanDate(value){const [y,m,d]=value.split("-").map(Number);return `${y}년 ${m}월 ${d}일`}
+    function drawPicker(){
+      const theater=theaterDefs.find(item=>item.id===theaterSelect.value);const width=520,height=260;const map=d3.select(routePicker);map.attr("viewBox",`0 0 ${width} ${height}`);map.selectAll("*").remove();pickerProjection=projectionFor(theater,width,height,pickerProjectionEvent);const path=d3.geoPath(pickerProjection);
+      const viewport=map.append("g").attr("class","map-viewport");viewport.append("g").selectAll("path").data(countries).join("path").attr("class","country").attr("d",path);
+      if(pickerPoints.start&&pickerPoints.end)viewport.append("path").datum({type:"LineString",coordinates:[pickerPoints.start,pickerPoints.end]}).attr("class","route").attr("d",path);
+      for(const [key,label] of [["start","출발"],["end","도착"]]){const point=pickerPoints[key];if(!point)continue;const xy=pickerProjection(point);if(!xy)continue;if(key==="start"){viewport.append("circle").attr("class","start-dot").attr("data-base-r",6).attr("cx",xy[0]).attr("cy",xy[1]).attr("r",6)}else{const start=pickerPoints.start?pickerProjection(pickerPoints.start):[xy[0],xy[1]-20];const angle=Math.atan2(xy[1]-start[1],xy[0]-start[0])*180/Math.PI+90,endTransform=`translate(${xy[0]},${xy[1]}) rotate(${angle})`;viewport.append("path").attr("class","end-mark").attr("data-base-transform",endTransform).attr("d","M0,-10 L8,8 L-8,8 Z").attr("transform",endTransform)}viewport.append("text").attr("class","place-label").attr("x",xy[0]+10).attr("y",xy[1]-10).text(label)}
+      map.call(pickerZoom).call(pickerZoom.transform,pickerZoomTransform);
+      updateCoordinateReadout();
+    }
+    function updateCoordinateReadout(){
+      const format=point=>point?`${point[1].toFixed(2)}°, ${point[0].toFixed(2)}°`:"미선택";document.getElementById("coordinate-readout").textContent=`출발 ${format(pickerPoints.start)} · 도착 ${format(pickerPoints.end)}`;
+    }
+    function currentPickerView(){
+      if(!pickerProjection)return null;
+      const view=[[0,0],[520,0],[520,260],[0,260]].map(point=>{const coordinate=pickerProjection.invert(pickerZoomTransform.invert(point));return coordinate?.every(Number.isFinite)?coordinate:null});
+      return view.every(Boolean)?view:null;
+    }
+    function setPickerMode(mode){pickerMode=mode;document.getElementById("pick-start").classList.toggle("is-active",mode==="start");document.getElementById("pick-end").classList.toggle("is-active",mode==="end")}
+    function openEditor(mode,id,context={}){
+      editorMode=mode;selectedEventId=id;const source=id?eventById(id):null;pickerProjectionEvent=source?{routes:source.routes||[],mapView:source.mapView||null}:null;
+      document.getElementById("editor-title").textContent=mode==="add"?"사건 추가":"사건 편집";
+      const initialSort=context.sortDate||source?.sortDate||"1943-01-01";theaterSelect.value=context.theater||source?.theater||"west";document.getElementById("edit-sort-date").value=initialSort;
+      document.getElementById("edit-end-date").value=source?eventEndDate(source)||"":"";
+      document.getElementById("edit-date").value=mode==="add"?koreanDate(initialSort):(source?.date||koreanDate(initialSort));document.getElementById("edit-title").value=mode==="add"?"":(source?.title||"");document.getElementById("edit-summary").value=mode==="add"?"":(source?.summary||"");
+      const route=source?.routes?.[0];pickerPoints={start:route?[route[1],route[2]]:null,end:route?[route[4],route[5]]:null};pickerZoomTransform=d3.zoomIdentity;document.getElementById("edit-start-name").value=route?.[0]||"";document.getElementById("edit-end-name").value=route?.[3]||"";hasMapInput.checked=Boolean(route);mapEditor.hidden=!hasMapInput.checked;setPickerMode("start");drawPicker();
+      editor.showModal();setTimeout(()=>document.getElementById(mode==="add"?"edit-title":"edit-date").focus(),0);
+    }
+    menu.addEventListener("click",event=>{
+      const action=event.target.closest("button")?.dataset.action;if(!action)return;closeMenu();
+      if(action==="add"){const source=eventById(selectedEventId);openEditor("add",null,{theater:source?.theater,sortDate:source?.sortDate})}
+      if(action==="edit"){openEditor("edit",selectedEventId)}
+      if(action==="delete"){
+        const target=eventById(selectedEventId);if(!target||!confirm(`‘${target.title}’ 사건을 삭제할까요?`))return;
+        if(selectedEventId.startsWith("custom-")){userState.added=(userState.added||[]).filter(item=>item.id!==selectedEventId)}else{userState.deleted=[...new Set([...(userState.deleted||[]),selectedEventId])];delete userState.updates[selectedEventId]}
+        saveState();render();
+      }
+    });
+    document.addEventListener("pointerdown",event=>{if(menu.classList.contains("is-open")&&!menu.contains(event.target))closeMenu()},true);
+    document.addEventListener("keydown",event=>{if(event.key==="Escape"&&menu.classList.contains("is-open"))closeMenu()});
+    hasMapInput.addEventListener("change",()=>{mapEditor.hidden=!hasMapInput.checked;if(hasMapInput.checked)drawPicker()});
+    document.getElementById("pick-start").addEventListener("click",()=>setPickerMode("start"));document.getElementById("pick-end").addEventListener("click",()=>setPickerMode("end"));document.getElementById("clear-route").addEventListener("click",()=>{pickerProjectionEvent=null;pickerPoints={start:null,end:null};pickerZoomTransform=d3.zoomIdentity;document.getElementById("edit-start-name").value="";document.getElementById("edit-end-name").value="";setPickerMode("start");drawPicker()});
+    document.getElementById("picker-zoom-in").addEventListener("click",()=>pickerSvg.call(pickerZoom.scaleBy,1.45));document.getElementById("picker-zoom-out").addEventListener("click",()=>pickerSvg.call(pickerZoom.scaleBy,1/1.45));
+    theaterSelect.addEventListener("change",()=>{pickerProjectionEvent=null;pickerPoints={start:null,end:null};pickerZoomTransform=d3.zoomIdentity;drawPicker()});
+    document.getElementById("edit-sort-date").addEventListener("change",event=>{if(editorMode==="add")document.getElementById("edit-date").value=koreanDate(event.target.value)});
+    d3.select(routePicker).on("click",event=>{if(!pickerProjection)return;const screenPoint=d3.pointer(event,routePicker),mapPoint=pickerZoomTransform.invert(screenPoint),point=pickerProjection.invert(mapPoint);if(!point)return;pickerPoints[pickerMode]=point;if(pickerMode==="start")setPickerMode("end");drawPicker()});
+    editorForm.addEventListener("submit",event=>{
+      event.preventDefault();const sortDate=document.getElementById("edit-sort-date").value,endDate=document.getElementById("edit-end-date").value||null;if(endDate&&endDate<=sortDate){alert("종료 날짜는 시작 날짜보다 뒤여야 합니다.");return}if(hasMapInput.checked&&(!pickerPoints.start||!pickerPoints.end)){alert("지도에서 출발점과 도착점을 모두 선택해주세요.");return}const routes=hasMapInput.checked?[[document.getElementById("edit-start-name").value.trim()||"출발점",pickerPoints.start[0],pickerPoints.start[1],document.getElementById("edit-end-name").value.trim()||"도착점",pickerPoints.end[0],pickerPoints.end[1]]]:[];const mapView=hasMapInput.checked?currentPickerView():null;const payload={theater:theaterSelect.value,sortDate,endDate,date:document.getElementById("edit-date").value.trim()||koreanDate(sortDate),title:document.getElementById("edit-title").value.trim(),summary:document.getElementById("edit-summary").value.trim(),routes,mapView};
+      if(editorMode==="add"){
+        userState.added=[...(userState.added||[]),{id:`custom-${Date.now()}`,...payload}];
+      }else if(selectedEventId.startsWith("custom-")){
+        userState.added=(userState.added||[]).map(item=>item.id===selectedEventId?{...item,...payload}:item);
+      }else{
+        userState.updates[selectedEventId]={...(userState.updates[selectedEventId]||{}),...payload};
+      }
+      saveState();editor.close();render();
+    });
+    document.getElementById("close-editor").addEventListener("click",()=>editor.close());
+    document.getElementById("cancel-edit").addEventListener("click",()=>editor.close());
+    editor.addEventListener("click",event=>{if(event.target===editor)editor.close()});
+    render();
+    timelineScroll.addEventListener("scroll",()=>{stickyTrack.style.transform=`translateX(${-timelineScroll.scrollLeft}px)`},{passive:true});
+    document.getElementById("dialog-zoom-in").addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1.45));document.getElementById("dialog-zoom-out").addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1/1.45));
+    document.getElementById("close-dialog").addEventListener("click",()=>dialog.close());
+    dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});
+  </script>
+</body>
+</html>
