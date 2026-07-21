@@ -174,9 +174,26 @@
     }
     function eventEndDate(event){return Object.hasOwn(event,"endDate")?(event.endDate||null):inferEndDate(event.date,event.sortDate)}
     function reignLength(startDate,endDate){const start=new Date(`${startDate}T00:00:00`),end=new Date(`${endDate}T00:00:00`);let months=(end.getFullYear()-start.getFullYear())*12+end.getMonth()-start.getMonth();if(end.getDate()<start.getDate())months-=1;const years=Math.floor(Math.max(0,months)/12),rest=Math.max(0,months)%12;return [years?`${years}년`:"",rest?`${rest}개월`:""].filter(Boolean).join(" ")||"1개월 미만"}
+    function eventYearRules(events){
+      if(!timelineConfig.yearRulePerEvent)return [];
+      const rules=new Set();
+      events.forEach(event=>{
+        for(const date of [event.sortDate,eventEndDate(event)]){
+          if(!date)continue;
+          const [year,month,day]=date.split("-").map(Number);
+          if(month===1&&day===1)continue;
+          rules.add(`${String(year).padStart(4,"0")}-01-01`);
+        }
+      });
+      return [...rules];
+    }
     function milestoneDates(events){
       const years=timelineConfig.yearMarkers||[];
-      return [...new Set([...years,...events.flatMap(event=>[event.sortDate,eventEndDate(event)]).filter(Boolean)])].sort();
+      const eventDates=events.flatMap(event=>[event.sortDate,eventEndDate(event)]).filter(Boolean);
+      const yearRules=new Set(eventYearRules(events));
+      const fillerYears=new Set([...yearRules].filter(date=>!years.includes(date)&&!eventDates.includes(date)));
+      const milestones=[...new Set([...years,...eventDates,...yearRules])].sort();
+      return {milestones,fillerYears};
     }
     function formatRule(date){const [year,month,day]=date.split("-").map(Number);return {year:String(year),label:month===1&&day===1?"1월":`${month}월 ${day}일`,yearLine:month===1&&day===1}}
     function durationColor(index){const hue=Math.round((index*137.508+18)%360),light=matchMedia("(prefers-color-scheme: dark)").matches?68:39;return `hsl(${hue} 62% ${light}%)`}
@@ -192,20 +209,20 @@
     function render(){
       const scrollLeft=timelineScroll.scrollLeft;
       const events=allEvents();
-      const milestones=milestoneDates(events);
-      const slotGap=timelineConfig.slotGap||252,slotTop=76,collisionGap=timelineConfig.collisionGap||150;
+      const {milestones,fillerYears}=milestoneDates(events);
+      const slotGap=timelineConfig.slotGap||252,slotTop=76,collisionGap=timelineConfig.collisionGap||150,yearRuleGap=timelineConfig.yearRuleGap||slotGap;
       const slotY=new Map();let cursorY=slotTop;
-      milestones.forEach(date=>{slotY.set(date,cursorY);const maxSameDate=Math.max(1,...theaterDefs.map(theater=>events.filter(event=>event.theater===theater.id&&event.sortDate===date).length));cursorY+=slotGap+(maxSameDate-1)*collisionGap});
+      milestones.forEach(date=>{slotY.set(date,cursorY);if(fillerYears.has(date)){cursorY+=yearRuleGap;return}const maxSameDate=Math.max(1,...theaterDefs.map(theater=>events.filter(event=>event.theater===theater.id&&event.sortDate===date).length));cursorY+=slotGap+(maxSameDate-1)*collisionGap});
       const timelineHeight=cursorY+slotTop+170;
       currentTimelineMeta={milestones,slotY};
       const durationEvents=events.filter(event=>eventEndDate(event));const durationColors=new Map(durationEvents.map((event,index)=>[event.id,durationColor(index)]));
       board.style.setProperty("--timeline-height",`${timelineHeight}px`);
       rules.replaceChildren();
       milestones.forEach(date=>{
-        const info=formatRule(date);const rule=document.createElement("div");rule.className=`time-rule${info.yearLine?" is-year":""}`;rule.dataset.milestone=date;rule.style.top=`${slotY.get(date)}px`;
+        const info=formatRule(date);const isFiller=fillerYears.has(date);const rule=document.createElement("div");rule.className=`time-rule${info.yearLine?" is-year":""}${isFiller?" is-filler-year":""}`;rule.dataset.milestone=date;rule.style.top=`${slotY.get(date)}px`;
         const label=document.createElement("span");label.className="time-label";
         if(info.yearLine){const strong=document.createElement("strong");strong.textContent=info.year;label.appendChild(strong)}
-        label.append(info.label);rule.appendChild(label);rules.appendChild(rule);
+        if(!isFiller)label.append(info.label);rule.appendChild(label);rules.appendChild(rule);
       });
       board.querySelectorAll(".theater-lane").forEach(node=>node.remove());
       stickyTrack.replaceChildren();

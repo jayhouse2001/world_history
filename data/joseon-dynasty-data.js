@@ -134,6 +134,8 @@ window.timelineConfig = {
   maxDate:"1910-12-31",
   defaultDate:"1392-07-17",
   yearMarkers:["1392-01-01","1400-01-01","1450-01-01","1500-01-01","1550-01-01","1600-01-01","1650-01-01","1700-01-01","1750-01-01","1800-01-01","1850-01-01","1900-01-01"],
+  yearRulePerEvent:true,
   slotGap:185,
+  yearRuleGap:52,
   collisionGap:170
 };
