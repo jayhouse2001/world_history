@@ -1,4 +1,8 @@
+    (async()=>{
     const timelineConfig=window.timelineConfig;
+    const historicalData=timelineConfig.historicalDataUrl
+      ? await d3.json(timelineConfig.historicalDataUrl).catch(error=>{console.warn("역사 경계 데이터를 불러오지 못해 기본 지도만 표시합니다.",error);return null})
+      : null;
     const theaterDefs=timelineConfig.lanes;
     const baseEvents=timelineConfig.events;
     const storageKey=timelineConfig.storageKey;
@@ -25,27 +29,110 @@
     function projectionFor(theater,width,height,event=null){
       const projection=d3.geoMercator(); if(theater.rotate) projection.rotate(theater.rotate);
       const b=theater.bounds;let corners={type:"MultiPoint",coordinates:[[b[0][0],b[0][1]],[b[1][0],b[0][1]],[b[1][0],b[1][1]],[b[0][0],b[1][1]]]};const savedView=(event?.mapView||[]).map(point=>[Number(point[0]),Number(point[1])]).filter(point=>point.every(Number.isFinite));const routePoints=(event?.routes||[]).flatMap(route=>[[Number(route[1]),Number(route[2])],[Number(route[4]),Number(route[5])]]).filter(point=>point.every(Number.isFinite));
-      if(savedView.length>=4){corners={type:"MultiPoint",coordinates:savedView}}else if(routePoints.length>=2&&routePoints.some(point=>!pointInTheater(theater,point))){const longitudes=routePoints.map(point=>point[0]),latitudes=routePoints.map(point=>point[1]),minLon=Math.min(...longitudes),maxLon=Math.max(...longitudes),minLat=Math.min(...latitudes),maxLat=Math.max(...latitudes),lonPad=Math.max(3,(maxLon-minLon)*.18),latPad=Math.max(2,(maxLat-minLat)*.22);corners={type:"MultiPoint",coordinates:[[minLon-lonPad,minLat-latPad],[maxLon+lonPad,minLat-latPad],[maxLon+lonPad,maxLat+latPad],[minLon-lonPad,maxLat+latPad]]}}
+      if(savedView.length>=4){corners={type:"MultiPoint",coordinates:savedView}}else if(routePoints.length>=2&&(event?.mapDesign==="war-v1"||routePoints.some(point=>!pointInTheater(theater,point)))){let normalized=routePoints;if(theater.rotate){normalized=routePoints.map(([lon,lat])=>{let value=lon;while(value<100)value+=360;return [value,lat]})}const longitudes=normalized.map(point=>point[0]),latitudes=normalized.map(point=>point[1]),minLon=Math.min(...longitudes),maxLon=Math.max(...longitudes),minLat=Math.min(...latitudes),maxLat=Math.max(...latitudes),lonPad=Math.max(3,(maxLon-minLon)*.22),latPad=Math.max(2,(maxLat-minLat)*.3);corners={type:"MultiPoint",coordinates:[[minLon-lonPad,minLat-latPad],[maxLon+lonPad,minLat-latPad],[maxLon+lonPad,maxLat+latPad],[minLon-lonPad,maxLat+latPad]].map(([lon,lat])=>[lon>180?lon-360:lon,lat])}}
       const padding=Math.max(8,Math.min(width,height)*.08);return projection.fitExtent([[padding,padding],[width-padding,height-padding]],corners);
     }
     function routeFeature(route){return {type:"LineString",coordinates:[[route[1],route[2]],[route[4],route[5]]]}}
+    function routeSide(route){return ["allied","axis","soviet","finnish"].includes(route[6])?route[6]:"neutral"}
+    function drawHistoricalPartitions(viewport,path,projection,event,width,height,labelRequests){
+      if(!historicalData||!event.historicalPartitions?.length)return;
+      const layer=viewport.append("g").attr("class","historical-control-layer");
+      event.historicalPartitions.forEach((partition,index)=>{
+        const feature=historicalData.features?.find(item=>item.properties?.NAME===partition.featureName);if(!feature)return;
+        const divider=(partition.divider||[]).map(projection).filter(Boolean);if(divider.length<2)return;
+        const defs=viewport.append("defs"),westId=`historical-west-${event.id}-${index}`,eastId=`historical-east-${event.id}-${index}`;
+        const west=[[0,0],[divider[0][0],0],...divider,[divider.at(-1)[0],height],[0,height]];
+        const east=[[divider[0][0],0],[width,0],[width,height],[divider.at(-1)[0],height],...divider.slice().reverse()];
+        defs.append("clipPath").attr("id",westId).attr("clipPathUnits","userSpaceOnUse").append("polygon").attr("points",west.map(point=>point.join(",")).join(" "));
+        defs.append("clipPath").attr("id",eastId).attr("clipPathUnits","userSpaceOnUse").append("polygon").attr("points",east.map(point=>point.join(",")).join(" "));
+        layer.append("path").datum(feature).attr("class",`historical-control historical-control-${partition.westSide}`).attr("clip-path",`url(#${westId})`).attr("d",path);
+        layer.append("path").datum(feature).attr("class",`historical-control historical-control-${partition.eastSide}`).attr("clip-path",`url(#${eastId})`).attr("d",path);
+        layer.append("path").datum(feature).attr("class","historical-boundary").attr("d",path);
+        layer.append("path").datum({type:"LineString",coordinates:partition.divider}).attr("class","partition-line").attr("d",path);
+        (partition.labels||[]).forEach(label=>{const point=projection(label.at);if(point)labelRequests.push({text:label.text,x:point[0],y:point[1],priority:96,className:"control-label"})});
+      });
+    }
     function keepMarkerSize(map,scale){
       map.selectAll(".start-dot[data-base-r]").attr("r",function(){return Number(this.dataset.baseR)/scale});
       map.selectAll(".end-mark[data-base-transform]").attr("transform",function(){return `${this.dataset.baseTransform} scale(${1/scale})`});
+      map.selectAll(".unit-icon[data-base-transform]").attr("transform",function(){return `${this.dataset.baseTransform} scale(${1/scale})`});
+    }
+    function installWarSymbols(map){
+      const defs=map.append("defs");
+      const symbols=[
+        ["unit-tank",'<path d="M4 15h24l4 4-3 3H5l-3-3z"/><circle cx="8" cy="19" r="2.2"/><circle cx="14" cy="19" r="2.2"/><circle cx="20" cy="19" r="2.2"/><circle cx="26" cy="19" r="2.2"/><path d="M8 10h15l4 5H6zM13 6h9l3 4H11zM18 4h3v2h-3zM23 7h11v2H23z"/>'],
+        ["unit-ship",'<path d="M2 15h32l-5 7H8zM9 11h17v4H9zM13 7h9v4h-9zM17 3h2v4h-2zM8 9h5v2H8zM24 9h6v2h-6z"/>'],
+        ["unit-bomber",'<path d="M17 2h2l2 8 12 5v3l-12-2-2 6h-2l-2-6-12 2v-3l12-5z"/>'],
+        ["unit-landing",'<path d="M3 7h30l-4 15H7zM8 10h20v3H8zM10 15h16v2H10zM10 19h16v2H10zM27 4h5v6h-5z"/>']
+      ];
+      symbols.forEach(([id,markup])=>{const symbol=defs.append("symbol").attr("id",id).attr("viewBox","0 0 36 24");symbol.html(markup)});
+    }
+    function addWarIcon(layer,projection,unit,labels){
+      const point=projection(unit.at);if(!point)return null;
+      const angle=Number(unit.heading)||0,transform=`translate(${point[0]},${point[1]}) rotate(${angle})`;
+      const group=layer.append("g").attr("class",`unit-icon unit-icon-${unit.side||"neutral"}`).attr("data-base-transform",transform).attr("transform",transform);
+      const width=labels?22:14,height=labels?15:10;
+      group.append("use").attr("href",`#unit-${unit.type}`).attr("x",-width/2).attr("y",-height/2).attr("width",width).attr("height",height);
+      return {x:point[0],y:point[1],x1:point[0]-12,y1:point[1]-9,x2:point[0]+12,y2:point[1]+9};
+    }
+    function boxesOverlap(a,b){return !(a.x2<=b.x1||a.x1>=b.x2||a.y2<=b.y1||a.y1>=b.y2)}
+    function overlapArea(a,b){if(!boxesOverlap(a,b))return 0;return (Math.min(a.x2,b.x2)-Math.max(a.x1,b.x1))*(Math.min(a.y2,b.y2)-Math.max(a.y1,b.y1))}
+    function drawCollisionLabels(layer,requests,width,height,obstacles,reserved=[]){
+      const offsets=[[0,0],[8,0],[-8,0],[0,8],[0,-8],[8,8],[-8,8],[8,-8],[-8,-8],[16,0],[-16,0],[0,14],[0,-14],[24,16],[-24,16],[24,-16],[-24,-16]],used=[];
+      const uniqueRequests=requests.filter((request,index,all)=>all.findIndex(other=>other.text===request.text)===index);
+      uniqueRequests.sort((a,b)=>b.priority-a.priority).forEach(request=>{
+        if(request.showLabel===false)return;
+        const text=layer.append("text").attr("class",request.className||"place-label").attr("x",request.x).attr("y",request.y).attr("visibility","hidden").text(request.text);
+        const bbox=text.node().getBBox();let best=null;
+        offsets.forEach(([dx,dy])=>{
+          const box={x1:request.x+dx+bbox.x-request.x-2,y1:request.y+dy+bbox.y-request.y-2,x2:request.x+dx+bbox.x-request.x+bbox.width+2,y2:request.y+dy+bbox.y-request.y+bbox.height+2};
+          const edgePenalty=box.x1<3||box.y1<3||box.x2>width-3||box.y2>height-3?1e7:0;
+          const collisions=[...used,...obstacles,...reserved].reduce((sum,item)=>sum+overlapArea(box,item),0);
+          const score=edgePenalty+collisions*1000+Math.hypot(dx,dy);if(!best||score<best.score)best={dx,dy,box,score};
+        });
+        if(!best){text.remove();return}
+        if(Math.hypot(best.dx,best.dy)>10)layer.insert("line","text").attr("class","map-label-connector").attr("x1",request.x).attr("y1",request.y).attr("x2",request.x+best.dx).attr("y2",request.y+best.dy);
+        text.attr("x",request.x+best.dx).attr("y",request.y+best.dy).attr("visibility",null);used.push(best.box);
+      });
+    }
+    function drawWarLegend(viewport,event,width){
+      const territoryEntries=event.legend?.territories||[];
+      const routeEntries=event.legend?.routes||[{side:"axis",label:"추축군 진격"}];
+      const unitEntries=event.legend?.units||[["ship","axis","함대"],["landing","axis","상륙정"],["tank","axis","전차"]].map(([type,side,label])=>({type,side,label}));
+      const colorEntries=event.legend?.colors||[{side:"axis",label:"주황: 추축군"}];
+      const rowCount=territoryEntries.length+routeEntries.length+1+unitEntries.length+colorEntries.length;
+      const x=width-190,y=18,w=172,h=34+rowCount*21,legend=viewport.append("g").attr("class","war-map-legend").attr("transform",`translate(${x},${y})`);
+      legend.append("rect").attr("class","war-legend-bg").attr("width",w).attr("height",h).attr("rx",6);
+      legend.append("text").attr("class","war-legend-title").attr("x",12).attr("y",19).text(event.legend?.title||"표현 범례");
+      const row=(cy,label,draw)=>{draw(cy);legend.append("text").attr("class","war-legend-text").attr("x",42).attr("y",cy+3).text(label)};
+      let cy=38;
+      territoryEntries.forEach(entry=>{row(cy,entry.label,yPos=>legend.append("rect").attr("class",`legend-territory legend-territory-${entry.side}`).attr("x",12).attr("y",yPos-7).attr("width",20).attr("height",13));cy+=21});
+      routeEntries.forEach(entry=>{row(cy,entry.label,yPos=>legend.append("line").attr("class",`route route-${entry.side} route-active`).attr("x1",12).attr("x2",32).attr("y1",yPos).attr("y2",yPos));cy+=21});
+      const directionSide=routeEntries[0]?.side||"neutral";
+      row(cy,"화살표: 진행 방향",yPos=>legend.append("path").attr("class",`legend-arrow legend-arrow-${directionSide}`).attr("d",`M12 ${yPos}h15m0 0-5-4m5 4-5 4`));cy+=21;
+      unitEntries.forEach(entry=>{row(cy,entry.label,yPos=>legend.append("use").attr("class",`legend-unit legend-unit-${entry.side}`).attr("href",`#unit-${entry.type}`).attr("x",12).attr("y",yPos-7).attr("width",20).attr("height",14));cy+=21});
+      colorEntries.forEach(entry=>{legend.append("circle").attr("class",`legend-side legend-side-${entry.side}`).attr("cx",18).attr("cy",cy).attr("r",5);legend.append("text").attr("class","war-legend-text").attr("x",30).attr("y",cy+3).text(entry.label);cy+=21});
+      return {x1:x,y1:y,x2:x+w,y2:y+h};
     }
     function drawMap(svgElement,theater,event,width,height,labels){
-      const map=d3.select(svgElement); map.attr("viewBox",`0 0 ${width} ${height}`); map.selectAll("g").remove();
+      const detailed=event.mapDesign==="war-v1";const map=d3.select(svgElement); map.attr("viewBox",`0 0 ${width} ${height}`).classed("war-map-detailed",detailed); map.selectAll("g,defs").remove();if(detailed)installWarSymbols(map);
       const projection=projectionFor(theater,width,height,event); const path=d3.geoPath(projection);const viewport=map.append("g").attr("class","map-viewport"); const base=viewport.append("g");
       base.append("path").datum(d3.geoGraticule10()).attr("class","graticule").attr("d",path);
-      base.selectAll("path.country").data(countries).join("path").attr("class","country").attr("d",path);
-      const routes=viewport.append("g"); event.routes.forEach(route=>{
-        routes.append("path").datum(routeFeature(route)).attr("class","route").attr("d",path);
+      base.selectAll("path.country").data(countries).join("path").attr("class",d=>{const id=String(d.id).padStart(3,"0"),side=event.countrySides?.[id];return side?`country country-side-${side}`:"country"}).attr("d",path);
+      const routeLayer=viewport.append("g").attr("class","route-layer"),unitLayer=viewport.append("g").attr("class","unit-layer"),labelRequests=[],obstacles=[];
+      drawHistoricalPartitions(viewport,path,projection,event,width,height,labelRequests);
+      event.routes.forEach(route=>{
+        const side=routeSide(route),routeClass=detailed?`route route-active route-${side}`:"route";
+        routeLayer.append("path").datum(routeFeature(route)).attr("class",routeClass).attr("d",path);
         const start=projection([route[1],route[2]]),end=projection([route[4],route[5]]); if(!start||!end)return;
-        routes.append("circle").attr("class","start-dot").attr("data-base-r",labels?5:3).attr("cx",start[0]).attr("cy",start[1]).attr("r",labels?5:3);
+        routeLayer.append("circle").attr("class",`start-dot start-dot-${side}`).attr("data-base-r",labels?5:3).attr("cx",start[0]).attr("cy",start[1]).attr("r",labels?5:3);
         const angle=Math.atan2(end[1]-start[1],end[0]-start[0])*180/Math.PI+90;
-        const endTransform=`translate(${end[0]},${end[1]}) rotate(${angle})`;routes.append("path").attr("class","end-mark").attr("data-base-transform",endTransform).attr("d",labels?"M0,-8 L7,7 L-7,7 Z":"M0,-5 L4,4 L-4,4 Z").attr("transform",endTransform);
-        if(labels){routes.append("text").attr("class","place-label").attr("x",start[0]+7).attr("y",start[1]-7).text(route[0]);routes.append("text").attr("class","place-label").attr("x",end[0]+8).attr("y",end[1]+15).text(route[3])}
+        const endTransform=`translate(${end[0]},${end[1]}) rotate(${angle})`;routeLayer.append("path").attr("class",`end-mark end-mark-${side}`).attr("data-base-transform",endTransform).attr("d",labels?"M0,-7 L6,6 L-6,6 Z":"M0,-4 L3.5,3.5 L-3.5,3.5 Z").attr("transform",endTransform);
+        if(labels&&detailed){labelRequests.push({text:route[0],x:start[0]+7,y:start[1]-7,priority:76},{text:route[3],x:end[0]+8,y:end[1]+14,priority:78})}
+        else if(labels){routeLayer.append("text").attr("class","place-label").attr("x",start[0]+7).attr("y",start[1]-7).text(route[0]);routeLayer.append("text").attr("class","place-label").attr("x",end[0]+8).attr("y",end[1]+15).text(route[3])}
       });
+      if(detailed)(event.units||[]).forEach(unit=>{const box=addWarIcon(unitLayer,projection,unit,labels);if(box)obstacles.push(box);if(labels&&unit.showLabel!==false&&box)labelRequests.push({text:unit.label,x:box.x,y:box.y-12,priority:54})});
+      if(detailed&&labels){const reserved=[drawWarLegend(viewport,event,width)];const labelLayer=viewport.append("g").attr("class","map-label-layer");drawCollisionLabels(labelLayer,labelRequests,width,height,obstacles,reserved);if(event.mapNote)labelLayer.append("text").attr("class","map-note").attr("x",12).attr("y",height-12).text(event.mapNote)}
     }
     function openMap(theater,event){
       document.getElementById("dialog-date").textContent=event.date;
@@ -242,3 +329,4 @@
     document.getElementById("dialog-zoom-in").addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1.45));document.getElementById("dialog-zoom-out").addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1/1.45));
     document.getElementById("close-dialog").addEventListener("click",()=>dialog.close());
     dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});
+    })();

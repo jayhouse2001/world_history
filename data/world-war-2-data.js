@@ -5,9 +5,80 @@ const lanes = [
       {id:"pacific",name:"아시아·태평양",bounds:[[100,-12],[-145,55]],rotate:[-160,0]}
     ];
 const events = [
-      {id:"pacific-china",theater:"pacific",sortDate:"1937-07-07",date:"1937년 7월 7일 이후",title:"중일전쟁 확대",summary:"루거우차오 사건 뒤 전쟁이 전면화되고 일본군이 중국 해안과 주요 도시로 진격.",routes:[["규슈",130.5,32.5,"상하이",121.47,31.23],["상하이",121.47,31.23,"난징",118.8,32.06]]},
-      {id:"east-poland",theater:"east",sortDate:"1939-09-01",date:"1939년 9월 1일·17일",title:"폴란드 침공",summary:"독일은 1일 서쪽에서, 소련은 17일 동쪽에서 폴란드로 진격.",routes:[["베를린",13.41,52.52,"바르샤바",21.01,52.23],["민스크",27.56,53.9,"브레스트",23.69,52.1]]},
-      {id:"east-winter",theater:"east",sortDate:"1939-11-30",date:"1939년 11월 30일~1940년 3월 13일",title:"겨울전쟁",summary:"소련이 핀란드를 공격하고 강화 조약으로 카렐리야 일부를 획득.",routes:[["레닌그라드",30.32,59.93,"비푸리",28.75,60.71]]},
+      {
+        id:"pacific-china", theater:"pacific", sortDate:"1937-07-07",
+        date:"1937년 7월 7일 이후", title:"중일전쟁 확대",
+        summary:"루거우차오 사건 뒤 전쟁이 전면화되고 일본군이 중국 해안과 주요 도시로 진격.",
+        mapDesign:"war-v1",
+        mapNote:"현대 국경 기준 · 국가색은 교전 진영, 진격 방향은 개략 표시",
+        mapView:[[112,20],[136,20],[136,42],[112,42]],
+        countrySides:{"156":"allied","392":"axis"},
+        routes:[
+          ["규슈",130.5,32.5,"상하이",121.47,31.23,"axis","naval"],
+          ["상하이",121.47,31.23,"난징",118.8,32.06,"axis","land"]
+        ],
+        units:[
+          {type:"ship",side:"axis",at:[124.8,31.7],heading:255,label:"일본 함대",showLabel:false},
+          {type:"landing",side:"axis",at:[121.8,31.05],heading:270,label:"상륙부대",showLabel:false},
+          {type:"tank",side:"axis",at:[120.15,31.75],heading:245,label:"지상군",showLabel:false}
+        ],
+        legend:{
+          title:"표현 범례",
+          territories:[{side:"allied",label:"중국 측 지역"},{side:"axis",label:"일본 측 지역"}],
+          showControl:false
+        }
+      },
+      {
+        id:"east-poland", theater:"east", sortDate:"1939-09-01",
+        date:"1939년 9월 1일·17일", title:"폴란드 침공",
+        summary:"독일은 1일 서쪽에서, 소련은 17일 동쪽에서 폴란드로 진격.",
+        mapDesign:"war-v1",
+        mapNote:"1938년 역사 경계 · 1939년 9월 28일 독·소 분할선(나레프·부크·산강) 개략",
+        mapView:[[10,47],[30,47],[30,56],[10,56]],
+        countrySides:{"276":"axis","616":"allied","703":"axis","112":"soviet","643":"soviet","804":"soviet"},
+        historicalPartitions:[{
+          featureName:"Poland",westSide:"axis",eastSide:"soviet",
+          divider:[[24.15,55.25],[23.55,54.15],[22.95,53.55],[23.45,52.15],[23.25,51.15],[22.65,50.35],[22.75,48.55]],
+          labels:[{text:"독일 점령 지역",at:[20.25,51.35]},{text:"소련 점령 지역",at:[25.35,51.65]}]
+        }],
+        routes:[
+          ["베를린",13.41,52.52,"바르샤바",21.01,52.23,"axis","land"],
+          ["민스크",27.56,53.9,"브레스트",23.69,52.1,"soviet","land"]
+        ],
+        units:[
+          {type:"tank",side:"axis",at:[17.8,52.25],heading:90,label:"독일 기갑",showLabel:false},
+          {type:"bomber",side:"axis",at:[19.3,50.7],heading:85,label:"독일 공군",showLabel:false},
+          {type:"tank",side:"soviet",at:[25.7,53.15],heading:270,label:"소련 기갑",showLabel:false}
+        ],
+        legend:{
+          title:"표현 범례",
+          territories:[{side:"axis",label:"독일 점령 지역"},{side:"soviet",label:"소련 점령 지역"}],
+          routes:[{side:"axis",label:"독일군 진격"},{side:"soviet",label:"소련군 진격"}],
+          units:[{type:"tank",side:"axis",label:"독일 기갑"},{type:"bomber",side:"axis",label:"독일 폭격기"},{type:"tank",side:"soviet",label:"소련 기갑"}],
+          colors:[{side:"axis",label:"주황: 독일군"},{side:"soviet",label:"적색: 소련군"}]
+        }
+      },
+      {
+        id:"east-winter", theater:"east", sortDate:"1939-11-30",
+        date:"1939년 11월 30일~1940년 3월 13일", title:"겨울전쟁",
+        summary:"소련이 핀란드를 공격하고 강화 조약으로 카렐리야 일부를 획득.",
+        mapDesign:"war-v1",
+        mapNote:"현대 국경 기준 · 국가색은 교전 진영, 진격 방향은 개략 표시",
+        mapView:[[19,57],[34,57],[34,66.5],[19,66.5]],
+        countrySides:{"246":"finnish","643":"soviet"},
+        routes:[["레닌그라드",30.32,59.93,"비푸리",28.75,60.71,"soviet","land"]],
+        units:[
+          {type:"tank",side:"soviet",at:[29.75,60.15],heading:315,label:"소련 기갑",showLabel:false},
+          {type:"bomber",side:"soviet",at:[28.9,61.25],heading:325,label:"소련 공군",showLabel:false}
+        ],
+        legend:{
+          title:"표현 범례",
+          territories:[{side:"finnish",label:"핀란드 지역"},{side:"soviet",label:"소련 지역"}],
+          routes:[{side:"soviet",label:"소련군 진격"}],
+          units:[{type:"tank",side:"soviet",label:"소련 기갑"},{type:"bomber",side:"soviet",label:"소련 폭격기"}],
+          colors:[{side:"soviet",label:"적색: 소련군"}]
+        }
+      },
       {id:"africa-italy-egypt",theater:"africa",sortDate:"1940-09-13",date:"1940년 9월 13일",title:"이탈리아군의 이집트 침공",summary:"리비아의 이탈리아군이 이집트로 진격했지만 시디바라니 부근에서 멈춤.",routes:[["토브루크",23.96,32.08,"시디바라니",25.93,31.61]]},
       {id:"west-ardennes",theater:"west",sortDate:"1940-05-10",date:"1940년 5월 10일",title:"아르덴 돌파",summary:"독일군이 저지대 국가를 공격하고 스당을 거쳐 프랑스 북부로 진격.",routes:[["쾰른",6.96,50.94,"스당",4.94,49.7],["스당",4.94,49.7,"파리",2.35,48.86]]},
       {id:"west-dunkirk",theater:"west",sortDate:"1940-05-26",date:"1940년 5월 26일~6월 4일",title:"덩케르크 철수",summary:"포위된 영국·프랑스 연합군 주력이 영국 본토로 철수.",routes:[["덩케르크",2.38,51.03,"도버",1.31,51.13]]},
@@ -53,8 +124,98 @@ const events = [
       {id:"west-tehran",theater:"west",sortDate:"1943-11-28",date:"1943년 11월 28일~12월 1일",title:"테헤란 회담",summary:"미·영·소 정상이 서유럽 제2전선 개설과 전후 구상을 협의.",routes:[]}
     ];
 
+const mapCountrySets = {
+  west1940:{"276":"axis","250":"allied","056":"allied","528":"allied","442":"allied","826":"allied"},
+  britain:{"276":"axis","826":"allied"},
+  dieppe:{"276":"axis","250":"axis","826":"allied"},
+  africaEarly:{"380":"axis","434":"axis","826":"allied","818":"allied"},
+  torch:{"504":"allied","012":"allied","788":"axis","826":"allied","840":"allied"},
+  tunisiaAllied:{"788":"allied","012":"allied","504":"allied","380":"axis","276":"axis"},
+  italy1943:{"380":"axis","788":"allied","012":"allied","504":"allied","826":"allied","840":"allied"},
+  balkans:{"276":"axis","380":"axis","348":"axis","642":"axis","100":"axis","300":"allied","688":"allied","070":"allied","191":"allied","705":"allied","499":"allied","807":"allied"},
+  eastFront:{"276":"axis","380":"axis","348":"axis","642":"axis","246":"finnish","643":"soviet","804":"soviet","112":"soviet","233":"soviet","428":"soviet","440":"soviet"},
+  eastSouth:{"276":"axis","380":"axis","348":"axis","642":"axis","643":"soviet","804":"soviet","112":"soviet"},
+  pearl:{"392":"axis","840":"allied"},
+  philippines:{"392":"axis","158":"axis","608":"allied","840":"allied"},
+  rabaul:{"392":"axis","598":"allied","036":"allied"},
+  singapore:{"392":"axis","458":"allied","702":"allied","826":"allied"},
+  coral:{"392":"axis","598":"allied","036":"allied","840":"allied"},
+  midway:{"392":"axis","840":"allied"},
+  solomons:{"392":"axis","090":"allied","548":"allied","840":"allied"},
+  cartwheel:{"392":"axis","090":"allied","598":"allied","036":"allied","840":"allied"},
+  tarawa:{"392":"axis","296":"allied","840":"allied"}
+};
+
+const detailedMapPresets = {
+  "west-ardennes":{countries:"west1940",sides:"axis",types:"land"},
+  "west-dunkirk":{countries:"west1940",sides:"allied",types:"naval"},
+  "west-france":{countries:"west1940",sides:"axis",types:"land"},
+  "west-britain":{countries:"britain",sides:"axis",types:"air"},
+  "africa-italy-egypt":{countries:"africaEarly",sides:"axis",types:"land"},
+  "africa-compass":{countries:"africaEarly",sides:"allied",types:"land"},
+  "africa-rommel":{countries:"africaEarly",sides:"axis",types:"naval"},
+  "africa-rommel-east":{countries:"africaEarly",sides:"axis",types:"land"},
+  "east-balkans":{countries:"balkans",sides:"axis",types:["land","land","landing"]},
+  "east-barbarossa":{countries:"eastFront",sides:"axis",types:"land"},
+  "east-leningrad":{countries:"eastFront",sides:"axis",types:"land"},
+  "east-moscow":{countries:"eastFront",sides:"axis",types:"land"},
+  "africa-crusader":{countries:"africaEarly",sides:"allied",types:"land"},
+  "pacific-pearl":{countries:"pearl",sides:"axis",types:"air"},
+  "pacific-philippines":{countries:"philippines",sides:"axis",types:"landing"},
+  "pacific-rabaul":{countries:"rabaul",sides:"axis",types:"landing"},
+  "pacific-singapore":{countries:"singapore",sides:"axis",types:"land"},
+  "pacific-coral":{countries:"coral",sides:"axis",types:"naval"},
+  "africa-gazala":{countries:"africaEarly",sides:"axis",types:"land"},
+  "pacific-midway":{countries:"midway",sides:"axis",types:"naval"},
+  "east-caseblue":{countries:"eastSouth",sides:"axis",types:"land"},
+  "africa-first-elalamein":{countries:"africaEarly",sides:"axis",types:"land"},
+  "pacific-guadalcanal":{countries:"solomons",sides:"allied",types:"landing"},
+  "west-dieppe":{countries:"dieppe",sides:"allied",types:"landing"},
+  "east-stalingrad":{countries:"eastSouth",sides:"axis",types:"land"},
+  "africa-second-elalamein":{countries:"africaEarly",sides:"allied",types:"land"},
+  "africa-torch":{countries:"torch",sides:"allied",types:"landing"},
+  "east-uranus":{countries:"eastSouth",sides:"soviet",types:"land"},
+  "east-stalingrad-end":{countries:"eastSouth",sides:"soviet",types:"land"},
+  "pacific-guadalcanal-end":{countries:"solomons",sides:"allied",types:"naval"},
+  "africa-tunisia-end":{countries:"tunisiaAllied",sides:"allied",types:"land"},
+  "pacific-cartwheel":{countries:"cartwheel",sides:"allied",types:"landing"},
+  "east-kursk":{countries:"eastSouth",sides:"axis",types:"land"},
+  "africa-sicily":{countries:"italy1943",sides:"allied",types:"landing"},
+  "africa-italy":{countries:"italy1943",sides:"allied",types:"landing",view:[[14,37.3],[16.8,37.3],[16.8,39.2],[14,39.2]]},
+  "africa-salerno":{countries:"italy1943",sides:"allied",types:"landing"},
+  "east-kyiv":{countries:"eastSouth",sides:"soviet",types:"land"},
+  "pacific-tarawa":{countries:"tarawa",sides:"allied",types:"landing"}
+};
+
+const sideMapLabels={allied:"연합군",axis:"추축군",soviet:"소련군",finnish:"핀란드군",neutral:"중립"};
+const unitMapLabels={land:"기갑",naval:"함대",air:"폭격기",landing:"상륙정"};
+const unitTypeByRoute={land:"tank",naval:"ship",air:"bomber",landing:"landing"};
+function routeMidpoint(route){const start=Number(route[1]),end=Number(route[4]);let delta=((end-start+540)%360)-180,lon=start+delta/2;if(lon>180)lon-=360;if(lon<-180)lon+=360;return [lon,(Number(route[2])+Number(route[5]))/2]}
+events.forEach(event=>{
+  const preset=detailedMapPresets[event.id];if(!preset||!event.routes?.length)return;
+  const sideFor=index=>Array.isArray(preset.sides)?preset.sides[index]||preset.sides.at(-1):preset.sides;
+  const typeFor=index=>Array.isArray(preset.types)?preset.types[index]||preset.types.at(-1):preset.types;
+  event.mapDesign="war-v1";
+  event.mapNote="현대 국경 기준 · 국가색은 참전국 진영(점령지는 아님), 이동 방향은 개략 표시";
+  if(preset.view)event.mapView=preset.view;
+  event.countrySides={...mapCountrySets[preset.countries]};
+  event.routes=event.routes.map((route,index)=>[...route.slice(0,6),sideFor(index),typeFor(index)]);
+  event.units=event.routes.map((route,index)=>{const side=sideFor(index),routeType=typeFor(index);return {type:unitTypeByRoute[routeType],side,at:routeMidpoint(route),heading:0,label:`${sideMapLabels[side]} ${unitMapLabels[routeType]}`,showLabel:false}});
+  const territorySides=[...new Set(Object.values(event.countrySides))];
+  const routeSides=[...new Set(event.routes.map(route=>route[6]))];
+  const unitPairs=[...new Map(event.units.map(unit=>[`${unit.side}-${unit.type}`,unit])).values()];
+  event.legend={
+    title:"표현 범례",
+    territories:territorySides.map(side=>({side,label:`${sideMapLabels[side]} 소속국`})),
+    routes:routeSides.map(side=>({side,label:`${sideMapLabels[side]} 이동`})),
+    units:unitPairs.map(unit=>({type:unit.type,side:unit.side,label:`${sideMapLabels[unit.side]} ${unitMapLabels[event.routes.find(route=>route[6]===unit.side&&unitTypeByRoute[route[7]]===unit.type)?.[7]||"land"]}`})),
+    colors:routeSides.map(side=>({side,label:`진영색: ${sideMapLabels[side]}`}))
+  };
+});
+
 window.timelineConfig = {
   storageKey: "world-history-ww2-events-v1",
+  historicalDataUrl:"data/world-1938.geojson",
   lanes,
   events,
   yearMarkers: ["1937-01-01","1939-01-01","1940-01-01","1941-01-01","1942-01-01","1943-01-01"]
