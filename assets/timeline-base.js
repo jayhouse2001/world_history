@@ -372,7 +372,7 @@
         const dateCounts=new Map();
         theaterEvents.forEach(event=>{
           const sameDateIndex=dateCounts.get(event.sortDate)||0;dateCounts.set(event.sortDate,sameDateIndex+1);
-          const article=document.createElement("article");article.className=`event${event.kind==="reign"?" is-reign-event":""}${event.kind==="world"?" is-world-event":""}${event.related?" is-related-event":""}`;article.dataset.eventId=event.id;article.style.top=`${slotY.get(event.sortDate)-28+sameDateIndex*collisionGap}px`;
+          const article=document.createElement("article");article.className=`event${event.kind==="reign"?" is-reign-event":""}${event.kind==="world"?" is-world-event":""}${event.related?" is-related-event":""}${event.series?` series-${event.series}`:""}`;article.dataset.eventId=event.id;article.style.top=`${slotY.get(event.sortDate)-28+sameDateIndex*collisionGap}px`;
           const faction=eventFaction(event);
           const card=document.createElement("div");card.className=`event-card${event.routes?.length||event.image?"":" no-map"}${event.kind==="reign"?" is-reign":""}${event.series?` is-series series-${event.series}`:""}${faction?` faction-${faction}`:""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
           const copy=document.createElement("div");
@@ -483,6 +483,21 @@
     document.getElementById("cancel-edit").addEventListener("click",()=>editor.close());
     editor.addEventListener("click",event=>{if(event.target===editor)editor.close()});
     render();
+    (function setupSeriesFilter(){
+      const host=document.getElementById("series-filter");if(!host||!Object.keys(seriesLabels).length)return;
+      const present=new Set(baseEvents.concat(userState.added||[]).map(e=>e.series).filter(Boolean));
+      const order=Object.keys(seriesLabels).filter(key=>present.has(key));if(!order.length)return;
+      const hidden=new Set(userState.hiddenSeries||[]);
+      const apply=key=>board.classList.toggle(`hide-series-${key}`,hidden.has(key));
+      order.forEach(key=>{
+        const label=document.createElement("label");label.className=`series-toggle series-toggle-${key}`;
+        const cb=document.createElement("input");cb.type="checkbox";cb.checked=!hidden.has(key);
+        const dot=document.createElement("span");dot.className="series-toggle-dot";
+        const text=document.createElement("span");text.textContent=seriesLabels[key];
+        cb.addEventListener("change",()=>{if(cb.checked)hidden.delete(key);else hidden.add(key);userState.hiddenSeries=[...hidden];saveState();apply(key)});
+        label.append(cb,dot,text);host.appendChild(label);apply(key);
+      });
+    })();
     timelineScroll.addEventListener("scroll",()=>{stickyTrack.style.transform=`translateX(${-timelineScroll.scrollLeft}px)`},{passive:true});
     window.addEventListener("scroll",updateStickyYear,{passive:true});
     window.addEventListener("resize",updateStickyYear,{passive:true});
