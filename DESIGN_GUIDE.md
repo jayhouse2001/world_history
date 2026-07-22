@@ -614,3 +614,132 @@ drawLabelTextOnTop();
 - 범례와 실제 기호의 색, 선, 패턴, 아이콘을 다르게 만들지 않는다.
 - 개략 표현을 정확한 점령 경계라고 단정하지 않는다.
 - 실제 브라우저에서 검증하지 않은 지도를 완료로 처리하지 않는다.
+
+---
+
+## 25. 사건 카드 데이터 구조 (다른 AI/세션이 카드를 추가·수정할 때 기준)
+
+이 섹션은 제2차 세계대전 타임라인(`data/world-war-2-data.js` + `assets/timeline-base.js`)에서 사건 카드를 추가·수정·확장하는 방법을 정리한 것이다. 조선왕조 등 다른 타임라인도 같은 엔진(`timeline-base.js`)을 쓴다.
+
+### 25.1 파일 역할
+
+- `data/<주제>-data.js` — 사건 데이터. 배열 `events` + `window.timelineConfig`. 콘텐츠만 여기 둔다.
+- `assets/timeline-base.js` — 공통 렌더러(타임라인·카드·지도·편집·필터). 로직만 여기 둔다. 콘텐츠 하드코딩 금지.
+- `assets/timeline-base.css` — 공통 스타일. 색·클래스 정의.
+- 지도 보조 데이터: `data/world-fronts.js`(시점별 전세계 진영 스냅샷+괴뢰국), `data/world-capitals.js`(주요국·수도·상시표시), `data/world-rivers-50m.js`(강), `data/world-landmarks.js`(섬 등 지명), `assets/world-atlas.js`(국가 topojson).
+
+### 25.2 사건(event) 객체 필드
+
+```js
+{
+  id:"west-normandy",          // 고유 id. 접두어=전선(west/east/africa/pacific) 또는 시리즈(uboat-/tiger-/mota-)
+  theater:"west",              // 소속 열(lane) id. WW2: west/east/africa/pacific
+  sortDate:"1944-06-06",       // 정렬·타임라인 위치 기준(YYYY-MM-DD). 필수
+  endDate:"1945-01-25",        // 선택. 기간 사건이면 종료일
+  date:"1944년 6월 6일",       // 카드에 표시할 사람이 읽는 날짜 문자열
+  title:"노르망디 상륙작전",   // 카드 제목
+  summary:"한두 문장 요약",    // 첫 화면 카드에 보이는 짧은 설명
+  detail:"긴 상세 설명",       // 선택. 카드를 눌러 연 상세창에 보임(없으면 summary 사용). \n\n 으로 문단 구분
+  series:"bob",                // 선택. 드라마/책 시리즈 키(§25.4)
+  episode:"3",                 // 선택. 시리즈 화수/국면. 배지에 "· EP3" 형태로 붙음(문자열, "6~7"도 가능)
+  faction:"allied",            // 선택. 카드 배경 진영 강제 지정(axis/allied). 자동 판별이 애매할 때만(§25.5)
+  image:"data:image/...",      // 선택. 참조 이미지(보통 편집기에서 넣음, localStorage 저장)
+  routes:[["출발",lon,lat,"도착",lon,lat,"side","type"]],  // 지도 화살표(§25.3)
+  mapDesign:"war-v1",          // 상세 지도 스타일. preset을 쓰면 자동 설정됨
+  mapView:[[경도,위도]x4],     // 지도 초기 화면 영역(4모서리)
+  countrySides:{"276":"axis"}, // 국가 진영색(ISO 숫자코드→side). 스냅샷 위에 덧씌움
+  units:[{type,side,at:[lon,lat],heading,label,showLabel}],  // 부대 아이콘
+  legend:{title,territories,routes,units,colors}             // 범례
+}
+```
+
+`sortDate`/`title`/`theater`만 필수. 지도 없는 카드는 `routes:[]`로 두면 텍스트 카드가 된다.
+
+### 25.3 route 형식과 side/type
+
+`route = ["출발지명", 출발경도, 출발위도, "도착지명", 도착경도, 도착위도, side, type]`
+
+- 좌표는 항상 `[경도(lon), 위도(lat)]` 순서, 십진수.
+- `side`: 화살표·아이콘 색. 아래 §25.6 표.
+- `type`: 부대 종류 → 아이콘. `land`(전차)·`naval`(함대)·`air`(폭격기)·`landing`(상륙정)·`para`(공수·낙하산)·`uboat`(잠수함). `unitTypeByRoute`/`unitMapLabels`에 정의.
+
+### 25.4 지도를 preset으로 자동 생성 (권장)
+
+카드마다 countrySides/units/legend를 직접 쓰지 않고, 간단히 `routes`만 둔 뒤 `detailedMapPresets`에 한 줄 추가하면 엔진이 지도·범례·아이콘을 자동 생성한다.
+
+```js
+// data 파일 안:
+detailedMapPresets["west-carentan"] = {countries:"normandy", sides:"bob", types:"para", view:[[...]]};
+// countries = mapCountrySets 의 키(국가 진영색 세트)
+// sides = 문자열(전 route 동일) 또는 배열(route별). types 도 동일.
+// view = 지도 초기 영역(선택)
+```
+
+- preset이 있으면 후처리 루프가 `mapDesign:"war-v1"`, countrySides, units, legend 를 자동 채운다.
+- **주의**: preset은 `route.slice(0,6)` 뒤에 preset의 side/type을 덧붙여 **route에 인라인으로 쓴 side/type을 덮어쓴다.** 세밀 제어가 필요하면 preset을 만들지 말고 카드에 countrySides/units/legend 를 직접 쓴다(예: 노르망디 카드).
+- route가 없는 카드(회담·항복 발표 등)는 preset 대상이 아니다. 전세계 전황도로 보이려면 `detailedNoRouteEvents` 배열에 id를 넣는다.
+
+### 25.5 진영 배경색 (자동)
+
+카드 배경으로 진영을 구분한다: **추축=옅은 붉은색(`faction-axis`), 연합=옅은 파랑(`faction-allied`)**. `eventFaction(event)`가 자동 판별:
+
+1. `event.faction`이 있으면 그 값 우선.
+2. 시리즈로 판별: axisSeries(`ironcoffins`,`tiger`)→axis, alliedSeries(`bob`,`pacific`,`mota`)→allied.
+3. route side로 판별: axisSides(`axis`,`uboat`,`tiger`) 하나라도 있으면 axis. 없고 alliedSides(`allied`,`bob`,`mota`) 있으면 allied.
+4. `soviet`/`finnish`는 시기에 따라 진영이 바뀌므로 **자동 판별에서 제외(중립)**. 소련이 연합군으로 공격한 사건(1942말 이후 반격·만주 침공 등)은 `faction:"allied"`를 **명시**한다. 1939년 소련 사건(폴란드 동부·겨울전쟁)은 무색 또는 필요시 명시.
+- 원칙: **공격 주체가 그 시점에 연합군이면 파랑, 독일·추축이면 붉은색.**
+
+### 25.6 side(진영) 색·라벨 목록
+
+| side | 색(route/아이콘) | sideMapLabels |
+|---|---|---|
+| allied | `#2f98f5` 파랑 | 연합군 |
+| axis | `#ff842b` 주황 | 추축군 |
+| soviet | `#b54848` 적색 | 소련군 |
+| finnish | `#3777a8` | 핀란드군 |
+| bob | `#7bc043` 초록 | 101 공수사단 |
+| mota | `#3a5a86` 강청색 | 제8공군 100폭격전대 |
+| uboat | `#1c3a63` 남색 | 독일 U보트 |
+| tiger | `#8a6d3b` 카키 | 독일 중전차대대 |
+
+새 side를 추가하려면: ① `timeline-base.js`의 `routeSide()` 배열에 키 추가, ② `timeline-base.css`에 `.route-<key>`/`.start-dot-<key>`/`.end-mark-<key>`/`.unit-icon-<key>`/`.legend-arrow-<key>`/`.legend-unit-<key>,.legend-side-<key>` 색 추가, ③ data의 `sideMapLabels`에 라벨 추가, ④ 진영 배경이 필요하면 `eventFaction()`의 axisSides/alliedSides에 추가.
+
+### 25.7 드라마·서적 시리즈 추가 방법
+
+각 시리즈(밴드 오브 브라더스 등)는 카드 상단 영문 배지 + 좌측 굵은 테두리 + 보이기/숨기기 필터로 묶인다. 새 시리즈 추가 절차:
+
+1. **웹으로 사실 검증** — 시기·지역·좌표를 신뢰 출처 2곳 이상 교차확인(uboat.net·Wikipedia 등). 개략은 개략이라 표기.
+2. **`timelineConfig.seriesLabels`에 키 추가** — 예 `newkey:"SERIES NAME · 한글명"`. 배지·필터 칩·상세창 태그가 이 라벨을 쓴다.
+3. **CSS `.series-<key> .series-badge`(배경색), `.event-card.series-<key>`(border-color+border-left-width:4px)** 추가. 필터 점 `.series-toggle-<key> .series-toggle-dot`, 필터 숨김 규칙 `.hide-series-<key> .event.series-<key>{display:none}` 도 추가.
+4. **부대 아이콘이 새로 필요하면** `installWarSymbols()`에 `<symbol id="unit-<x>">` 추가, `unitTypeByRoute`/`unitMapLabels`에 매핑.
+5. **필요하면 새 side** 추가(§25.6). 시리즈 진영도 `eventFaction()`의 axisSeries/alliedSeries에 등록.
+6. **카드 작성** — 각 화/국면을 event로. `series`,`episode`,`summary`(짧게),`detail`(자세히),`routes` 지정. 지도는 preset 권장.
+7. 비전투 에피소드(훈련·휴양·귀향)는 넣지 않는다(전투·작전·이동이 있는 화만).
+8. `PLAN.md` §28 로드맵의 체크리스트를 갱신한다.
+
+현재 구현된 시리즈: `bob`(Band of Brothers)·`pacific`(The Pacific)·`mota`(Masters of the Air)·`ironcoffins`(강철의 관 U보트)·`tiger`(진흙 속의 호랑이 오토 카리우스).
+
+### 25.8 카드 상호작용·필터
+
+- **카드 클릭**(또는 Enter/Space) → 상세창(지도+상세설명+이미지). 지도가 없는 카드는 지도 영역 숨김.
+- 상세창 우측 상단 **"✎ 편집"** 버튼 → 편집 폼.
+- **길게 누르기/우클릭** → 추가·편집·삭제 메뉴.
+- 편집 폼에서 `detail`·`image`를 넣고 지운다. 이미지는 4MB 이하 권장, data URL로 localStorage 저장.
+- 헤딩 옆 **시리즈 필터 칩** — 기본 전부 보이기, 끄면 그 시리즈 `.event` 숨김(`board`에 `hide-series-<key>` 클래스). 상태는 `userState.hiddenSeries`로 localStorage 저장.
+- **스티키 헤더에 현재 스크롤 연도** 표시(`#sticky-year`).
+
+### 25.9 지도 표현(요약, 상세는 §11~24)
+
+- 바탕: 실제 국가 topojson + 강(Natural Earth 1:50m) + 국가명(영문)·주요국 수도·지명 점. 국경 임의 제작 금지.
+- 진영색: `data/world-fronts.js`의 **시점별 전세계 스냅샷**이 사건 날짜에 맞게 자동으로 전 세계를 칠한다. 사건별 `countrySides`가 그 위에 덧씌운다. 그래서 지도를 패닝해도 전 세계 진영이 보인다.
+- 점령지 분할: `historicalPartitions`(국가 하나를 전선으로 분할), 괴뢰국(만주국)은 `world-fronts.js`의 `worldPuppetStates`에 개략 폴리곤+빗금.
+- 범례는 화면 우하단 고정(줌·패닝에 안 움직임). 화살표·부대아이콘·범례 항목은 그 사건 지도에만, 진영색·나라이름은 전 세계 공통.
+- 작은 섬(팔라우·펠렐리우 등)은 topojson에 없어 육지로 안 보일 수 있다 → `world-landmarks.js`에 지명 점으로 보완.
+
+### 25.10 데이터 검증 습관
+
+- 카드/preset 추가 후 반드시 괄호 균형을 확인한다(`{ } ( ) [ ]` 개수 일치).
+- route 있는 카드는 preset이 있거나 카드에 countrySides/units/legend가 직접 있어야 지도가 제대로 나온다.
+- 좌표는 `[경도,위도]` 순서(위경도 바꾸면 지도 반대편으로 감).
+- 시기·지역은 신뢰 출처로 검증하고, 불확실하면 카드 설명이나 커밋에 개략임을 밝힌다.
+- 커밋: AI 흔적/서명 금지, 작성자 `jayhouse <jayhouse2001@gmail.com>`, 영문 메시지(`AGENTS.md` 규칙).
