@@ -71,3 +71,18 @@
   - Don-kun, NordNordWest
   - CC BY-SA 3.0
   - https://commons.wikimedia.org/wiki/File:Vietnam_war_1968-1969_map_de.svg
+
+- `series-bob.jpg`
+  - Band of Brothers (HBO, 2001) 대표 이미지 / 키아트
+  - © HBO / 저작권 자료 — 개인 열람용(비공개), 웹 재배포 금지
+  - 첫 화면 시리즈 배너용
+
+- `series-pacific.jpg`
+  - The Pacific (HBO, 2010) 대표 이미지 / 키아트
+  - © HBO / 저작권 자료 — 개인 열람용(비공개), 웹 재배포 금지
+  - 첫 화면 시리즈 배너용
+
+- `series-mota.webp`
+  - Masters of the Air (Apple TV+, 2024) 대표 이미지 / 키아트
+  - © Apple / 저작권 자료 — 개인 열람용(비공개), 웹 재배포 금지
+  - 첫 화면 시리즈 배너용

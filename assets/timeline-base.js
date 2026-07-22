@@ -16,6 +16,7 @@
     const majorCountries = new Set(window.worldMajorCountries||[]);
     const alwaysShowCountries = new Set(window.worldAlwaysShow||[]);
     const landmarks = window.worldLandmarks||[];
+    const seriesLabels = timelineConfig.seriesLabels||{};
     const puppetStates = window.worldPuppetStates||[];
     const frontSnapshotFor = window.frontSnapshotFor||(()=>({}));
     const featureById = new Map(countries.map(feature=>[String(feature.id).padStart(3,"0"),feature]));
@@ -65,7 +66,7 @@
       const padding=Math.max(8,Math.min(width,height)*.08);return projection.fitExtent([[padding,padding],[width-padding,height-padding]],corners);
     }
     function routeFeature(route){return {type:"LineString",coordinates:[[route[1],route[2]],[route[4],route[5]]]}}
-    function routeSide(route){return ["allied","axis","soviet","finnish"].includes(route[6])?route[6]:"neutral"}
+    function routeSide(route){return ["allied","axis","soviet","finnish","bob"].includes(route[6])?route[6]:"neutral"}
     function drawHistoricalPartitions(viewport,path,projection,event,width,height,labelRequests){
       if(!historicalData||!event.historicalPartitions?.length)return;
       const layer=viewport.append("g").attr("class","historical-control-layer");
@@ -95,7 +96,8 @@
         ["unit-tank",'<path d="M4 15h24l4 4-3 3H5l-3-3z"/><circle cx="8" cy="19" r="2.2"/><circle cx="14" cy="19" r="2.2"/><circle cx="20" cy="19" r="2.2"/><circle cx="26" cy="19" r="2.2"/><path d="M8 10h15l4 5H6zM13 6h9l3 4H11zM18 4h3v2h-3zM23 7h11v2H23z"/>'],
         ["unit-ship",'<path d="M2 15h32l-5 7H8zM9 11h17v4H9zM13 7h9v4h-9zM17 3h2v4h-2zM8 9h5v2H8zM24 9h6v2h-6z"/>'],
         ["unit-bomber",'<path d="M17 2h2l2 8 12 5v3l-12-2-2 6h-2l-2-6-12 2v-3l12-5z"/>'],
-        ["unit-landing",'<path d="M3 7h30l-4 15H7zM8 10h20v3H8zM10 15h16v2H10zM10 19h16v2H10zM27 4h5v6h-5z"/>']
+        ["unit-landing",'<path d="M3 7h30l-4 15H7zM8 10h20v3H8zM10 15h16v2H10zM10 19h16v2H10zM27 4h5v6h-5z"/>'],
+        ["unit-para",'<path d="M4 9a14 8 0 0 1 28 0z"/><path d="M4 9l12 6M18 3v12M32 9l-12 6" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="18" cy="17" r="2.4"/><path d="M16.6 19h2.8l1.1 4h-5z"/>']
       ];
       symbols.forEach(([id,markup])=>{const symbol=defs.append("symbol").attr("id",id).attr("viewBox","0 0 36 24");symbol.html(markup)});
     }
@@ -332,8 +334,10 @@
         theaterEvents.forEach(event=>{
           const sameDateIndex=dateCounts.get(event.sortDate)||0;dateCounts.set(event.sortDate,sameDateIndex+1);
           const article=document.createElement("article");article.className=`event${event.kind==="reign"?" is-reign-event":""}${event.kind==="world"?" is-world-event":""}${event.related?" is-related-event":""}`;article.dataset.eventId=event.id;article.style.top=`${slotY.get(event.sortDate)-28+sameDateIndex*collisionGap}px`;
-          const card=document.createElement("div");card.className=`event-card${event.routes?.length?"":" no-map"}${event.kind==="reign"?" is-reign":""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
-          const copy=document.createElement("div");const time=document.createElement("time");time.className="event-date";time.textContent=event.kind==="reign"&&eventEndDate(event)?`${event.date} · 총 ${reignLength(event.sortDate,eventEndDate(event))}`:event.date;
+          const card=document.createElement("div");card.className=`event-card${event.routes?.length?"":" no-map"}${event.kind==="reign"?" is-reign":""}${event.series?` is-series series-${event.series}`:""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
+          const copy=document.createElement("div");
+          if(event.series&&seriesLabels[event.series]){const badge=document.createElement("span");badge.className="series-badge";badge.textContent=event.episode?`${seriesLabels[event.series]} · EP${event.episode}`:seriesLabels[event.series];copy.appendChild(badge)}
+          const time=document.createElement("time");time.className="event-date";time.textContent=event.kind==="reign"&&eventEndDate(event)?`${event.date} · 총 ${reignLength(event.sortDate,eventEndDate(event))}`:event.date;
           const title=document.createElement("h4");title.className="event-title";title.textContent=event.title;const summary=document.createElement("p");summary.className="event-summary";summary.textContent=event.summary;copy.append(time,title,summary);
           if(event.kind==="reign"){const meta=document.createElement("dl");meta.className="reign-meta";for(const [label,value] of [["혈연",event.relation],["계승",event.succession],["섭정",event.regency]]){if(!value)continue;const row=document.createElement("div"),term=document.createElement("dt"),detail=document.createElement("dd");term.textContent=label;detail.textContent=value;row.append(term,detail);meta.appendChild(row)}copy.appendChild(meta)}card.appendChild(copy);
           if(event.routes?.length){const button=document.createElement("button");button.className="map-thumb";button.type="button";button.setAttribute("aria-label",`${theater.name} ${event.date} ${event.title} 지도 확대`);const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("role","img");svg.setAttribute("aria-label",`${event.title} 이동 경로 축소 지도`);const text=document.createElement("span");text.textContent="지도 확대";button.append(svg,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button);drawMap(svg,theater,event,130,88,false)}

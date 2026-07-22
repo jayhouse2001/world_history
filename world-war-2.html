@@ -11,9 +11,15 @@
   <div class="page-shell">
     <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">WH</span><span>세계사 타임라인</span></a><a class="back-link" href="index.html">← 사건 목록</a></header>
     <main>
-      <section class="hero"><div><p class="eyebrow">1939 — 1945 · FOUR THEATERS</p><h1>제2차<br>세계대전</h1></div><p class="hero-copy">네 전선의 사건을 한 화면에서 비교합니다. 지도 축소판을 누르면 이동 경로를 확대해서 볼 수 있습니다.</p></section>
+      <div class="series-banner" role="img" aria-label="밴드 오브 브라더스, 더 퍼시픽, 마스터스 오브 디 에어를 상징하는 합성 배너">
+        <div class="series-banner-img series-banner-bob"></div>
+        <div class="series-banner-img series-banner-pacific"></div>
+        <div class="series-banner-img series-banner-mota"></div>
+        <div class="series-banner-title"><p class="eyebrow">1939 — 1945 · FOUR THEATERS</p><h1>제2차<br>세계대전</h1></div>
+        <div class="series-banner-caption"><span>BAND OF BROTHERS</span><span>THE PACIFIC</span><span>MASTERS OF THE AIR</span></div>
+      </div>
       <section class="timeline-section" aria-labelledby="timeline-heading">
-        <div class="section-heading"><h2 id="timeline-heading">전선별 타임라인 · 1943년까지</h2><p>시간은 위에서 아래로 흐릅니다</p></div>
+        <div class="section-heading"><h2 id="timeline-heading">전선별 타임라인 · 1937~1945</h2><p>시간은 위에서 아래로 흐릅니다</p></div>
         <div id="sticky-theater-bar" class="sticky-theater-bar" aria-hidden="true"><div id="sticky-theater-track" class="sticky-theater-track"></div></div>
         <div id="timeline-scroll" class="timeline-scroll" aria-label="네 전선 가로 스크롤 영역"><div id="timeline-board" class="timeline-board"><div id="time-rules" class="time-rules" aria-hidden="true"></div></div></div>
         <div class="timeline-note"><span class="edit-hint">지역 타임라인·여백 길게 누르기: 그 위치에 사건 추가</span><span>사건 카드 길게 누르기: 추가·편집·삭제</span><span>가로선: 네 지역 공통 날짜 기준</span><span>사건 밀도에 따라 날짜 사이 간격 조정</span><span>지도: 현대 국경 기준 · 이동 방향 개략 표시 · Natural Earth 1:110m</span></div>
@@ -38,8 +44,8 @@
     <form id="editor-form" class="editor-form">
       <div class="dialog-header"><div><span class="dialog-date">내 타임라인</span><h3 id="editor-title">사건 편집</h3></div><button id="close-editor" class="close-button" type="button" aria-label="편집 창 닫기">✕</button></div>
       <label class="form-field"><span>지역</span><select id="edit-theater" required></select></label>
-      <label class="form-field"><span>날짜 (정렬 기준)</span><input id="edit-sort-date" type="date" min="1937-01-01" max="1943-12-31" required></label>
-      <label class="form-field"><span>종료 날짜 (기간 사건만)</span><input id="edit-end-date" type="date" min="1937-01-01" max="1943-12-31"></label>
+      <label class="form-field"><span>날짜 (정렬 기준)</span><input id="edit-sort-date" type="date" min="1937-01-01" max="1945-12-31" required></label>
+      <label class="form-field"><span>종료 날짜 (기간 사건만)</span><input id="edit-end-date" type="date" min="1937-01-01" max="1945-12-31"></label>
       <label class="form-field"><span>카드에 표시할 날짜</span><input id="edit-date" type="text" required placeholder="예: 1943년 7월 5일~8월 23일"></label>
       <label class="form-field"><span>사건명</span><input id="edit-title" type="text" required maxlength="60"></label>
       <label class="form-field"><span>요약</span><textarea id="edit-summary" required maxlength="220"></textarea></label>

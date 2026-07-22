@@ -56,6 +56,11 @@
       "826":"allied","840":"allied","156":"allied","036":"allied","250":"allied",
       "643":"soviet","112":"soviet","804":"soviet","233":"soviet","428":"soviet","440":"soviet","616":"soviet"
     }},
+    { from:"1945-01-20", sides:{
+      ...AXIS_CORE, ...JP_COLONIES,
+      "826":"allied","840":"allied","156":"allied","036":"allied","250":"allied","056":"allied","528":"allied",
+      "643":"soviet","112":"soviet","804":"soviet","233":"soviet","428":"soviet","440":"soviet","616":"soviet","642":"soviet","348":"soviet"
+    }},
     { from:"1945-05-01", sides:{
       "392":"axis", ...JP_COLONIES,
       "826":"allied","840":"allied","156":"allied","036":"allied","250":"allied","276":"allied","380":"allied",

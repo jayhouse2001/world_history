@@ -121,7 +121,33 @@ const events = [
       {id:"africa-salerno",theater:"africa",sortDate:"1943-09-09",date:"1943년 9월 9일",title:"살레르노 상륙",summary:"연합군 주력이 살레르노에 상륙해 독일군의 반격을 막고 교두보를 확보.",routes:[["시칠리아",14.1,37.5,"살레르노",14.77,40.68]]},
       {id:"east-kyiv",theater:"east",sortDate:"1943-11-06",date:"1943년 11월 6일",title:"소련군의 키이우 탈환",summary:"소련군이 드니프로강을 건너 키이우를 탈환하고 서쪽으로 진격.",routes:[["쿠르스크",36.19,51.74,"키이우",30.52,50.45]]},
       {id:"pacific-tarawa",theater:"pacific",sortDate:"1943-11-20",date:"1943년 11월 20~23일",title:"타라와 전투",summary:"미 해병대가 치열한 상륙전 끝에 길버트제도의 타라와 환초를 점령.",routes:[["하와이",-157.95,21.35,"타라와",172.98,1.35]]},
-      {id:"west-tehran",theater:"west",sortDate:"1943-11-28",date:"1943년 11월 28일~12월 1일",title:"테헤란 회담",summary:"미·영·소 정상이 서유럽 제2전선 개설과 전후 구상을 협의.",routes:[]}
+      {id:"west-tehran",theater:"west",sortDate:"1943-11-28",date:"1943년 11월 28일~12월 1일",title:"테헤란 회담",summary:"미·영·소 정상이 서유럽 제2전선 개설과 전후 구상을 협의.",routes:[]},
+      {id:"africa-anzio",theater:"africa",sortDate:"1944-01-22",date:"1944년 1월 22일",title:"안치오 상륙",summary:"연합군이 로마 남쪽 안치오에 상륙해 교두보를 확보했으나 진격이 지체됨.",routes:[["나폴리",14.27,40.85,"안치오",12.62,41.45]]},
+      {id:"africa-rome",theater:"africa",sortDate:"1944-06-04",date:"1944년 6월 4일",title:"로마 해방",summary:"구스타프선을 돌파한 연합군이 로마에 입성하며 이탈리아 수도가 해방됨.",routes:[["안치오",12.62,41.45,"로마",12.5,41.9]]},
+      {id:"west-normandy",theater:"west",sortDate:"1944-06-06",date:"1944년 6월 6일",title:"노르망디 상륙작전",series:"bob",episode:"2",summary:"연합군이 노르망디 해안에 상륙해 서부 제2전선을 엶. 미 101공수사단(이지 중대)은 유타 해변 후방 생트마리뒤몽 일대에 야간 강하해 브레쿠르 저택의 독일군 포대를 제압.",routes:[["포츠머스",-1.09,50.8,"유타 해변",-1.17,49.42,"allied","landing"],["영국 상공",-1.5,50.2,"생트마리뒤몽",-1.23,49.36,"allied","para"]]},
+      {id:"west-carentan",theater:"west",sortDate:"1944-06-10",date:"1944년 6월 10~13일",title:"카랑탕 전투",series:"bob",episode:"3",summary:"미 101공수사단이 유타·오마하 교두보를 잇는 요충지 카랑탕을 점령하고 독일군의 반격을 막아냄. 이지 중대가 시가 진입과 방어에 참가.",routes:[["생트마리뒤몽",-1.23,49.36,"카랑탕",-1.24,49.3,"allied","para"]]},
+      {id:"east-bagration",theater:"east",sortDate:"1944-06-22",date:"1944년 6월 22일~8월 19일",title:"바그라티온 작전",summary:"소련군의 대공세로 독일 중부집단군이 붕괴하고 벨라루스가 해방됨.",routes:[["스몰렌스크",32.05,54.78,"민스크",27.56,53.9],["민스크",27.56,53.9,"바르샤바",21.01,52.23]]},
+      {id:"pacific-philippine-sea",theater:"pacific",sortDate:"1944-06-19",date:"1944년 6월 19~20일",title:"필리핀해 해전",summary:"미 해군이 마리아나 해역에서 일본 함재기 전력을 궤멸시킴.",routes:[["사이판",145.75,15.18,"필리핀해",137,15]]},
+      {id:"east-warsaw-uprising",theater:"east",sortDate:"1944-08-01",date:"1944년 8월 1일~10월 2일",title:"바르샤바 봉기",summary:"폴란드 국내군이 봉기했으나 소련군의 진격이 멈춘 사이 독일군에게 진압됨.",routes:[["바르샤바",21.01,52.23,"프라가",21.05,52.25]]},
+      {id:"west-paris",theater:"west",sortDate:"1944-08-25",date:"1944년 8월 25일",title:"파리 해방",summary:"연합군과 프랑스 저항군이 파리를 해방하고 독일 점령이 끝남.",routes:[["노르망디",-0.5,49.35,"파리",2.35,48.86]]},
+      {id:"west-market-garden",theater:"west",sortDate:"1944-09-17",date:"1944년 9월 17~25일",title:"마켓가든 작전",series:"bob",episode:"4",summary:"연합군 공수부대가 네덜란드의 교량들을 확보하려 강하. 미 101공수사단(이지 중대)은 에인트호번 일대에 강하해 도로(헬스 하이웨이)를 열었으나 아른험까지의 작전 전체는 실패로 끝남.",routes:[["영국 상공",1.2,51.9,"에인트호번",5.47,51.44,"allied","para"],["에인트호번",5.47,51.44,"네이메헌",5.85,51.84,"allied","land"]]},
+      {id:"west-the-island",theater:"west",sortDate:"1944-10-05",date:"1944년 10월",title:"더 아일랜드 · 크로스로드",series:"bob",episode:"5",summary:"마켓가든 이후 이지 중대가 네이메헌 북쪽 강 사이의 '아일랜드'를 지킴. 윈터스가 새벽 도로 교차로(크로스로드)에서 독일 SS 부대를 기습해 격퇴한 전투가 5화의 핵심.",routes:[["네이메헌",5.85,51.84,"더 아일랜드",5.9,51.95,"allied","para"]]},
+      {id:"pacific-leyte",theater:"pacific",sortDate:"1944-10-23",date:"1944년 10월 23~26일",title:"레이테만 해전",summary:"사상 최대 규모의 해전에서 일본 연합함대가 결정적 타격을 입음.",routes:[["뉴기니",141,-6,"레이테",125,10.9]]},
+      {id:"west-bulge",theater:"west",sortDate:"1944-12-16",date:"1944년 12월 16일~1945년 1월 25일",title:"벌지 전투",summary:"독일군의 아르덴 기습 반격이 초기 성과 뒤 연합군에게 저지됨.",routes:[["아이펠",6.5,50.3,"바스토뉴",5.72,50.0]]},
+      {id:"west-bastogne",theater:"west",sortDate:"1944-12-19",date:"1944년 12월 19일~1945년 1월",title:"바스토뉴 방어",series:"bob",episode:"6~7",summary:"벌지 전투에서 미 101공수사단이 요충지 바스토뉴에서 포위된 채 혹한과 포격을 견디며 방어. 이지 중대는 인근 숲에서 버티다 1월 푸아를 공격해 탈환.",routes:[["랭스",4.03,49.26,"바스토뉴",5.72,50.0,"allied","para"],["바스토뉴",5.72,50.0,"푸아",5.79,50.05,"allied","para"]]},
+      {id:"pacific-iwojima",theater:"pacific",sortDate:"1945-02-19",date:"1945년 2월 19일~3월 26일",title:"이오지마 전투",summary:"미 해병대가 막대한 희생 끝에 이오지마를 점령해 본토 폭격 기지를 확보.",routes:[["사이판",145.75,15.18,"이오지마",141.32,24.78]]},
+      {id:"west-haguenau",theater:"west",sortDate:"1945-02-05",date:"1945년 2월",title:"아그누 전투",series:"bob",episode:"8",summary:"이지 중대가 알자스의 아그누에서 모데르강을 사이에 두고 독일군과 대치. 야간 정찰대를 보내 포로를 잡는 작전을 수행.",routes:[["바스토뉴",5.72,50.0,"아그누",7.79,48.82,"allied","para"]]},
+      {id:"west-rhine",theater:"west",sortDate:"1945-03-07",date:"1945년 3월 7일",title:"레마겐 라인강 도하",summary:"연합군이 레마겐의 철교를 확보해 라인강을 건너 독일 본토로 진격.",routes:[["아헨",6.08,50.78,"레마겐",7.23,50.58]]},
+      {id:"pacific-okinawa",theater:"pacific",sortDate:"1945-04-01",date:"1945년 4월 1일~6월 22일",title:"오키나와 전투",summary:"연합군이 오키나와를 점령했으나 양측 모두 막대한 피해를 입음.",routes:[["필리핀",122,13,"오키나와",127.8,26.34]]},
+      {id:"east-berlin",theater:"east",sortDate:"1945-04-16",date:"1945년 4월 16일~5월 2일",title:"베를린 전투",summary:"동쪽에서 소련군이 베를린을 포위·함락하고, 서쪽에서 진격한 미·영 연합군이 엘베강에서 소련군과 합류. 히틀러가 자살하고 나치 독일이 붕괴함.",routes:[["오데르강",14.64,52.57,"베를린",13.41,52.52,"soviet","land"],["루르",7.3,51.4,"엘베강",11.6,52.2,"allied","land"]]},
+      {id:"west-landsberg",theater:"west",sortDate:"1945-04-27",date:"1945년 4월 27일",title:"카우퍼링 수용소 발견",series:"bob",episode:"9",summary:"이지 중대가 란츠베르크 인근 카우퍼링 강제수용소를 발견하고 참상을 목격. 나치의 홀로코스트 실상이 병사들에게 드러남.",routes:[["아그누",7.79,48.82,"란츠베르크",10.87,48.05,"allied","para"]]},
+      {id:"west-eagles-nest",theater:"west",sortDate:"1945-05-05",date:"1945년 5월 5일",title:"독수리 둥지 점령",series:"bob",episode:"10",summary:"이지 중대가 베르히테스가덴과 히틀러의 산장 켈슈타인하우스(독수리 둥지)를 점령. 유럽 전쟁의 상징적 종착점.",routes:[["란츠베르크",10.87,48.05,"베르히테스가덴",13.04,47.63,"allied","para"]]},
+      {id:"west-ve-day",theater:"west",sortDate:"1945-05-08",date:"1945년 5월 8일",title:"독일 항복(유럽 전승일)",summary:"독일이 무조건 항복하고 유럽에서의 전쟁이 끝남.",routes:[]},
+      {id:"pacific-hiroshima",theater:"pacific",sortDate:"1945-08-06",date:"1945년 8월 6일",title:"히로시마 원자폭탄 투하",summary:"미군이 히로시마에 원자폭탄을 투하해 도시가 파괴되고 막대한 사상자가 발생.",routes:[["티니안",145.63,15.0,"히로시마",132.46,34.39]]},
+      {id:"east-manchuria",theater:"east",sortDate:"1945-08-08",date:"1945년 8월 8~9일",title:"소련의 대일 참전·만주 침공",summary:"소련이 일본에 선전포고하고 만주로 진격해 관동군을 붕괴시킴.",routes:[["치타",113.5,52.03,"하얼빈",126.53,45.8],["블라디보스토크",131.89,43.12,"지린",126.55,43.84]]},
+      {id:"pacific-nagasaki",theater:"pacific",sortDate:"1945-08-09",date:"1945년 8월 9일",title:"나가사키 원자폭탄 투하",summary:"미군이 나가사키에 두 번째 원자폭탄을 투하함.",routes:[["티니안",145.63,15.0,"나가사키",129.87,32.75]]},
+      {id:"pacific-surrender-announce",theater:"pacific",sortDate:"1945-08-15",date:"1945년 8월 15일",title:"일본의 항복 발표",summary:"일왕이 라디오로 항복을 발표하며 사실상 전쟁이 종결됨.",routes:[]},
+      {id:"pacific-surrender-sign",theater:"pacific",sortDate:"1945-09-02",date:"1945년 9월 2일",title:"항복 문서 조인",summary:"도쿄만의 미주리함에서 일본이 항복 문서에 서명하며 제2차 세계대전이 끝남.",routes:[["도쿄",139.69,35.69,"도쿄만",139.77,35.45]]}
     ];
 
 const mapCountrySets = {
@@ -143,7 +169,18 @@ const mapCountrySets = {
   midway:{"392":"axis","840":"allied"},
   solomons:{"392":"axis","090":"allied","548":"allied","840":"allied"},
   cartwheel:{"392":"axis","090":"allied","598":"allied","036":"allied","840":"allied"},
-  tarawa:{"392":"axis","296":"allied","840":"allied"}
+  tarawa:{"392":"axis","296":"allied","840":"allied"},
+  italy1944:{"380":"axis","276":"axis","826":"allied","840":"allied"},
+  normandy:{"276":"axis","250":"axis","826":"allied","840":"allied"},
+  eastLate:{"276":"axis","348":"axis","642":"axis","643":"soviet","804":"soviet","112":"soviet","616":"soviet"},
+  westLate:{"276":"axis","250":"allied","056":"allied","826":"allied","840":"allied"},
+  berlin:{"276":"axis","643":"soviet","616":"soviet","826":"allied","840":"allied","250":"allied"},
+  marianas:{"392":"axis","840":"allied"},
+  leyte:{"392":"axis","158":"axis","608":"allied","840":"allied"},
+  iwojima:{"392":"axis","840":"allied"},
+  okinawa:{"392":"axis","840":"allied"},
+  homeland:{"392":"axis","840":"allied"},
+  manchuria:{"392":"axis","156":"axis","643":"soviet"}
 };
 
 const detailedMapPresets = {
@@ -184,12 +221,37 @@ const detailedMapPresets = {
   "africa-italy":{countries:"italy1943",sides:"allied",types:"landing",view:[[14,37.3],[16.8,37.3],[16.8,39.2],[14,39.2]]},
   "africa-salerno":{countries:"italy1943",sides:"allied",types:"landing"},
   "east-kyiv":{countries:"eastSouth",sides:"soviet",types:"land"},
-  "pacific-tarawa":{countries:"tarawa",sides:"allied",types:"landing"}
+  "pacific-tarawa":{countries:"tarawa",sides:"allied",types:"landing"},
+  "africa-anzio":{countries:"italy1944",sides:"allied",types:"landing",view:[[11.5,40.5],[15,40.5],[15,42.4],[11.5,42.4]]},
+  "africa-rome":{countries:"italy1944",sides:"allied",types:"land",view:[[11.5,40.7],[14,40.7],[14,42.3],[11.5,42.3]]},
+  "west-normandy":{countries:"normandy",sides:["allied","bob"],types:["landing","para"],view:[[-2,48.9],[0.5,48.9],[0.5,50],[-2,50]]},
+  "east-bagration":{countries:"eastLate",sides:"soviet",types:"land"},
+  "pacific-philippine-sea":{countries:"marianas",sides:"allied",types:"naval"},
+  "east-warsaw-uprising":{countries:"eastLate",sides:"allied",types:"land",view:[[19.5,51],[23,51],[23,53.5],[19.5,53.5]]},
+  "west-paris":{countries:"westLate",sides:"allied",types:"land"},
+  "pacific-leyte":{countries:"leyte",sides:"allied",types:"naval"},
+  "west-bulge":{countries:"westLate",sides:"axis",types:"land",view:[[4,49],[8,49],[8,51.5],[4,51.5]]},
+  "pacific-iwojima":{countries:"iwojima",sides:"allied",types:"landing"},
+  "west-rhine":{countries:"westLate",sides:"allied",types:"land",view:[[5,49.5],[9,49.5],[9,51.5],[5,51.5]]},
+  "pacific-okinawa":{countries:"okinawa",sides:"allied",types:"landing"},
+  "east-berlin":{countries:"berlin",sides:["soviet","allied"],types:"land",view:[[6,50.5],[16,50.5],[16,54],[6,54]]},
+  "pacific-hiroshima":{countries:"homeland",sides:"allied",types:"air"},
+  "east-manchuria":{countries:"manchuria",sides:"soviet",types:"land"},
+  "pacific-nagasaki":{countries:"homeland",sides:"allied",types:"air"},
+  "pacific-surrender-sign":{countries:"homeland",sides:"allied",types:"naval",view:[[138,34],[142,34],[142,37],[138,37]]},
+  "west-carentan":{countries:"normandy",sides:"bob",types:"para",view:[[-1.6,49.1],[-0.8,49.1],[-0.8,49.6],[-1.6,49.6]]},
+  "west-market-garden":{countries:"westLate",sides:["bob","bob"],types:["para","land"],view:[[4.8,51.2],[6.4,51.2],[6.4,52.2],[4.8,52.2]]},
+  "west-the-island":{countries:"westLate",sides:"bob",types:"para",view:[[5.4,51.6],[6.4,51.6],[6.4,52.2],[5.4,52.2]]},
+  "west-bastogne":{countries:"westLate",sides:["bob","bob"],types:["para","para"],view:[[4.6,49.5],[6.6,49.5],[6.6,50.5],[4.6,50.5]]},
+  "west-haguenau":{countries:"westLate",sides:"bob",types:"para",view:[[5,48.3],[9,48.3],[9,50.6],[5,50.6]]},
+  "west-landsberg":{countries:"westLate",sides:"bob",types:"para",view:[[7,47.6],[11.6,47.6],[11.6,49.4],[7,49.4]]},
+  "west-eagles-nest":{countries:"westLate",sides:"bob",types:"para",view:[[10.4,47.3],[13.6,47.3],[13.6,48.6],[10.4,48.6]]}
 };
+const detailedNoRouteEvents=["west-ve-day","pacific-surrender-announce"];
 
-const sideMapLabels={allied:"연합군",axis:"추축군",soviet:"소련군",finnish:"핀란드군",neutral:"중립"};
-const unitMapLabels={land:"기갑",naval:"함대",air:"폭격기",landing:"상륙정"};
-const unitTypeByRoute={land:"tank",naval:"ship",air:"bomber",landing:"landing"};
+const sideMapLabels={allied:"연합군",axis:"추축군",soviet:"소련군",finnish:"핀란드군",neutral:"중립",bob:"101 공수사단"};
+const unitMapLabels={land:"기갑",naval:"함대",air:"폭격기",landing:"상륙정",para:"공수"};
+const unitTypeByRoute={land:"tank",naval:"ship",air:"bomber",landing:"landing",para:"para"};
 function routeMidpoint(route){const start=Number(route[1]),end=Number(route[4]);let delta=((end-start+540)%360)-180,lon=start+delta/2;if(lon>180)lon-=360;if(lon<-180)lon+=360;return [lon,(Number(route[2])+Number(route[5]))/2]}
 events.forEach(event=>{
   const preset=detailedMapPresets[event.id];if(!preset||!event.routes?.length)return;
@@ -213,6 +275,18 @@ events.forEach(event=>{
   };
 });
 
+detailedNoRouteEvents.forEach(id=>{
+  const event=events.find(item=>item.id===id);if(!event)return;
+  event.mapDesign="war-v1";
+  event.mapNote="현대 국경 기준 · 국가색은 참전국 진영, 해당 시점 전황";
+  event.countrySides={};
+  event.legend={
+    title:"표현 범례",
+    territories:[{side:"allied",label:"연합국"},{side:"axis",label:"추축국"},{side:"soviet",label:"소련권"}],
+    routes:[],units:[],colors:[]
+  };
+});
+
 const japaneseColonies = ["410","408","158"];
 events.forEach(event=>{
   if(!event.countrySides)return;
@@ -226,5 +300,6 @@ window.timelineConfig = {
   historicalDataUrl:"data/world-1938.geojson",
   lanes,
   events,
-  yearMarkers: ["1937-01-01","1939-01-01","1940-01-01","1941-01-01","1942-01-01","1943-01-01"]
+  seriesLabels:{bob:"BAND OF BROTHERS",pacific:"THE PACIFIC",mota:"MASTERS OF THE AIR"},
+  yearMarkers: ["1937-01-01","1939-01-01","1940-01-01","1941-01-01","1942-01-01","1943-01-01","1944-01-01","1945-01-01"]
 };
