@@ -104,6 +104,8 @@ const events = [
       {id:"east-barbarossa",theater:"east",sortDate:"1941-06-22",date:"1941년 6월 22일",title:"바르바로사 작전",summary:"독일과 추축군이 발트해에서 흑해에 이르는 전선에서 소련을 침공.",routes:[["바르샤바",21.01,52.23,"스몰렌스크",32.05,54.78],["루마니아",26.1,44.43,"키이우",30.52,50.45]]},
       {id:"west-atlantic-charter",theater:"west",sortDate:"1941-08-14",date:"1941년 8월 14일",title:"대서양 헌장",summary:"루스벨트와 처칠이 전후 국제질서의 공동 원칙을 발표.",routes:[]},
       {id:"east-leningrad",theater:"east",sortDate:"1941-09-08",date:"1941년 9월 8일",title:"레닌그라드 포위 시작",summary:"독일군과 핀란드군의 압박으로 레닌그라드의 육상 보급로가 차단.",routes:[["프스코프",28.33,57.82,"레닌그라드",30.32,59.93]]},
+      {id:"tiger-barbarossa",theater:"east",sortDate:"1941-06-22",date:"1941년 6월 22일",title:"카리우스의 첫 전투 · 38(t) 장전수",series:"tiger",episode:"입문",summary:"오토 카리우스가 20 기갑사단 38(t) 전차의 장전수로 바르바로사 개시일에 첫 실전을 치름. 동프로이센 수바우키 국경에서 소련으로 진격.",detail:"회고록 '진흙 속의 호랑이(Tiger im Schlamm)'의 시작. 1922년생 오토 카리우스는 1941년 6월 22일 바르바로사 개시일, 20 기갑사단(중부집단군)의 체코제 경전차 Panzer 38(t)의 장전수로 첫 실전에 나선다. 동프로이센 수바우키 국경에서 리투아니아로 밀고 들어가 비테프스크·스몰렌스크 방면으로 진격했다. 훗날 150대 이상을 격파하는 전차 에이스의 출발점.",routes:[["수바우키 국경",22.9,54.1,"비테프스크",30.2,55.2,"tiger","tiger"]]},
+      {id:"tiger-deploy",theater:"east",sortDate:"1943-07-01",date:"1943년 1월~7월",title:"티거 전차대 · 502 중전차대대",series:"tiger",episode:"티거",summary:"카리우스가 502 중전차대대로 옮겨 티거 I 전차 소대장이 됨. 1943년 7월 레닌그라드 전선에 투입.",detail:"1943년 1월 보충대대에서 처음 티거 I를 접한 카리우스는 제502 중전차대대(schwere Panzer-Abteilung 502) 2중대에 배속된다. 7월 북부집단군의 레닌그라드·볼호프 전선에 투입되어 소대장으로 싸운다. 이때부터 그의 이름이 알려진 발트·레닌그라드 전선의 티거 전투가 시작된다.",routes:[["프스코프",28.33,57.82,"볼호프 전선",32.3,59.9,"tiger","tiger"]]},
       {id:"east-moscow",theater:"east",sortDate:"1941-10-02",date:"1941년 10월 2일",title:"모스크바 공방전",summary:"독일군의 태풍 작전이 모스크바 앞에서 소련의 저항과 겨울 반격에 막힘.",routes:[["스몰렌스크",32.05,54.78,"모스크바",37.62,55.75]]},
       {id:"africa-crusader",theater:"africa",sortDate:"1941-11-18",date:"1941년 11월 18일",title:"크루세이더 작전",summary:"연합군의 반격으로 토브루크 포위가 풀리고 롬멜군이 서부 리비아로 후퇴.",routes:[["살룸",25.14,31.55,"엘아게일라",20.07,30.18]]},
       {id:"pacific-pearl",theater:"pacific",sortDate:"1941-12-07",date:"1941년 12월 7일",title:"진주만 공격",summary:"일본 기동부대가 하와이 진주만을 기습해 미국의 태평양전쟁 참전을 불러옴.",routes:[["히토카푸만",147.63,44.98,"진주만",-157.95,21.35]]},
@@ -176,6 +178,8 @@ const events = [
         }
       },
       {id:"west-carentan",theater:"west",sortDate:"1944-06-10",date:"1944년 6월 10~13일",title:"카랑탕 전투",series:"bob",episode:"3",summary:"유타·오마하 교두보를 잇는 카랑탕을 점령한 시가전.",detail:"[3화 Carentan] 유타와 오마하 두 상륙 교두보를 잇는 도로 요충지 카랑탕을 두고 벌인 시가전. 이지 중대는 총탄이 쏟아지는 교차로에서 얼어붙은 신병 블라이스 이병을 윈터스가 독려해 전진시키는 장면으로 유명하다. 마을 점령 뒤 독일군의 강력한 역습을 능선(6월 13일)에서 셔먼 전차의 지원을 받아 격퇴한다. 전투 스트레스와 리더십을 정면으로 다룬 화.",routes:[["생트마리뒤몽",-1.23,49.36,"카랑탕",-1.24,49.3,"allied","para"]]},
+      {id:"tiger-narva",theater:"east",sortDate:"1944-03-17",date:"1944년 3월 17~22일",title:"나르바 전투 · 기사십자장",series:"tiger",episode:"나르바",summary:"카리우스가 티거 3대로 나르바 서쪽 렘비투 부근에서 사흘간 소련 전차 28대 등을 격파. 이 전공으로 기사십자장을 받음.",detail:"1944년 초 에스토니아 나르바 교두보에서 카리우스의 티거들이 소련군의 대공세를 막아낸다. 2월 12일 4대 격파, 모델 원수의 방문(2월 2일)으로 유명하다. 3월 17~22일 렘비투 마을 부근에서 티거 3대로 사흘간 전차 28대·돌격포 4문·야포 17문을 파괴했고, 이 전공으로 기사십자장을 받는다. 이후 실라매에로 물러나 정비.",routes:[["실라매에",27.774,59.393,"나르바(렘비투)",28.19,59.38,"tiger","tiger"]]},
+      {id:"tiger-malinava",theater:"east",sortDate:"1944-07-22",date:"1944년 7월 22~24일",title:"말리나바 전차전과 중상",series:"tiger",episode:"말리나바",summary:"카리우스가 티거 단 2대로 뒤나부르크 북쪽 말리나바에서 IS-2 등 소련 전차 종대를 격파. 이틀 뒤 총 7발을 맞고 중상을 입어 동부전선을 떠남.",detail:"1944년 7월 22일, 2중대장 카리우스는 티거 8대 중 자신과 케르셔 소위의 단 2대만으로 뒤나부르크(다우가프필스) 북쪽 말리나바로 접근하는 소련 전차 종대를 좁은 외길에서 기습한다. 신형 IS-2 중전차를 포함한 다수를 20~30분 만에 격파했다. 격파 수(17~23대)는 자료마다 다투어지지만, 소수의 티거가 이룬 전설적 매복전으로 회고록의 절정이다.\n\n이틀 뒤인 7월 24일, 2중대장으로 정식 취임한 날 카리우스는 다우가프필스 부근에서 다리·팔과 등에 네 발, 목에 한 발 등 총 일곱 발을 맞고 중상을 입는다. 기적적으로 살아남지만 동부전선 일선 복무는 여기서 끝나고, 회복 뒤에는 서부전선의 야크트티거 부대로 옮긴다.",routes:[["다우가프필스",26.536,55.875,"말리나바",26.6,55.95,"tiger","tiger"]]},
       {id:"east-bagration",theater:"east",sortDate:"1944-06-22",date:"1944년 6월 22일~8월 19일",title:"바그라티온 작전",faction:"allied",summary:"소련군의 대공세로 독일 중부집단군이 붕괴하고 벨라루스가 해방됨.",routes:[["스몰렌스크",32.05,54.78,"민스크",27.56,53.9],["민스크",27.56,53.9,"바르샤바",21.01,52.23]]},
       {id:"pacific-philippine-sea",theater:"pacific",sortDate:"1944-06-19",date:"1944년 6월 19~20일",title:"필리핀해 해전",summary:"미 해군이 마리아나 해역에서 일본 함재기 전력을 궤멸시킴.",routes:[["사이판",145.75,15.18,"필리핀해",137,15]]},
       {id:"east-warsaw-uprising",theater:"east",sortDate:"1944-08-01",date:"1944년 8월 1일~10월 2일",title:"바르샤바 봉기",summary:"폴란드 국내군이 봉기했으나 소련군의 진격이 멈춘 사이 독일군에게 진압됨.",routes:[["바르샤바",21.01,52.23,"프라가",21.05,52.25]]},
@@ -185,6 +189,8 @@ const events = [
       {id:"pacific-peleliu",theater:"pacific",sortDate:"1944-09-15",date:"1944년 9월 15일~11월 27일",title:"펠렐리우 전투",series:"pacific",episode:"5~7",summary:"미 제1해병사단이 펠렐리우에 상륙. '사흘이면 끝난다'던 예상과 달리 두 달 넘는 최악의 소모전이 됨.",detail:"[5화 Peleliu Landing / 6화 Peleliu Airfield / 7화 Peleliu Hills] 산호섬 펠렐리우 상륙. 뜨거운 산호 암반 위에서 비행장을 가로지르는 돌격(6화), 그리고 우무르브로골 능선('블러디 노즈 리지')의 동굴 진지를 하나씩 파괴하는 지옥의 능선전(7화)이 이어진다. 전략적 가치 논란에도 불구하고 미 해병대가 가장 높은 손실률을 기록한 전투 중 하나로, 슬레지의 회고를 통해 전쟁의 광기가 극단적으로 그려진다.",routes:[["남태평양 기지",137.5,3.0,"펠렐리우",134.23,6.99,"allied","landing"]]},
       {id:"pacific-leyte",theater:"pacific",sortDate:"1944-10-23",date:"1944년 10월 23~26일",title:"레이테만 해전",summary:"사상 최대 규모의 해전에서 일본 연합함대가 결정적 타격을 입음.",routes:[["뉴기니",141,-6,"레이테",125,10.9]]},
       {id:"west-bulge",theater:"west",sortDate:"1944-12-16",date:"1944년 12월 16일~1945년 1월 25일",title:"벌지 전투",summary:"독일군의 아르덴 기습 반격이 초기 성과 뒤 연합군에게 저지됨.",routes:[["아이펠",6.5,50.3,"바스토뉴",5.72,50.0]]},
+      {id:"tiger-jagdtiger",theater:"west",sortDate:"1945-03-01",date:"1945년 초",title:"야크트티거 중대 · 서부전선",series:"tiger",episode:"야크트티거",summary:"회복한 카리우스가 512 중전차구축대대의 야크트티거 중대장으로 서부전선 루르·지겐 일대에 투입됨.",detail:"동부전선에서 중상을 입고 회복한 카리우스는 1945년 초 제512 중전차구축대대(schwere Panzerjäger-Abteilung 512)의 야크트티거(128mm 포를 단 초중량 구축전차) 중대장이 되어 서부전선에 배치된다. 루르·지겐 지역에서 진격하는 미군을 상대했다. 거대하지만 기동성이 떨어지는 야크트티거의 한계 속에 싸운다.",routes:[["지겐",8.024,50.875,"루르",7.5,51.4,"tiger","tiger"]]},
+      {id:"tiger-surrender",theater:"west",sortDate:"1945-04-15",date:"1945년 4월 15일",title:"카리우스 항복 · 루르 포위망",series:"tiger",episode:"종전",summary:"루르 포위망에서 탈출이 막히자 카리우스가 야크트티거의 포를 파괴하고 이절론에서 미군에 항복.",detail:"1945년 4월 루르 포위망이 좁혀지자 돌파가 불가능해진 카리우스는 남은 야크트티거의 주포를 파괴해 적에게 넘어가지 않게 한 뒤, 4월 15일 이절론(실러플라츠)에서 미군에 항복한다. 오토 카리우스의 전쟁이 끝난다. 그는 전후 약사가 되었고 2015년 타계했다.",routes:[["루르",7.5,51.4,"이절론",7.70,51.37,"tiger","tiger"]]},
       {id:"west-bastogne",theater:"west",sortDate:"1944-12-19",date:"1944년 12월 19일~1945년 1월",title:"바스토뉴 방어",series:"bob",episode:"6~7",summary:"벌지 전투에서 포위된 바스토뉴를 혹한 속에 사수하고 푸아를 탈환.",detail:"[6화 Bastogne / 7화 The Breaking Point] 벌지 전투에서 101공수사단은 요충지 바스토뉴에서 완전 포위된 채 방한복·탄약·의약품 없이 혹한을 버틴다. 6화는 위생병 유진 '독' 로의 시선으로 부상병 치료와 간호사 르네와의 만남을 그린다. 7화는 푸아(Foy) 공격 — 무능한 다이크 중위의 지휘 마비를 스피어스가 대신 돌파해 마을을 탈환하는 장면이 절정. 겅과 토이 등 여러 대원이 전사·부상한다.",routes:[["랭스",4.03,49.26,"바스토뉴",5.72,50.0,"allied","para"],["바스토뉴",5.72,50.0,"푸아",5.79,50.05,"allied","para"]]},
       {id:"pacific-iwojima",theater:"pacific",sortDate:"1945-02-19",date:"1945년 2월 19일~3월 26일",title:"이오지마 전투",series:"pacific",episode:"8",summary:"미 해병대가 막대한 희생 끝에 이오지마를 점령해 본토 폭격 기지를 확보.",detail:"[8화 Iwo Jima] 화산섬 이오지마 상륙. 검은 화산재 해변과 지하 요새에서 벌어진 지옥 같은 소모전. 과달카날의 영웅 존 배실론이 이 전투에서 전사한다. 스리바치산에 성조기를 세운 장면(로젠탈의 사진)으로 상징되지만, 실제 전투는 그 뒤로도 한 달 넘게 이어졌다. B-29 폭격기의 비상착륙 기지 확보가 목적.",routes:[["사이판",145.75,15.18,"이오지마",141.32,24.78]]},
       {id:"west-haguenau",theater:"west",sortDate:"1945-02-05",date:"1945년 2월",title:"아그누 전투",series:"bob",episode:"8",summary:"알자스 아그누에서 모데르강을 사이에 둔 대치와 야간 정찰.",detail:"[8화 The Last Patrol] 알자스의 아그누에서 모데르강을 사이에 두고 독일군과 대치. 신임 소위 존스가 첫 실전으로 강 건너 포로 생포 정찰을 지휘하고, 웹스터가 부대에 복귀한다. 첫 정찰은 성공하지만 두 번째 정찰 명령이 떨어지자, 윈터스는 부하들을 아끼려 '정찰을 나갔다고만 보고하라'며 실제 도하를 시키지 않는다. 종전이 가까운 시점의 무의미한 희생을 거부하는 결정이 핵심.",routes:[["바스토뉴",5.72,50.0,"아그누",7.79,48.82,"allied","para"]]},
@@ -235,7 +241,9 @@ const mapCountrySets = {
   gloucester:{"392":"axis","840":"allied","036":"allied"},
   peleliu:{"392":"axis","840":"allied"},
   mota:{"826":"allied","276":"axis"},
-  atlantic:{"826":"allied","276":"axis","250":"axis","840":"allied"}
+  atlantic:{"826":"allied","276":"axis","250":"axis","840":"allied"},
+  tigerEast:{"276":"axis","643":"soviet","233":"soviet","428":"soviet","440":"soviet"},
+  tigerWest:{"276":"axis","840":"allied","826":"allied"}
 };
 
 const detailedMapPresets = {
@@ -312,6 +320,12 @@ const detailedMapPresets = {
   "uboat-u415-sunk":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-8,46],[0,46],[0,50],[-8,50]]},
   "uboat-escape":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-10,45],[12,45],[12,62],[-10,62]]},
   "uboat-surrender":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-10,45],[12,45],[12,62],[-10,62]]},
+  "tiger-barbarossa":{countries:"tigerEast",sides:"tiger",types:"tiger",view:[[20,53],[34,53],[34,58],[20,58]]},
+  "tiger-deploy":{countries:"tigerEast",sides:"tiger",types:"tiger",view:[[26,57],[34,57],[34,61],[26,61]]},
+  "tiger-narva":{countries:"tigerEast",sides:"tiger",types:"tiger",view:[[26,58.5],[30,58.5],[30,60],[26,60]]},
+  "tiger-malinava":{countries:"tigerEast",sides:"tiger",types:"tiger",view:[[25,55.3],[28,55.3],[28,56.6],[25,56.6]]},
+  "tiger-jagdtiger":{countries:"tigerWest",sides:"tiger",types:"tiger",view:[[6,50],[10,50],[10,52],[6,52]]},
+  "tiger-surrender":{countries:"tigerWest",sides:"tiger",types:"tiger",view:[[6.5,50.5],[9,50.5],[9,52],[6.5,52]]},
   "west-carentan":{countries:"normandy",sides:"bob",types:"para",view:[[-1.6,49.1],[-0.8,49.1],[-0.8,49.6],[-1.6,49.6]]},
   "west-market-garden":{countries:"westLate",sides:["bob","bob"],types:["para","land"],view:[[4.8,51.2],[6.4,51.2],[6.4,52.2],[4.8,52.2]]},
   "west-the-island":{countries:"westLate",sides:"bob",types:"para",view:[[5.4,51.6],[6.4,51.6],[6.4,52.2],[5.4,52.2]]},
@@ -322,9 +336,9 @@ const detailedMapPresets = {
 };
 const detailedNoRouteEvents=["west-ve-day","pacific-surrender-announce"];
 
-const sideMapLabels={allied:"연합군",axis:"추축군",soviet:"소련군",finnish:"핀란드군",neutral:"중립",bob:"101 공수사단",mota:"제8공군 100폭격전대",uboat:"독일 U보트"};
-const unitMapLabels={land:"기갑",naval:"함대",air:"폭격기",landing:"상륙정",para:"공수",uboat:"잠수함"};
-const unitTypeByRoute={land:"tank",naval:"ship",air:"bomber",landing:"landing",para:"para",uboat:"uboat"};
+const sideMapLabels={allied:"연합군",axis:"추축군",soviet:"소련군",finnish:"핀란드군",neutral:"중립",bob:"101 공수사단",mota:"제8공군 100폭격전대",uboat:"독일 U보트",tiger:"독일 중전차대대"};
+const unitMapLabels={land:"기갑",naval:"함대",air:"폭격기",landing:"상륙정",para:"공수",uboat:"잠수함",tiger:"전차"};
+const unitTypeByRoute={land:"tank",naval:"ship",air:"bomber",landing:"landing",para:"para",uboat:"uboat",tiger:"tank"};
 function routeMidpoint(route){const start=Number(route[1]),end=Number(route[4]);let delta=((end-start+540)%360)-180,lon=start+delta/2;if(lon>180)lon-=360;if(lon<-180)lon+=360;return [lon,(Number(route[2])+Number(route[5]))/2]}
 events.forEach(event=>{
   const preset=detailedMapPresets[event.id];if(!preset||!event.routes?.length)return;
@@ -373,6 +387,6 @@ window.timelineConfig = {
   historicalDataUrl:"data/world-1938.geojson",
   lanes,
   events,
-  seriesLabels:{bob:"BAND OF BROTHERS",pacific:"THE PACIFIC",mota:"MASTERS OF THE AIR",ironcoffins:"IRON COFFINS · 강철의 관"},
+  seriesLabels:{bob:"BAND OF BROTHERS",pacific:"THE PACIFIC",mota:"MASTERS OF THE AIR",ironcoffins:"IRON COFFINS · 강철의 관",tiger:"TIGERS IN THE MUD · 진흙 속의 호랑이"},
   yearMarkers: ["1937-01-01","1939-01-01","1940-01-01","1941-01-01","1942-01-01","1943-01-01","1944-01-01","1945-01-01"]
 };

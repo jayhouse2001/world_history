@@ -66,7 +66,7 @@
       const padding=Math.max(8,Math.min(width,height)*.08);return projection.fitExtent([[padding,padding],[width-padding,height-padding]],corners);
     }
     function routeFeature(route){return {type:"LineString",coordinates:[[route[1],route[2]],[route[4],route[5]]]}}
-    function routeSide(route){return ["allied","axis","soviet","finnish","bob","mota","uboat"].includes(route[6])?route[6]:"neutral"}
+    function routeSide(route){return ["allied","axis","soviet","finnish","bob","mota","uboat","tiger"].includes(route[6])?route[6]:"neutral"}
     function drawHistoricalPartitions(viewport,path,projection,event,width,height,labelRequests){
       if(!historicalData||!event.historicalPartitions?.length)return;
       const layer=viewport.append("g").attr("class","historical-control-layer");
@@ -320,8 +320,8 @@
 
     function eventFaction(event){
       if(event.faction)return event.faction;
-      const axisSides=new Set(["axis","uboat"]),alliedSides=new Set(["allied","bob","mota"]);
-      const axisSeries=new Set(["ironcoffins"]),alliedSeries=new Set(["bob","pacific","mota"]);
+      const axisSides=new Set(["axis","uboat","tiger"]),alliedSides=new Set(["allied","bob","mota"]);
+      const axisSeries=new Set(["ironcoffins","tiger"]),alliedSeries=new Set(["bob","pacific","mota"]);
       if(event.series){if(axisSeries.has(event.series))return "axis";if(alliedSeries.has(event.series))return "allied"}
       const sides=(event.routes||[]).map(r=>r[6]).filter(Boolean);
       const hasAxis=sides.some(s=>axisSides.has(s)),hasAllied=sides.some(s=>alliedSides.has(s));
