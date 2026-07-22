@@ -20,7 +20,7 @@
       </div>
       <section class="timeline-section" aria-labelledby="timeline-heading">
         <div class="section-heading"><h2 id="timeline-heading">전선별 타임라인 · 1937~1945</h2><p>시간은 위에서 아래로 흐릅니다</p></div>
-        <div id="sticky-theater-bar" class="sticky-theater-bar" aria-hidden="true"><div id="sticky-theater-track" class="sticky-theater-track"></div></div>
+        <div id="sticky-theater-bar" class="sticky-theater-bar" aria-hidden="true"><div id="sticky-year" class="sticky-year"></div><div id="sticky-theater-track" class="sticky-theater-track"></div></div>
         <div id="timeline-scroll" class="timeline-scroll" aria-label="네 전선 가로 스크롤 영역"><div id="timeline-board" class="timeline-board"><div id="time-rules" class="time-rules" aria-hidden="true"></div></div></div>
         <div class="timeline-note"><span class="edit-hint">지역 타임라인·여백 길게 누르기: 그 위치에 사건 추가</span><span>사건 카드 길게 누르기: 추가·편집·삭제</span><span>가로선: 네 지역 공통 날짜 기준</span><span>사건 밀도에 따라 날짜 사이 간격 조정</span><span>지도: 현대 국경 기준 · 이동 방향 개략 표시 · Natural Earth 1:110m</span></div>
       </section>
@@ -29,9 +29,10 @@
   </div>
 
   <dialog id="map-dialog" aria-labelledby="dialog-title">
-    <div class="dialog-header"><div><span id="dialog-date" class="dialog-date"></span><h3 id="dialog-title"></h3></div><button id="close-dialog" class="close-button" type="button" aria-label="확대 지도 닫기">✕</button></div>
+    <div class="dialog-header"><div><span id="dialog-date" class="dialog-date"></span><h3 id="dialog-title"></h3></div><div class="dialog-header-actions"><button id="dialog-edit" class="dialog-edit-btn" type="button">✎ 편집</button><button id="close-dialog" class="close-button" type="button" aria-label="확대 지도 닫기">✕</button></div></div>
     <div class="dialog-map-wrap"><div class="interactive-map"><svg id="dialog-map" class="dialog-map" role="img" aria-labelledby="dialog-map-title dialog-map-desc"></svg><div class="map-zoom-controls" aria-label="지도 확대 축소"><button id="dialog-zoom-in" type="button" aria-label="지도 확대">＋</button><button id="dialog-zoom-out" type="button" aria-label="지도 축소">−</button></div></div></div>
     <p id="dialog-summary" class="dialog-summary"></p>
+    <figure id="dialog-image-wrap" class="dialog-image-wrap" hidden><img id="dialog-image" alt="참조 이미지"></figure>
   </dialog>
 
   <div id="event-menu" class="event-menu" role="menu" aria-label="사건 편집 메뉴">
@@ -49,6 +50,11 @@
       <label class="form-field"><span>카드에 표시할 날짜</span><input id="edit-date" type="text" required placeholder="예: 1943년 7월 5일~8월 23일"></label>
       <label class="form-field"><span>사건명</span><input id="edit-title" type="text" required maxlength="60"></label>
       <label class="form-field"><span>요약</span><textarea id="edit-summary" required maxlength="220"></textarea></label>
+      <label class="form-field"><span>상세 설명 (선택)</span><textarea id="edit-detail" maxlength="1200" placeholder="카드를 눌러 열었을 때 보일 자세한 내용"></textarea></label>
+      <div class="form-field image-field"><span>참조 이미지 (선택)</span>
+        <input id="edit-image" type="file" accept="image/*">
+        <div class="image-preview-wrap" hidden><img id="edit-image-preview" alt="참조 이미지 미리보기"><button id="edit-image-remove" class="clear-route" type="button">이미지 제거</button></div>
+      </div>
       <label class="map-editor-toggle"><input id="edit-has-map" type="checkbox">지도 이동 경로 추가</label>
       <div id="map-editor" class="map-editor" hidden>
         <div class="interactive-map"><svg id="route-picker" class="route-picker" role="img" aria-label="출발점과 도착점을 선택하는 지도"></svg><div class="map-zoom-controls" aria-label="경로 선택 지도 확대 축소"><button id="picker-zoom-in" type="button" aria-label="경로 선택 지도 확대">＋</button><button id="picker-zoom-out" type="button" aria-label="경로 선택 지도 축소">−</button></div></div>

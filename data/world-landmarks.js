@@ -17,5 +17,8 @@ window.worldLandmarks = [
   {name:"Coral Sea", lon:154.0, lat:-18.0},
   {name:"Port Moresby", lon:147.18, lat:-9.44},
   {name:"Espiritu Santo", lon:167.18, lat:-15.38},
-  {name:"Palau", lon:134.58, lat:7.52}
+  {name:"Palau", lon:134.58, lat:7.52},
+  {name:"Peleliu", lon:134.23, lat:6.99},
+  {name:"Angaur", lon:134.14, lat:6.9},
+  {name:"Cape Gloucester", lon:148.43, lat:-5.45}
 ];

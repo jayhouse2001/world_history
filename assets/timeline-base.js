@@ -66,7 +66,7 @@
       const padding=Math.max(8,Math.min(width,height)*.08);return projection.fitExtent([[padding,padding],[width-padding,height-padding]],corners);
     }
     function routeFeature(route){return {type:"LineString",coordinates:[[route[1],route[2]],[route[4],route[5]]]}}
-    function routeSide(route){return ["allied","axis","soviet","finnish","bob"].includes(route[6])?route[6]:"neutral"}
+    function routeSide(route){return ["allied","axis","soviet","finnish","bob","mota"].includes(route[6])?route[6]:"neutral"}
     function drawHistoricalPartitions(viewport,path,projection,event,width,height,labelRequests){
       if(!historicalData||!event.historicalPartitions?.length)return;
       const layer=viewport.append("g").attr("class","historical-control-layer");
@@ -230,13 +230,21 @@
         if(event.mapNote)overlay.append("text").attr("class","map-note").attr("x",12).attr("y",height-10).text(event.mapNote);
       } else if(svgElement===dialogSvg.node()){dialogLabelContext=null}
     }
+    let dialogEventId=null;
     function openMap(theater,event){
-      document.getElementById("dialog-date").textContent=event.date;
+      dialogEventId=event.id;
+      const seriesTag=event.series&&seriesLabels[event.series]?`${seriesLabels[event.series]}${event.episode?` · EP${event.episode}`:""}`:"";
+      document.getElementById("dialog-date").textContent=seriesTag?`${event.date} · ${seriesTag}`:event.date;
       document.getElementById("dialog-title").textContent=`${theater.name} · ${event.title}`;
-      document.getElementById("dialog-summary").textContent=event.summary;
+      document.getElementById("dialog-summary").textContent=event.detail||event.summary;
+      const dialogImageWrap=document.getElementById("dialog-image-wrap"),dialogImage=document.getElementById("dialog-image");
+      if(event.image){dialogImage.src=event.image;dialogImageWrap.hidden=false}else{dialogImage.removeAttribute("src");dialogImageWrap.hidden=true}
       dialogSvg.select("title").text(`${theater.name}: ${event.date} ${event.title}`);
-      dialogSvg.select("desc").text(event.summary);
-      drawMap(dialogSvg.node(),theater,event,960,510,true);dialogZoomTransform=d3.zoomIdentity;dialogSvg.call(dialogZoom.transform,dialogZoomTransform); dialog.showModal();
+      dialogSvg.select("desc").text(event.detail||event.summary);
+      const mapWrap=document.querySelector("#map-dialog .dialog-map-wrap");
+      if(event.routes?.length){mapWrap.hidden=false;drawMap(dialogSvg.node(),theater,event,960,510,true);dialogZoomTransform=d3.zoomIdentity;dialogSvg.call(dialogZoom.transform,dialogZoomTransform)}
+      else{mapWrap.hidden=true}
+      dialog.showModal();
     }
 
     const menu=document.getElementById("event-menu");
@@ -251,6 +259,13 @@
     let pickerMode="start",pickerProjection=null,pickerProjectionEvent=null,pickerPoints={start:null,end:null},pickerZoomTransform=d3.zoomIdentity;
     const hasMapInput=document.getElementById("edit-has-map");
     const mapEditor=document.getElementById("map-editor");
+    let editorImage=null;
+    const imageInput=document.getElementById("edit-image");
+    const imagePreview=document.getElementById("edit-image-preview");
+    const imagePreviewWrap=document.querySelector(".image-preview-wrap");
+    function setEditorImage(dataUrl){editorImage=dataUrl||null;if(editorImage){imagePreview.src=editorImage;imagePreviewWrap.hidden=false}else{imagePreview.removeAttribute("src");imagePreviewWrap.hidden=true;imageInput.value=""}}
+    imageInput.addEventListener("change",()=>{const file=imageInput.files?.[0];if(!file)return;if(file.size>4*1024*1024){alert("이미지가 너무 큽니다(4MB 이하 권장). 더 작은 파일을 사용해주세요.")}const reader=new FileReader();reader.onload=()=>setEditorImage(reader.result);reader.readAsDataURL(file)});
+    document.getElementById("edit-image-remove").addEventListener("click",()=>setEditorImage(null));
     const routePicker=document.getElementById("route-picker");
     const pickerSvg=d3.select(routePicker);
     const pickerZoom=d3.zoom().scaleExtent([.35,8]).on("zoom",event=>{pickerZoomTransform=event.transform;pickerSvg.select(".map-viewport").attr("transform",event.transform);keepMarkerSize(pickerSvg,event.transform.k)});
@@ -302,6 +317,18 @@
       });timeline.appendChild(svg);
     }
 
+    function updateStickyYear(){
+      const stickyYear=document.getElementById("sticky-year");
+      const stickyBar=document.getElementById("sticky-theater-bar");
+      if(!stickyYear||!stickyBar||!currentTimelineMeta)return;
+      const {milestones,slotY}=currentTimelineMeta;if(!milestones.length)return;
+      const y=stickyBar.getBoundingClientRect().bottom-board.getBoundingClientRect().top;
+      let current=milestones[0];
+      for(const date of milestones){if(slotY.get(date)<=y)current=date;else break}
+      const year=Number(current.slice(0,4));
+      const label=year<0?`기원전 ${-year}년`:`${year}년`;
+      if(stickyYear.textContent!==label)stickyYear.textContent=label;
+    }
     function render(){
       const scrollLeft=timelineScroll.scrollLeft;
       const events=allEvents();
@@ -334,30 +361,32 @@
         theaterEvents.forEach(event=>{
           const sameDateIndex=dateCounts.get(event.sortDate)||0;dateCounts.set(event.sortDate,sameDateIndex+1);
           const article=document.createElement("article");article.className=`event${event.kind==="reign"?" is-reign-event":""}${event.kind==="world"?" is-world-event":""}${event.related?" is-related-event":""}`;article.dataset.eventId=event.id;article.style.top=`${slotY.get(event.sortDate)-28+sameDateIndex*collisionGap}px`;
-          const card=document.createElement("div");card.className=`event-card${event.routes?.length?"":" no-map"}${event.kind==="reign"?" is-reign":""}${event.series?` is-series series-${event.series}`:""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
+          const card=document.createElement("div");card.className=`event-card${event.routes?.length||event.image?"":" no-map"}${event.kind==="reign"?" is-reign":""}${event.series?` is-series series-${event.series}`:""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
           const copy=document.createElement("div");
           if(event.series&&seriesLabels[event.series]){const badge=document.createElement("span");badge.className="series-badge";badge.textContent=event.episode?`${seriesLabels[event.series]} · EP${event.episode}`:seriesLabels[event.series];copy.appendChild(badge)}
           const time=document.createElement("time");time.className="event-date";time.textContent=event.kind==="reign"&&eventEndDate(event)?`${event.date} · 총 ${reignLength(event.sortDate,eventEndDate(event))}`:event.date;
           const title=document.createElement("h4");title.className="event-title";title.textContent=event.title;const summary=document.createElement("p");summary.className="event-summary";summary.textContent=event.summary;copy.append(time,title,summary);
           if(event.kind==="reign"){const meta=document.createElement("dl");meta.className="reign-meta";for(const [label,value] of [["혈연",event.relation],["계승",event.succession],["섭정",event.regency]]){if(!value)continue;const row=document.createElement("div"),term=document.createElement("dt"),detail=document.createElement("dd");term.textContent=label;detail.textContent=value;row.append(term,detail);meta.appendChild(row)}copy.appendChild(meta)}card.appendChild(copy);
-          if(event.routes?.length){const button=document.createElement("button");button.className="map-thumb";button.type="button";button.setAttribute("aria-label",`${theater.name} ${event.date} ${event.title} 지도 확대`);const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("role","img");svg.setAttribute("aria-label",`${event.title} 이동 경로 축소 지도`);const text=document.createElement("span");text.textContent="지도 확대";button.append(svg,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button);drawMap(svg,theater,event,130,88,false)}
-          attachEditGesture(card,event);article.appendChild(card);timeline.appendChild(article);
+          if(event.image){const button=document.createElement("button");button.className="image-thumb";button.type="button";button.setAttribute("aria-label",`${event.title} 참조 이미지·상세 보기`);const img=document.createElement("img");img.src=event.image;img.alt="";const text=document.createElement("span");text.textContent="자세히 보기";button.append(img,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button)}
+          else if(event.routes?.length){const button=document.createElement("button");button.className="map-thumb";button.type="button";button.setAttribute("aria-label",`${theater.name} ${event.date} ${event.title} 지도 확대`);const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("role","img");svg.setAttribute("aria-label",`${event.title} 이동 경로 축소 지도`);const text=document.createElement("span");text.textContent="지도 확대";button.append(svg,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button);drawMap(svg,theater,event,130,88,false)}
+          attachEditGesture(card,event,theater);article.appendChild(card);timeline.appendChild(article);
         });
         attachLaneGesture(timeline,theater);
         board.appendChild(lane);
       });
       timelineScroll.scrollLeft=scrollLeft;
+      updateStickyYear();
     }
 
-    function attachEditGesture(card,event){
+    function attachEditGesture(card,event,theater){
       let timer=null,startX=0,startY=0,longPressed=false;
       const cancel=()=>{clearTimeout(timer);timer=null;card.classList.remove("is-pressed")};
       card.addEventListener("pointerdown",e=>{if(e.button!==0)return;startX=e.clientX;startY=e.clientY;longPressed=false;card.classList.add("is-pressed");timer=setTimeout(()=>{longPressed=true;openMenu(event.id,e.clientX,e.clientY);card.classList.remove("is-pressed")},620)});
       card.addEventListener("pointermove",e=>{if(Math.hypot(e.clientX-startX,e.clientY-startY)>10)cancel()});
       card.addEventListener("pointerup",cancel);card.addEventListener("pointercancel",cancel);card.addEventListener("pointerleave",cancel);
-      card.addEventListener("click",e=>{if(longPressed){e.preventDefault();e.stopPropagation();longPressed=false}},true);
+      card.addEventListener("click",e=>{if(longPressed){e.preventDefault();e.stopPropagation();longPressed=false;return}if(e.target.closest("button"))return;openMap(theater,event)},true);
+      card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openMap(theater,event)}else if(e.key==="ContextMenu"||(e.shiftKey&&e.key==="F10")){e.preventDefault();const box=card.getBoundingClientRect();openMenu(event.id,box.left+24,box.top+24)}});
       card.addEventListener("contextmenu",e=>{e.preventDefault();cancel();openMenu(event.id,e.clientX,e.clientY)});
-      card.addEventListener("keydown",e=>{if(e.key==="ContextMenu"||(e.shiftKey&&e.key==="F10")){e.preventDefault();const box=card.getBoundingClientRect();openMenu(event.id,box.left+24,box.top+24)}});
     }
     function dateAtPosition(timeline,clientY){
       const y=clientY-timeline.getBoundingClientRect().top;const {milestones,slotY}=currentTimelineMeta;
@@ -404,6 +433,7 @@
       const initialSort=context.sortDate||source?.sortDate||timelineConfig.defaultDate||baseEvents[0]?.sortDate;theaterSelect.value=context.theater||source?.theater||theaterDefs[0]?.id;document.getElementById("edit-sort-date").value=initialSort;
       document.getElementById("edit-end-date").value=source?eventEndDate(source)||"":"";
       document.getElementById("edit-date").value=mode==="add"?koreanDate(initialSort):(source?.date||koreanDate(initialSort));document.getElementById("edit-title").value=mode==="add"?"":(source?.title||"");document.getElementById("edit-summary").value=mode==="add"?"":(source?.summary||"");
+      document.getElementById("edit-detail").value=mode==="add"?"":(source?.detail||"");setEditorImage(mode==="add"?null:(source?.image||null));
       const route=source?.routes?.[0];pickerPoints={start:route?[route[1],route[2]]:null,end:route?[route[4],route[5]]:null};pickerZoomTransform=d3.zoomIdentity;document.getElementById("edit-start-name").value=route?.[0]||"";document.getElementById("edit-end-name").value=route?.[3]||"";hasMapInput.checked=Boolean(route);mapEditor.hidden=!hasMapInput.checked;setPickerMode("start");drawPicker();
       editor.showModal();setTimeout(()=>document.getElementById(mode==="add"?"edit-title":"edit-date").focus(),0);
     }
@@ -426,7 +456,7 @@
     document.getElementById("edit-sort-date").addEventListener("change",event=>{if(editorMode==="add")document.getElementById("edit-date").value=koreanDate(event.target.value)});
     d3.select(routePicker).on("click",event=>{if(!pickerProjection)return;const screenPoint=d3.pointer(event,routePicker),mapPoint=pickerZoomTransform.invert(screenPoint),point=pickerProjection.invert(mapPoint);if(!point)return;pickerPoints[pickerMode]=point;if(pickerMode==="start")setPickerMode("end");drawPicker()});
     editorForm.addEventListener("submit",event=>{
-      event.preventDefault();const sortDate=document.getElementById("edit-sort-date").value,endDate=document.getElementById("edit-end-date").value||null;if(endDate&&endDate<=sortDate){alert("종료 날짜는 시작 날짜보다 뒤여야 합니다.");return}if(hasMapInput.checked&&(!pickerPoints.start||!pickerPoints.end)){alert("지도에서 출발점과 도착점을 모두 선택해주세요.");return}const routes=hasMapInput.checked?[[document.getElementById("edit-start-name").value.trim()||"출발점",pickerPoints.start[0],pickerPoints.start[1],document.getElementById("edit-end-name").value.trim()||"도착점",pickerPoints.end[0],pickerPoints.end[1]]]:[];const mapView=hasMapInput.checked?currentPickerView():null;const payload={theater:theaterSelect.value,sortDate,endDate,date:document.getElementById("edit-date").value.trim()||koreanDate(sortDate),title:document.getElementById("edit-title").value.trim(),summary:document.getElementById("edit-summary").value.trim(),routes,mapView};
+      event.preventDefault();const sortDate=document.getElementById("edit-sort-date").value,endDate=document.getElementById("edit-end-date").value||null;if(endDate&&endDate<=sortDate){alert("종료 날짜는 시작 날짜보다 뒤여야 합니다.");return}if(hasMapInput.checked&&(!pickerPoints.start||!pickerPoints.end)){alert("지도에서 출발점과 도착점을 모두 선택해주세요.");return}const routes=hasMapInput.checked?[[document.getElementById("edit-start-name").value.trim()||"출발점",pickerPoints.start[0],pickerPoints.start[1],document.getElementById("edit-end-name").value.trim()||"도착점",pickerPoints.end[0],pickerPoints.end[1]]]:[];const mapView=hasMapInput.checked?currentPickerView():null;const payload={theater:theaterSelect.value,sortDate,endDate,date:document.getElementById("edit-date").value.trim()||koreanDate(sortDate),title:document.getElementById("edit-title").value.trim(),summary:document.getElementById("edit-summary").value.trim(),detail:document.getElementById("edit-detail").value.trim()||null,image:editorImage||null,routes,mapView};
       if(editorMode==="add"){
         userState.added=[...(userState.added||[]),{id:`custom-${Date.now()}`,...payload}];
       }else if(selectedEventId.startsWith("custom-")){
@@ -441,7 +471,11 @@
     editor.addEventListener("click",event=>{if(event.target===editor)editor.close()});
     render();
     timelineScroll.addEventListener("scroll",()=>{stickyTrack.style.transform=`translateX(${-timelineScroll.scrollLeft}px)`},{passive:true});
+    window.addEventListener("scroll",updateStickyYear,{passive:true});
+    window.addEventListener("resize",updateStickyYear,{passive:true});
+    updateStickyYear();
     document.getElementById("dialog-zoom-in").addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1.45));document.getElementById("dialog-zoom-out").addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1/1.45));
     document.getElementById("close-dialog").addEventListener("click",()=>dialog.close());
+    document.getElementById("dialog-edit").addEventListener("click",()=>{if(!dialogEventId)return;dialog.close();openEditor("edit",dialogEventId)});
     dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});
     })();

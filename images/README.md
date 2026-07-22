@@ -77,8 +77,8 @@
   - © HBO / 저작권 자료 — 개인 열람용(비공개), 웹 재배포 금지
   - 첫 화면 시리즈 배너용
 
-- `series-pacific.jpg`
-  - The Pacific (HBO, 2010) 대표 이미지 / 키아트
+- `series-pacific.webp`
+  - The Pacific (HBO, 2010) 대표 이미지 / 키아트 · 배너용 700px webp로 최적화(원본 images/_original/)
   - © HBO / 저작권 자료 — 개인 열람용(비공개), 웹 재배포 금지
   - 첫 화면 시리즈 배너용
 
