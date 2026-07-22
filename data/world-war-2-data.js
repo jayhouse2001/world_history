@@ -33,9 +33,9 @@ const events = [
         date:"1939년 9월 1일·17일", title:"폴란드 침공",
         summary:"독일은 1일 서쪽에서, 소련은 17일 동쪽에서 폴란드로 진격.",
         mapDesign:"war-v1",
-        mapNote:"1938년 역사 경계 · 1939년 9월 28일 독·소 분할선(나레프·부크·산강) 개략",
+        mapNote:"1938년 역사 경계 · 1939년 9월 28일 독·소 분할선(나레프·부크·산강) 개략 · 강: Natural Earth 1:50m",
         mapView:[[10,47],[30,47],[30,56],[10,56]],
-        countrySides:{"276":"axis","616":"allied","703":"axis","112":"soviet","643":"soviet","804":"soviet"},
+        countrySides:{"276":"axis","616":"allied","703":"axis","112":"soviet","643":"soviet","804":"soviet","826":"allied","250":"allied"},
         historicalPartitions:[{
           featureName:"Poland",westSide:"axis",eastSide:"soviet",
           divider:[[24.15,55.25],[23.55,54.15],[22.95,53.55],[23.45,52.15],[23.25,51.15],[22.65,50.35],[22.75,48.55]],
@@ -52,7 +52,7 @@ const events = [
         ],
         legend:{
           title:"표현 범례",
-          territories:[{side:"axis",label:"독일 점령 지역"},{side:"soviet",label:"소련 점령 지역"}],
+          territories:[{side:"axis",label:"독일 점령 지역"},{side:"soviet",label:"소련 점령 지역"},{side:"allied",label:"연합국(영·프)"}],
           routes:[{side:"axis",label:"독일군 진격"},{side:"soviet",label:"소련군 진격"}],
           units:[{type:"tank",side:"axis",label:"독일 기갑"},{type:"bomber",side:"axis",label:"독일 폭격기"},{type:"tank",side:"soviet",label:"소련 기갑"}],
           colors:[{side:"axis",label:"주황: 독일군"},{side:"soviet",label:"적색: 소련군"}]
@@ -211,6 +211,14 @@ events.forEach(event=>{
     units:unitPairs.map(unit=>({type:unit.type,side:unit.side,label:`${sideMapLabels[unit.side]} ${unitMapLabels[event.routes.find(route=>route[6]===unit.side&&unitTypeByRoute[route[7]]===unit.type)?.[7]||"land"]}`})),
     colors:routeSides.map(side=>({side,label:`진영색: ${sideMapLabels[side]}`}))
   };
+});
+
+const japaneseColonies = ["410","408","158"];
+events.forEach(event=>{
+  if(!event.countrySides)return;
+  const japanIsAxis=event.countrySides["392"]==="axis";
+  if(!japanIsAxis)return;
+  japaneseColonies.forEach(id=>{if(!event.countrySides[id])event.countrySides[id]="axis"});
 });
 
 window.timelineConfig = {

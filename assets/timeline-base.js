@@ -10,6 +10,15 @@
     function loadState(){try{return {...emptyState,...JSON.parse(localStorage.getItem(storageKey)||"{}")}}catch{return structuredClone(emptyState)}}
     let userState = loadState();
     const countries = topojson.feature(worldAtlas,worldAtlas.objects.countries).features;
+    const rivers = (window.worldRivers?.features)||[];
+    const capitalsByCountry = window.worldCapitals||{};
+    const countryNameOverrides = window.worldCountryNames||{};
+    const majorCountries = new Set(window.worldMajorCountries||[]);
+    const alwaysShowCountries = new Set(window.worldAlwaysShow||[]);
+    const landmarks = window.worldLandmarks||[];
+    const puppetStates = window.worldPuppetStates||[];
+    const frontSnapshotFor = window.frontSnapshotFor||(()=>({}));
+    const featureById = new Map(countries.map(feature=>[String(feature.id).padStart(3,"0"),feature]));
     const board = document.getElementById("timeline-board");
     const laneWidth=theaterDefs.length===1?360:Math.max(1,theaterDefs.length)*288+92;
     document.documentElement.style.setProperty("--lane-count",String(theaterDefs.length));
@@ -22,10 +31,33 @@
     dialogSvg.append("title").attr("id","dialog-map-title");
     dialogSvg.append("desc").attr("id","dialog-map-desc");
     let dialogZoomTransform=d3.zoomIdentity;
-    const dialogZoom=d3.zoom().scaleExtent([.35,8]).on("zoom",event=>{dialogZoomTransform=event.transform;dialogSvg.select(".map-viewport").attr("transform",event.transform);keepMarkerSize(dialogSvg,event.transform.k)});
+    let currentLegendBox=null;
+    let dialogLabelContext=null;
+    const dialogZoom=d3.zoom().scaleExtent([.35,8]).on("zoom",event=>{dialogZoomTransform=event.transform;dialogSvg.select(".map-viewport").attr("transform",event.transform);keepMarkerSize(dialogSvg,event.transform.k);if(dialogLabelContext){const c=dialogLabelContext;layoutPlaceLabels(c.labelLayer,c.capitalLayer,c.anchors,c.projection,c.path,event.transform,c.width,c.height)}});
     dialogSvg.call(dialogZoom);
 
     function pointInTheater(theater,point){const [[west,south],[east,north]]=theater.bounds;const [lon,lat]=point;const inLongitude=west<=east?(lon>=west&&lon<=east):(lon>=west||lon<=east);return inLongitude&&lat>=south&&lat<=north}
+    function drawPuppetStates(viewport,projection,event,labelRequests,width,height){
+      if(!puppetStates.length)return;
+      const date=event.sortDate||"";
+      const active=puppetStates.filter(state=>!state.from||state.from<=date);if(!active.length)return;
+      const defs=viewport.append("defs");
+      const pattern=defs.append("pattern").attr("id","hatch-axis").attr("patternUnits","userSpaceOnUse").attr("width",6).attr("height",6).attr("patternTransform","rotate(45)");
+      pattern.append("rect").attr("width",6).attr("height",6).attr("class","puppet-hatch-bg");
+      pattern.append("line").attr("x1",0).attr("y1",0).attr("x2",0).attr("y2",6).attr("class","puppet-hatch-line");
+      const layer=viewport.append("g").attr("class","puppet-layer");
+      active.forEach(state=>{
+        const pts=state.coordinates.map(c=>projection(c)).filter(Boolean);
+        if(pts.length<3)return;
+        const cx=pts.reduce((s,p)=>s+p[0],0)/pts.length,cy=pts.reduce((s,p)=>s+p[1],0)/pts.length;
+        const onScreen=pts.some(p=>p[0]>=-40&&p[0]<=width+40&&p[1]>=-40&&p[1]<=height+40);
+        if(!onScreen)return;
+        const d=`M${pts.map(p=>p.join(",")).join("L")}Z`;
+        layer.append("path").attr("class",`puppet-area puppet-area-${state.side}`).attr("d",d);
+        layer.append("path").attr("class","puppet-outline").attr("d",d);
+        labelRequests.push({text:state.label,x:cx,y:cy,priority:64,className:"control-label"});
+      });
+    }
     function projectionFor(theater,width,height,event=null){
       const projection=d3.geoMercator(); if(theater.rotate) projection.rotate(theater.rotate);
       const b=theater.bounds;let corners={type:"MultiPoint",coordinates:[[b[0][0],b[0][1]],[b[1][0],b[0][1]],[b[1][0],b[1][1]],[b[0][0],b[1][1]]]};const savedView=(event?.mapView||[]).map(point=>[Number(point[0]),Number(point[1])]).filter(point=>point.every(Number.isFinite));const routePoints=(event?.routes||[]).flatMap(route=>[[Number(route[1]),Number(route[2])],[Number(route[4]),Number(route[5])]]).filter(point=>point.every(Number.isFinite));
@@ -95,13 +127,13 @@
         text.attr("x",request.x+best.dx).attr("y",request.y+best.dy).attr("visibility",null);used.push(best.box);
       });
     }
-    function drawWarLegend(viewport,event,width){
+    function drawWarLegend(layer,event,width,height){
       const territoryEntries=event.legend?.territories||[];
       const routeEntries=event.legend?.routes||[{side:"axis",label:"추축군 진격"}];
       const unitEntries=event.legend?.units||[["ship","axis","함대"],["landing","axis","상륙정"],["tank","axis","전차"]].map(([type,side,label])=>({type,side,label}));
       const colorEntries=event.legend?.colors||[{side:"axis",label:"주황: 추축군"}];
       const rowCount=territoryEntries.length+routeEntries.length+1+unitEntries.length+colorEntries.length;
-      const x=width-190,y=18,w=172,h=34+rowCount*21,legend=viewport.append("g").attr("class","war-map-legend").attr("transform",`translate(${x},${y})`);
+      const w=172,h=34+rowCount*21,x=width-w-18,y=height-h-16,legend=layer.append("g").attr("class","war-map-legend").attr("transform",`translate(${x},${y})`);
       legend.append("rect").attr("class","war-legend-bg").attr("width",w).attr("height",h).attr("rx",6);
       legend.append("text").attr("class","war-legend-title").attr("x",12).attr("y",19).text(event.legend?.title||"표현 범례");
       const row=(cy,label,draw)=>{draw(cy);legend.append("text").attr("class","war-legend-text").attr("x",42).attr("y",cy+3).text(label)};
@@ -114,13 +146,64 @@
       colorEntries.forEach(entry=>{legend.append("circle").attr("class",`legend-side legend-side-${entry.side}`).attr("cx",18).attr("cy",cy).attr("r",5);legend.append("text").attr("class","war-legend-text").attr("x",30).attr("y",cy+3).text(entry.label);cy+=21});
       return {x1:x,y1:y,x2:x+w,y2:y+h};
     }
+    function inView(point,width,height){return point&&point[0]>=0&&point[0]<=width&&point[1]>=0&&point[1]<=height}
+    function drawRivers(layer,path){
+      if(!rivers.length)return;
+      layer.selectAll("path.river").data(rivers).join("path").attr("class","river").attr("d",path);
+    }
+    function collectPlaceAnchors(event){
+      const routeCoords=(event.routes||[]).flatMap(route=>[[Number(route[1]),Number(route[2])],[Number(route[4]),Number(route[5])]]);
+      const nearRoutePoint=(lon,lat)=>routeCoords.some(([rLon,rLat])=>Math.abs(rLon-lon)<0.6&&Math.abs(rLat-lat)<0.6);
+      const anchors=[];const labeledMajor=new Set();
+      majorCountries.forEach(id=>{
+        const capital=capitalsByCountry[id];if(!capital)return;labeledMajor.add(id);
+        const name=countryNameOverrides[id];
+        const alwaysShow=alwaysShowCountries.has(id);
+        const feature=featureById.get(id);
+        const fallback=alwaysShow&&feature?d3.geoCentroid(feature):null;
+        if(nearRoutePoint(capital.lon,capital.lat)){if(name)anchors.push({lon:capital.lon,lat:capital.lat,text:name,priority:80,className:"country-label",dot:false,dy:-16,alwaysShow,fallback});return}
+        anchors.push({lon:capital.lon,lat:capital.lat,text:name?`${name} · ${capital.name}`:capital.name,priority:alwaysShow?98:82,className:"capital-label",dot:true,dx:5,dy:-4,alwaysShow,fallback});
+      });
+      countries.forEach(feature=>{
+        const id=String(feature.id).padStart(3,"0");if(labeledMajor.has(id))return;
+        const centroid=d3.geoCentroid(feature);if(!centroid||!Number.isFinite(centroid[0]))return;
+        const name=countryNameOverrides[id]||feature.properties?.name;if(!name)return;
+        anchors.push({lon:centroid[0],lat:centroid[1],text:name,priority:44,className:"country-label",dot:false,feature});
+      });
+      landmarks.forEach(place=>{
+        if(nearRoutePoint(place.lon,place.lat))return;
+        anchors.push({lon:place.lon,lat:place.lat,text:place.name,priority:60,className:"landmark-label",dot:true,dotClass:"landmark-dot",dx:5,dy:-4});
+      });
+      return anchors;
+    }
+    function layoutPlaceLabels(layer,capitalLayer,anchors,projection,path,transform,width,height){
+      layer.selectAll("*").remove();capitalLayer.selectAll("*").remove();
+      const requests=[];
+      anchors.forEach(anchor=>{
+        const base=projection([anchor.lon,anchor.lat]);if(!base)return;
+        let point=transform?transform.apply(base):base;let showDot=anchor.dot;
+        if(!inView(point,width,height)){
+          if(!anchor.alwaysShow||!anchor.fallback)return;
+          const fb=projection(anchor.fallback);if(!fb)return;const fbPoint=transform?transform.apply(fb):fb;
+          if(!inView(fbPoint,width,height))return;point=fbPoint;showDot=false;
+        }
+        if(anchor.feature&&path.area(anchor.feature)*(transform?transform.k*transform.k:1)<220)return;
+        if(showDot)capitalLayer.append("circle").attr("class",anchor.dotClass||"capital-dot").attr("cx",point[0]).attr("cy",point[1]).attr("r",anchor.dotClass?2.4:3.2);
+        requests.push({text:anchor.text,x:point[0]+(anchor.dx||0),y:point[1]+(anchor.dy||0),priority:anchor.priority,className:anchor.className});
+      });
+      drawCollisionLabels(layer,requests,width,height,[],currentLegendBox?[currentLegendBox]:[]);
+    }
     function drawMap(svgElement,theater,event,width,height,labels){
       const detailed=event.mapDesign==="war-v1";const map=d3.select(svgElement); map.attr("viewBox",`0 0 ${width} ${height}`).classed("war-map-detailed",detailed); map.selectAll("g,defs").remove();if(detailed)installWarSymbols(map);
       const projection=projectionFor(theater,width,height,event); const path=d3.geoPath(projection);const viewport=map.append("g").attr("class","map-viewport"); const base=viewport.append("g");
+      const worldSides=detailed?{...frontSnapshotFor(event.sortDate||""),...(event.countrySides||{})}:(event.countrySides||{});
       base.append("path").datum(d3.geoGraticule10()).attr("class","graticule").attr("d",path);
-      base.selectAll("path.country").data(countries).join("path").attr("class",d=>{const id=String(d.id).padStart(3,"0"),side=event.countrySides?.[id];return side?`country country-side-${side}`:"country"}).attr("d",path);
-      const routeLayer=viewport.append("g").attr("class","route-layer"),unitLayer=viewport.append("g").attr("class","unit-layer"),labelRequests=[],obstacles=[];
+      base.selectAll("path.country").data(countries).join("path").attr("class",d=>{const id=String(d.id).padStart(3,"0"),side=worldSides[id];return side?`country country-side-${side}`:"country"}).attr("d",path);
+      if(detailed&&labels)drawRivers(base.append("g").attr("class","river-layer"),path);
+      const labelRequests=[],obstacles=[];
       drawHistoricalPartitions(viewport,path,projection,event,width,height,labelRequests);
+      if(detailed)drawPuppetStates(viewport,projection,event,labelRequests,width,height);
+      const routeLayer=viewport.append("g").attr("class","route-layer"),unitLayer=viewport.append("g").attr("class","unit-layer");
       event.routes.forEach(route=>{
         const side=routeSide(route),routeClass=detailed?`route route-active route-${side}`:"route";
         routeLayer.append("path").datum(routeFeature(route)).attr("class",routeClass).attr("d",path);
@@ -132,7 +215,18 @@
         else if(labels){routeLayer.append("text").attr("class","place-label").attr("x",start[0]+7).attr("y",start[1]-7).text(route[0]);routeLayer.append("text").attr("class","place-label").attr("x",end[0]+8).attr("y",end[1]+15).text(route[3])}
       });
       if(detailed)(event.units||[]).forEach(unit=>{const box=addWarIcon(unitLayer,projection,unit,labels);if(box)obstacles.push(box);if(labels&&unit.showLabel!==false&&box)labelRequests.push({text:unit.label,x:box.x,y:box.y-12,priority:54})});
-      if(detailed&&labels){const reserved=[drawWarLegend(viewport,event,width)];const labelLayer=viewport.append("g").attr("class","map-label-layer");drawCollisionLabels(labelLayer,labelRequests,width,height,obstacles,reserved);if(event.mapNote)labelLayer.append("text").attr("class","map-note").attr("x",12).attr("y",height-12).text(event.mapNote)}
+      if(detailed&&labels){
+        const overlay=map.append("g").attr("class","map-fixed-overlay");
+        currentLegendBox=drawWarLegend(overlay,event,width,height);
+        const routeLabelLayer=viewport.append("g").attr("class","map-label-layer");
+        drawCollisionLabels(routeLabelLayer,labelRequests,width,height,obstacles,currentLegendBox?[currentLegendBox]:[]);
+        const capitalLayer=overlay.append("g").attr("class","capital-layer");
+        const placeLabelLayer=overlay.append("g").attr("class","place-label-layer map-label-layer");
+        const anchors=collectPlaceAnchors(event);
+        layoutPlaceLabels(placeLabelLayer,capitalLayer,anchors,projection,path,d3.zoomIdentity,width,height);
+        if(svgElement===dialogSvg.node())dialogLabelContext={labelLayer:placeLabelLayer,capitalLayer,anchors,projection,path,width,height};
+        if(event.mapNote)overlay.append("text").attr("class","map-note").attr("x",12).attr("y",height-10).text(event.mapNote);
+      } else if(svgElement===dialogSvg.node()){dialogLabelContext=null}
     }
     function openMap(theater,event){
       document.getElementById("dialog-date").textContent=event.date;

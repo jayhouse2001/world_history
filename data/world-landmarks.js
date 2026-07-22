@@ -1,0 +1,21 @@
+window.worldLandmarks = [
+  {name:"Pearl Harbor", lon:-157.95, lat:21.35},
+  {name:"Hawaii", lon:-155.5, lat:19.6},
+  {name:"Midway", lon:-177.37, lat:28.21},
+  {name:"Wake I.", lon:166.62, lat:19.28},
+  {name:"Guam", lon:144.79, lat:13.44},
+  {name:"Saipan", lon:145.75, lat:15.18},
+  {name:"Tinian", lon:145.63, lat:15.0},
+  {name:"Iwo Jima", lon:141.32, lat:24.78},
+  {name:"Okinawa", lon:127.8, lat:26.34},
+  {name:"Truk", lon:151.84, lat:7.45},
+  {name:"Rabaul", lon:152.17, lat:-4.2},
+  {name:"Guadalcanal", lon:160.15, lat:-9.58},
+  {name:"Tarawa", lon:172.98, lat:1.33},
+  {name:"Bougainville", lon:155.38, lat:-6.2},
+  {name:"Leyte", lon:124.9, lat:10.9},
+  {name:"Coral Sea", lon:154.0, lat:-18.0},
+  {name:"Port Moresby", lon:147.18, lat:-9.44},
+  {name:"Espiritu Santo", lon:167.18, lat:-15.38},
+  {name:"Palau", lon:134.58, lat:7.52}
+];
