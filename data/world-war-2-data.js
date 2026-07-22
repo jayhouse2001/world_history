@@ -87,6 +87,18 @@ const events = [
       {id:"africa-compass",theater:"africa",sortDate:"1940-12-09",date:"1940년 12월 9일~1941년 2월 9일",title:"컴퍼스 작전",summary:"영국군이 이탈리아군을 격파하고 이집트에서 리비아 동부까지 진격.",routes:[["시디바라니",25.93,31.61,"벵가지",20.07,32.12]]},
       {id:"africa-rommel",theater:"africa",sortDate:"1941-02-12",date:"1941년 2월 12일",title:"롬멜의 리비아 도착",summary:"롬멜이 리비아에 도착하고 독일 아프리카 군단 증원이 이어짐.",routes:[["나폴리",14.27,40.85,"트리폴리",13.19,32.89]]},
       {id:"west-lendlease",theater:"west",sortDate:"1941-03-11",date:"1941년 3월 11일",title:"미국 무기대여법",summary:"미국이 영국을 비롯한 연합국에 대규모 군수 지원을 제공할 법적 기반을 마련.",routes:[]},
+      {id:"atlantic-begins",theater:"west",sortDate:"1939-09-03",date:"1939년 9월 3일~",title:"대서양 전투 개시 · U보트전 시작",summary:"개전 첫날 독일 U보트가 여객선 아테니아호를 격침하며 6년에 걸친 대서양 전투가 시작됨.",detail:"제2차 세계대전 개전 당일인 1939년 9월 3일, U-30이 여객선 SS 아테니아호를 격침하며 대서양 전투가 시작됐다. 이후 독일 U보트는 영국으로 향하는 대서양 호송선단을 끊어 섬나라 영국을 고사시키려 했고, 연합군은 이를 지키려 6년간 싸웠다. 회고록 '강철의 관'은 이 대서양 전투 한복판에 있던 한 독일 U보트 승조원의 기록이다.",routes:[["독일 기지",8.0,54.0,"북대서양 호송로",-25,53,"uboat","uboat"]]},
+      {id:"uboat-first",theater:"west",sortDate:"1941-04-01",date:"1941년 4월",title:"U보트 첫 출항 · 대서양의 '행복한 시절'",series:"ironcoffins",episode:"입문",summary:"헤르베르트 베르너가 U-557의 2등 당직사관으로 첫 대서양 초계에 나섬. 프랑스 기지에서 출격해 호송선단을 사냥하던 독일 U보트의 전성기.",detail:"헤르베르트 베르너의 회고록 '강철의 관(Iron Coffins)' 시작. 1941년 4월, 스무 살의 베르너가 U-557(Type VIIC)의 2등 당직사관으로 처음 바다에 나선다. 프랑스 함락(1940) 뒤 독일 U보트는 로리앙·브레스트 등 비스케이만 기지에서 출격해 북대서양 호송선단을 사냥했고, 이 시기를 '행복한 시절(Happy Time)'이라 불렀다. 손실은 적고 격침은 많던, U보트가 사냥꾼이던 시절.",routes:[["로리앙",-3.368,47.727,"북대서양 초계",-20,50,"uboat","uboat"]]},
+      {id:"uboat-u230",theater:"west",sortDate:"1943-02-11",date:"1943년 2월 11일~3월 31일",title:"U-230 1차 초계 · SC121 늑대떼 공격",series:"ironcoffins",episode:"1차 초계",summary:"베르너가 U-230의 1등 당직사관으로 첫 초계에 나서 북대서양 호송선단 SC121을 늑대떼로 공격하고 브레스트로 귀항.",detail:"1942년 10월 킬에서 취역한 U-230(지크만 함장)에 1등 당직사관으로 승선한 베르너는 1943년 2월 11일 베르겐을 떠나 첫 초계에 나선다. 3월 6~10일, 26척의 U보트 늑대떼('베스트마르크'·'오스트마르크')가 느린 동향 호송선단 SC121을 북대서양 사각지대에서 덮쳐 상선 12~14척을 격침한다. U-230도 3월 7일 상선 한 척을 격침. 폭풍우 속 이 첫 전투에서 배가 해저에 처박혀 16시간을 사투한 일화가 유명하다. 3월 31일 브레스트 귀항.",routes:[["베르겐",5.32,60.39,"SC121 (사각지대)",-20,50,"uboat","uboat"],["SC121 (사각지대)",-20,50,"브레스트",-4.523,48.366,"uboat","uboat"]]},
+      {id:"uboat-biscay",theater:"west",sortDate:"1943-07-01",date:"1943년 4~8월",title:"비스케이만 통과 위기",series:"ironcoffins",episode:"통과 지옥",summary:"연합군의 '비스케이만 공세'로 기지를 드나드는 U보트가 초계기의 표적이 됨. 잠항 통과와 대공포 사투가 강요됨.",detail:"1943년 4월 개시된 RAF 연안사령부의 '비스케이만 공세(Operation Derange)'는 센티미터파 레이더를 단 장거리 초계기 약 75대로 기지 출입 U보트를 사냥했다. 4~8월에만 U보트 26척이 만에서 격침됐다. 되니츠는 잠항 통과·집단 통과·부상 대공전을 명령했고, U-230도 4월과 7월 출항 때 이 죽음의 통로를 건넜다. 회고록에서 가장 공포스러운 장면 중 하나.",routes:[["브레스트",-4.523,48.366,"대서양 출구",-8,46,"uboat","uboat"]]},
+      {id:"uboat-bermuda",theater:"west",sortDate:"1943-07-05",date:"1943년 7월 5일~9월 8일",title:"U-230 3차 초계 · 서대서양",series:"ironcoffins",episode:"3차 초계",summary:"U-230이 미국 동해안·버뮤다 북방까지 진출했으나 성과 없이 브레스트로 귀항. 판세가 기운 뒤의 헛된 원정.",detail:"7월 5일 브레스트를 떠난 U-230은 뉴잉글랜드 근해와 버뮤다 북방(약 34°N)까지 진출해 보급 잠수함에서 연료를 받으며 오래 초계했으나 단 한 척도 격침하지 못하고 9월 8일 브레스트로 돌아온다. 검은 5월 이후 U보트가 사냥감으로 전락한 현실을 보여주는, 길고 소득 없는 원정.",routes:[["브레스트",-4.523,48.366,"버뮤다 북방",-65,34,"uboat","uboat"]]},
+      {id:"uboat-gibraltar",theater:"west",sortDate:"1943-11-22",date:"1943년 11월 22일~12월 16일",title:"U-230 지브롤터 돌파 · 지중해",series:"ironcoffins",episode:"4차 초계",summary:"U-230이 강한 해류와 연합군 초계망을 뚫고 지브롤터 해협을 강행 돌파해 툴롱에 도착. 베르너는 이 무렵 함을 떠남.",detail:"11월 22일 브레스트를 떠난 U-230은 조류가 거세고 연합군 항공·해상 초계가 극심한 지브롤터 해협을 강행 돌파해 12월 16일 지중해의 툴롱에 도착한다. 베르너는 이 전후로 함장 교육을 위해 U-230을 떠난다. (U-230은 이후 1944년 8월 21일 툴롱 앞 생망드리에에서 자침 — 이때 베르너는 이미 하함한 뒤였다.)",routes:[["브레스트",-4.523,48.366,"지브롤터 해협",-5.5,36.0,"uboat","uboat"],["지브롤터 해협",-5.5,36.0,"툴롱",5.9,43.1,"uboat","uboat"]]},
+      {id:"uboat-blackmay",theater:"west",sortDate:"1943-05-24",date:"1943년 5월 · 검은 5월",title:"검은 5월 · U보트의 몰락",series:"ironcoffins",episode:"전환점",summary:"단 한 달에 U보트 약 41척이 격침당하며 사냥꾼이 사냥감으로 전락. 되니츠가 북대서양에서 U보트를 철수시킴.",detail:"1943년 5월, 대서양 전투의 결정적 전환점 '검은 5월(Black May)'. 연합군의 장거리 초계기(B-24), 호위항모, 센티미터파 레이더, HF/DF, 에니그마 해독이 한꺼번에 위력을 발휘하며 '항공 사각지대'가 닫혔다. 이 한 달에 U보트 약 41척(전력의 4분의 1)이 격침됐고, 되니츠는 5월 24일 북대서양에서 U보트를 철수시킨다. 이후 U보트는 다시는 주도권을 회복하지 못했다. '강철의 관'이라는 제목이 현실이 된 시점.",routes:[["북대서양 사각지대",-35,55,"철수",-4.523,48.366,"uboat","uboat"]]},
+      {id:"uboat-u415",theater:"west",sortDate:"1944-04-17",date:"1944년 4월 17일~",title:"U-415 함장 취임 · 노르망디 대응 출격",series:"ironcoffins",episode:"함장",summary:"베르너가 U-415의 함장으로 첫 지휘. D-Day 직후 상륙 저지 출격에 나서 초계기와 사투를 벌이며 리버레이터를 격추.",detail:"1944년 4월 17일 베르너는 U-415의 함장으로 첫 지휘를 맡아 브레스트에서 출격한다. 6월 6일 노르망디 상륙 직후, 얕은 서부 해협으로 밀려 들어가 반복되는 공습을 견디며 상륙 저지 작전에 투입된다. 6월 7일 대공전 중 U-415의 대공포가 RAF 224비행대의 B-24 리버레이터를 격추하기도 했다. 슈노르헬로 잠항 통과하며 버텼다.",routes:[["브레스트",-4.523,48.366,"서부 해협",-5.5,47.5,"uboat","uboat"]]},
+      {id:"uboat-u415-sunk",theater:"west",sortDate:"1944-07-14",date:"1944년 7월 14일",title:"U-415 기뢰 격침 · 브레스트",series:"ironcoffins",episode:"함장",summary:"U-415가 브레스트 항구의 공중 투하 기뢰에 격침됨. 베르너는 생존해 U-953으로 옮김.",detail:"1944년 7월 14일, U-415가 브레스트 앞바다 기뢰원('Jellyfish 5')의 공중 투하 기뢰에 부딪혀 침몰한다. 2명이 죽고 약 14명이 다쳤으나 베르너는 살아남는다. 생존 승조원과 함께 U-953으로 옮겨 지휘를 잇는다.",routes:[["서부 해협",-5.5,47.5,"브레스트",-4.55,48.35,"uboat","uboat"]]},
+      {id:"uboat-escape",theater:"west",sortDate:"1944-08-19",date:"1944년 8월",title:"프랑스 기지 탈출 · U-953",series:"ironcoffins",episode:"탈출",summary:"연합군이 브르타뉴를 장악하자 U-953이 포위된 브레스트를 빠져나와 라로셸을 거쳐 노르웨이로 탈출.",detail:"1944년 8월 베르너가 U-953의 함장이 된 직후, 연합 지상군이 브르타뉴를 휩쓸며 브레스트가 포위된다. U-953은 다른 보트들과 함께 브레스트를 탈출해 8월 19일 라팔리스(라로셸)에 도착하고, 8월 말 슈노르헬로 잠항한 채 연합군 항공·해상 봉쇄를 뚫고 노르웨이로 향한다. 회고록 마지막 장의 핵심인 필사의 탈출.",routes:[["브레스트",-4.523,48.366,"라로셸(라팔리스)",-1.228,46.158,"uboat","uboat"],["라로셸(라팔리스)",-1.228,46.158,"노르웨이",5.32,60.39,"uboat","uboat"]]},
+      {id:"uboat-surrender",theater:"west",sortDate:"1945-05-09",date:"1945년 5월",title:"U-953 노르웨이 탈출·항복",series:"ironcoffins",episode:"종전",summary:"베르너가 마지막으로 지휘한 U-953이 함락 직전의 프랑스 기지를 떠나 노르웨이로 탈출, 종전과 함께 항복.",detail:"1944년 8월 베르너는 U-953의 함장이 되어, D-Day 이후 봉쇄된 비스케이만을 빠져나와 노르웨이로 탈출한다. 1945년 5월 되니츠의 항복 명령이 전달되고, U-953은 종전 시점까지 살아남은 극소수의 실전 U보트 중 하나로 노르웨이에서 항복한다. 이후 영국으로 인도됐다. 베르너의 전쟁이 끝난다.",routes:[["브레스트",-4.523,48.366,"노르웨이 베르겐",5.32,60.39,"uboat","uboat"]]},
+      {id:"atlantic-ends",theater:"west",sortDate:"1945-05-08",date:"1945년 5월 8일",title:"대서양 전투 종결",summary:"독일 항복과 함께 6년에 걸친 대서양 전투가 끝남. 전쟁 중 독일 U보트 약 3분의 2가 격침되고 승조원 대부분이 전사.",detail:"1945년 5월 독일 항복으로 대서양 전투가 종결됐다. 전쟁 기간 독일이 투입한 U보트 약 1,150척 중 800척 가까이가 격침됐고, U보트 승조원 약 4만 명 중 3만 명 이상이 전사해 전 병과를 통틀어 가장 높은 사망률을 기록했다. '강철의 관'이라는 별명 그대로였다.",routes:[]},
       {id:"africa-rommel-east",theater:"africa",sortDate:"1941-03-24",date:"1941년 3월 24일",title:"롬멜의 동진",summary:"독일·이탈리아군이 리비아에서 이집트 국경까지 진격.",routes:[["엘아게일라",20.07,30.18,"토브루크",23.96,32.08],["토브루크",23.96,32.08,"살룸",25.14,31.55]]},
       {id:"east-balkans",theater:"east",sortDate:"1941-04-06",date:"1941년 4월 6일~6월 1일",title:"발칸반도 공략",summary:"독일군이 유고슬라비아와 그리스를 거쳐 크레타로 진격.",routes:[["빈",16.37,48.21,"베오그라드",20.46,44.82],["베오그라드",20.46,44.82,"아테네",23.73,37.98],["아테네",23.73,37.98,"크레타",24.81,35.24]]},
       {id:"east-barbarossa",theater:"east",sortDate:"1941-06-22",date:"1941년 6월 22일",title:"바르바로사 작전",summary:"독일과 추축군이 발트해에서 흑해에 이르는 전선에서 소련을 침공.",routes:[["바르샤바",21.01,52.23,"스몰렌스크",32.05,54.78],["루마니아",26.1,44.43,"키이우",30.52,50.45]]},
@@ -108,14 +120,16 @@ const events = [
       {id:"east-stalingrad",theater:"east",sortDate:"1942-08-23",date:"1942년 8월 23일~1943년 2월 2일",title:"스탈린그라드 전투",summary:"독일군이 시가전을 벌였으나 소련군의 포위 뒤 제6군이 항복.",routes:[["하르키우",36.23,49.99,"스탈린그라드",44.5,48.71]]},
       {id:"africa-second-elalamein",theater:"africa",sortDate:"1942-10-23",date:"1942년 10월 23일~11월 11일",title:"제2차 엘 알라메인 전투",summary:"몽고메리의 영국 제8군이 롬멜군을 격파해 서쪽으로 후퇴시킴.",routes:[["엘알라메인",28.95,30.84,"메르사마트루",27.24,31.35]]},
       {id:"africa-torch",theater:"africa",sortDate:"1942-11-08",date:"1942년 11월 8일",title:"횃불 작전",summary:"미·영 연합군이 모로코와 알제리에 상륙해 추축군을 동서에서 압박.",routes:[["대서양",-10,34,"카사블랑카",-7.59,33.57],["지중해",2,38,"알제",3.06,36.75]]},
-      {id:"east-uranus",theater:"east",sortDate:"1942-11-19",date:"1942년 11월 19일",title:"천왕성 작전",summary:"소련군이 스탈린그라드 북서와 남쪽에서 돌파해 독일 제6군을 포위.",routes:[["세라피모비치",42.74,49.58,"칼라치",43.53,48.69],["사르파",44.41,48.38,"칼라치",43.53,48.69]]},
+      {id:"east-uranus",theater:"east",sortDate:"1942-11-19",date:"1942년 11월 19일",title:"천왕성 작전",faction:"allied",summary:"소련군이 스탈린그라드 북서와 남쪽에서 돌파해 독일 제6군을 포위.",routes:[["세라피모비치",42.74,49.58,"칼라치",43.53,48.69],["사르파",44.41,48.38,"칼라치",43.53,48.69]]},
       {id:"west-casablanca",theater:"west",sortDate:"1943-01-14",date:"1943년 1월 14~24일",title:"카사블랑카 회담",summary:"루스벨트와 처칠이 추축국의 무조건 항복 원칙과 다음 작전을 협의.",routes:[]},
+      {id:"usaaf-bombing-begins",theater:"west",sortDate:"1942-08-17",date:"1942년 8월 17일",title:"미국의 유럽 주간폭격 개시",summary:"미 제8공군이 프랑스 루앙을 첫 B-17 폭격하며 유럽에서 미국의 주간 정밀폭격이 시작됨. 영국 공군의 야간 폭격과 함께 독일을 24시간 압박.",detail:"1942년 8월 17일, 미 제8공군의 B-17 12대가 독일 점령하 프랑스 루앙-소트빌 조차장을 폭격하며 유럽에서 미국의 첫 주간 정밀폭격이 시작됐다. 영국 공군(RAF)의 야간 지역폭격과 미군의 주간 정밀폭격이 짝을 이뤄 독일 산업을 24시간 두들기는 '연합 폭격 공세'가 이때부터 본격화됐다. 드라마 '마스터스 오브 디 에어'의 100폭격전대는 이 흐름 속에 1943년 투입된다.",routes:[["영국 기지",0.5,52.3,"루앙",1.09,49.44,"mota","air"]]},
       {id:"mota-bremen",theater:"west",sortDate:"1943-06-25",date:"1943년 6월~",title:"제8공군 첫 폭격 임무",series:"mota",episode:"1",summary:"미 제8공군 100폭격전대가 영국 소프 애보츠 기지에서 첫 주간 정밀폭격 임무에 나섬. 브레멘 등 독일 표적으로 출격.",detail:"[1화] 미 육군항공대 제8공군 100폭격전대('블러디 헌드레드')가 영국 이스트앵글리아의 소프 애보츠 기지에 배치된다. 호위기 없이 대낮에 독일 상공으로 날아가 B-17 폭격기로 정밀폭격을 감행하는 위험천만한 임무. 브레멘 출격에서부터 대공포와 독일 전투기에 큰 피해를 입으며, 승무원들이 처음으로 죽음을 마주한다.",routes:[["소프 애보츠",0.98,52.28,"브레멘",8.8,53.08,"mota","air"]]},
       {id:"mota-regensburg",theater:"west",sortDate:"1943-08-17",date:"1943년 8월 17일",title:"레겐스부르크 셔틀 폭격",series:"mota",episode:"2",summary:"레겐스부르크 폭격 후 북아프리카까지 날아가는 셔틀 임무. 큰 손실을 입음.",detail:"[2화] 독일 남부 레겐스부르크의 메서슈미트 공장을 폭격한 뒤, 되돌아오지 않고 그대로 남하해 북아프리카(튀니지)에 착륙하는 전례 없는 '셔틀 폭격' 임무. 장거리 비행 내내 독일 전투기의 집요한 요격을 받아 100전대는 극심한 손실을 입는다. 호위 전투기의 항속거리 한계가 여실히 드러난 임무.",routes:[["소프 애보츠",0.98,52.28,"레겐스부르크",12.1,49.02,"mota","air"],["레겐스부르크",12.1,49.02,"북아프리카",9.5,35.5,"mota","air"]]},
       {id:"mota-munster",theater:"west",sortDate:"1943-10-10",date:"1943년 10월 10일",title:"뮌스터 폭격 · 검은 주간",series:"mota",episode:"3",summary:"뮌스터 폭격에서 100폭격전대가 하루 만에 대부분의 기체를 잃는 참사를 겪음.",detail:"[3화] 뮌스터 도심을 겨냥한 폭격 임무. 이날 100폭격전대는 출격한 13대 중 한 대(로지 로젠탈의 기체)만 돌아오는 궤멸적 손실을 입는다. '블러디 헌드레드'라는 별명이 굳어진 검은 날. 이어진 '검은 주간'(슈바인푸르트 등)의 누적 손실로 주간 정밀폭격 교리 자체가 위기에 몰린다.",routes:[["소프 애보츠",0.98,52.28,"뮌스터",7.63,51.96,"mota","air"]]},
       {id:"mota-berlin",theater:"west",sortDate:"1944-03-06",date:"1944년 3월 6일",title:"베를린 대공습",series:"mota",episode:"7",summary:"P-51 무스탕의 장거리 호위 아래 제8공군이 베를린을 대규모 폭격. 독일 공군을 소모전으로 몰아넣음.",detail:"[7화] P-51 무스탕 전투기가 마침내 베를린까지 왕복 호위가 가능해지면서, 제8공군이 독일 수도 베를린을 대규모로 폭격한다. 폭격 자체보다 이를 요격하러 올라오는 독일 전투기를 무스탕으로 격멸하는 것이 목적. 독일 공군(루프트바페)의 전력이 이 소모전으로 급속히 무너지며 제공권이 연합군으로 넘어간다.",routes:[["소프 애보츠",0.98,52.28,"베를린",13.41,52.52,"mota","air"]]},
       {id:"mota-frantic",theater:"west",sortDate:"1944-06-21",date:"1944년 6월",title:"러시아 셔틀 (프랜틱 작전)",series:"mota",episode:"9",summary:"독일을 폭격한 뒤 소련 폴타바 기지까지 날아가는 미·소 합동 셔틀 폭격.",detail:"[9화] 독일 표적을 폭격한 뒤 서쪽으로 돌아오지 않고 동쪽 소련 영내 폴타바 기지에 착륙하는 프랜틱(Frantic) 셔틀 작전. 그러나 폴타바에서 독일 야간폭격기의 기습을 받아 지상의 미군기 다수가 파괴된다. 이후 종전과 함께 스탈라그 루프트 포로수용소의 승무원들이 해방되며 이야기가 마무리된다.",routes:[["소프 애보츠",0.98,52.28,"베를린",13.41,52.52,"mota","air"],["베를린",13.41,52.52,"폴타바",34.55,49.59,"mota","air"]]},
-      {id:"east-stalingrad-end",theater:"east",sortDate:"1943-02-02",date:"1943년 2월 2일",title:"스탈린그라드 독일군 항복",summary:"포위된 독일 제6군의 잔여 병력이 항복하고 남부 전선의 흐름이 소련 쪽으로 기움.",routes:[["스탈린그라드",44.5,48.71,"포로수용지",45.1,49.2]]},
+      {id:"usaaf-bombing-ends",theater:"west",sortDate:"1945-04-25",date:"1945년 4월",title:"전략폭격 종결",summary:"독일 항복을 앞두고 연합군의 전략폭격 임무가 사실상 종료됨. 폭격기 승무원의 손실률은 지상 못지않게 높았다.",detail:"1945년 4월, 폭격할 표적이 거의 남지 않으면서 연합군의 대독 전략폭격이 사실상 끝난다. 제8공군은 마지막으로 보급·인도적 임무로 전환했다. 유럽 상공 폭격기 승무원의 손실률은 지상 전투에 뒤지지 않을 만큼 높았고, 제8공군에서만 수만 명이 전사했다. '마스터스 오브 디 에어'가 그린 100폭격전대의 여정도 이 승리와 희생 위에 있었다.",routes:[]},
+      {id:"east-stalingrad-end",theater:"east",sortDate:"1943-02-02",date:"1943년 2월 2일",title:"스탈린그라드 독일군 항복",faction:"allied",summary:"포위된 독일 제6군의 잔여 병력이 항복하고 남부 전선의 흐름이 소련 쪽으로 기움.",routes:[["스탈린그라드",44.5,48.71,"포로수용지",45.1,49.2]]},
       {id:"pacific-guadalcanal-end",theater:"pacific",sortDate:"1943-02-09",date:"1943년 2월 9일",title:"과달카날 전역 종료",summary:"일본군의 철수가 끝나며 연합군이 남태평양 공세의 발판을 확보.",routes:[["과달카날",160.15,-9.58,"부건빌",155.38,-6.2]]},
       {id:"africa-tunisia-end",theater:"africa",sortDate:"1943-05-13",date:"1943년 5월 13일",title:"튀니지 추축군 항복",summary:"튀니지의 독일·이탈리아군이 항복해 북아프리카 전역이 끝남.",routes:[["튀니스",10.18,36.81,"비제르테",9.87,37.27]]},
       {id:"pacific-cartwheel",theater:"pacific",sortDate:"1943-06-30",date:"1943년 6월 30일 시작",title:"카트휠 작전",summary:"연합군이 뉴기니와 솔로몬제도를 따라 진격하며 라바울을 고립시키기 시작.",routes:[["과달카날",160.15,-9.58,"부건빌",155.38,-6.2],["포트모르즈비",147.18,-9.44,"라에",146.98,-6.73]]},
@@ -125,7 +139,7 @@ const events = [
       {id:"africa-italy",theater:"africa",sortDate:"1943-09-03",date:"1943년 9월 3일",title:"이탈리아 본토 상륙",summary:"연합군이 메시나 해협을 건너 칼라브리아에 상륙.",routes:[["메시나",15.55,38.19,"레조칼라브리아",15.65,38.11]]},
       {id:"africa-armistice",theater:"africa",sortDate:"1943-09-08",date:"1943년 9월 8일",title:"이탈리아 휴전 발표",summary:"이탈리아의 연합군과의 휴전이 발표되고 독일군이 이탈리아 주요 지역을 장악.",routes:[]},
       {id:"africa-salerno",theater:"africa",sortDate:"1943-09-09",date:"1943년 9월 9일",title:"살레르노 상륙",summary:"연합군 주력이 살레르노에 상륙해 독일군의 반격을 막고 교두보를 확보.",routes:[["시칠리아",14.1,37.5,"살레르노",14.77,40.68]]},
-      {id:"east-kyiv",theater:"east",sortDate:"1943-11-06",date:"1943년 11월 6일",title:"소련군의 키이우 탈환",summary:"소련군이 드니프로강을 건너 키이우를 탈환하고 서쪽으로 진격.",routes:[["쿠르스크",36.19,51.74,"키이우",30.52,50.45]]},
+      {id:"east-kyiv",theater:"east",sortDate:"1943-11-06",date:"1943년 11월 6일",title:"소련군의 키이우 탈환",faction:"allied",summary:"소련군이 드니프로강을 건너 키이우를 탈환하고 서쪽으로 진격.",routes:[["쿠르스크",36.19,51.74,"키이우",30.52,50.45]]},
       {id:"pacific-tarawa",theater:"pacific",sortDate:"1943-11-20",date:"1943년 11월 20~23일",title:"타라와 전투",summary:"미 해병대가 치열한 상륙전 끝에 길버트제도의 타라와 환초를 점령.",routes:[["하와이",-157.95,21.35,"타라와",172.98,1.35]]},
       {id:"west-tehran",theater:"west",sortDate:"1943-11-28",date:"1943년 11월 28일~12월 1일",title:"테헤란 회담",summary:"미·영·소 정상이 서유럽 제2전선 개설과 전후 구상을 협의.",routes:[]},
       {id:"africa-anzio",theater:"africa",sortDate:"1944-01-22",date:"1944년 1월 22일",title:"안치오 상륙",summary:"연합군이 로마 남쪽 안치오에 상륙해 교두보를 확보했으나 진격이 지체됨.",routes:[["나폴리",14.27,40.85,"안치오",12.62,41.45]]},
@@ -162,7 +176,7 @@ const events = [
         }
       },
       {id:"west-carentan",theater:"west",sortDate:"1944-06-10",date:"1944년 6월 10~13일",title:"카랑탕 전투",series:"bob",episode:"3",summary:"유타·오마하 교두보를 잇는 카랑탕을 점령한 시가전.",detail:"[3화 Carentan] 유타와 오마하 두 상륙 교두보를 잇는 도로 요충지 카랑탕을 두고 벌인 시가전. 이지 중대는 총탄이 쏟아지는 교차로에서 얼어붙은 신병 블라이스 이병을 윈터스가 독려해 전진시키는 장면으로 유명하다. 마을 점령 뒤 독일군의 강력한 역습을 능선(6월 13일)에서 셔먼 전차의 지원을 받아 격퇴한다. 전투 스트레스와 리더십을 정면으로 다룬 화.",routes:[["생트마리뒤몽",-1.23,49.36,"카랑탕",-1.24,49.3,"allied","para"]]},
-      {id:"east-bagration",theater:"east",sortDate:"1944-06-22",date:"1944년 6월 22일~8월 19일",title:"바그라티온 작전",summary:"소련군의 대공세로 독일 중부집단군이 붕괴하고 벨라루스가 해방됨.",routes:[["스몰렌스크",32.05,54.78,"민스크",27.56,53.9],["민스크",27.56,53.9,"바르샤바",21.01,52.23]]},
+      {id:"east-bagration",theater:"east",sortDate:"1944-06-22",date:"1944년 6월 22일~8월 19일",title:"바그라티온 작전",faction:"allied",summary:"소련군의 대공세로 독일 중부집단군이 붕괴하고 벨라루스가 해방됨.",routes:[["스몰렌스크",32.05,54.78,"민스크",27.56,53.9],["민스크",27.56,53.9,"바르샤바",21.01,52.23]]},
       {id:"pacific-philippine-sea",theater:"pacific",sortDate:"1944-06-19",date:"1944년 6월 19~20일",title:"필리핀해 해전",summary:"미 해군이 마리아나 해역에서 일본 함재기 전력을 궤멸시킴.",routes:[["사이판",145.75,15.18,"필리핀해",137,15]]},
       {id:"east-warsaw-uprising",theater:"east",sortDate:"1944-08-01",date:"1944년 8월 1일~10월 2일",title:"바르샤바 봉기",summary:"폴란드 국내군이 봉기했으나 소련군의 진격이 멈춘 사이 독일군에게 진압됨.",routes:[["바르샤바",21.01,52.23,"프라가",21.05,52.25]]},
       {id:"west-paris",theater:"west",sortDate:"1944-08-25",date:"1944년 8월 25일",title:"파리 해방",summary:"연합군과 프랑스 저항군이 파리를 해방하고 독일 점령이 끝남.",routes:[["노르망디",-0.5,49.35,"파리",2.35,48.86]]},
@@ -176,12 +190,12 @@ const events = [
       {id:"west-haguenau",theater:"west",sortDate:"1945-02-05",date:"1945년 2월",title:"아그누 전투",series:"bob",episode:"8",summary:"알자스 아그누에서 모데르강을 사이에 둔 대치와 야간 정찰.",detail:"[8화 The Last Patrol] 알자스의 아그누에서 모데르강을 사이에 두고 독일군과 대치. 신임 소위 존스가 첫 실전으로 강 건너 포로 생포 정찰을 지휘하고, 웹스터가 부대에 복귀한다. 첫 정찰은 성공하지만 두 번째 정찰 명령이 떨어지자, 윈터스는 부하들을 아끼려 '정찰을 나갔다고만 보고하라'며 실제 도하를 시키지 않는다. 종전이 가까운 시점의 무의미한 희생을 거부하는 결정이 핵심.",routes:[["바스토뉴",5.72,50.0,"아그누",7.79,48.82,"allied","para"]]},
       {id:"west-rhine",theater:"west",sortDate:"1945-03-07",date:"1945년 3월 7일",title:"레마겐 라인강 도하",summary:"연합군이 레마겐의 철교를 확보해 라인강을 건너 독일 본토로 진격.",routes:[["아헨",6.08,50.78,"레마겐",7.23,50.58]]},
       {id:"pacific-okinawa",theater:"pacific",sortDate:"1945-04-01",date:"1945년 4월 1일~6월 22일",title:"오키나와 전투",series:"pacific",episode:"9",summary:"연합군이 오키나와를 점령했으나 양측 모두 막대한 피해를 입음.",detail:"[9화 Okinawa] 일본 본토 코앞 오키나와 상륙. 진흙탕 속 장기 소모전, 가미카제 공격, 그리고 주민을 끌어들인 참극이 벌어진다. 유진 슬레지('With the Old Breed'의 저자)의 시선으로 인간성이 무너지는 전장을 그린다. 미군 사상자만 5만 명이 넘는 태평양 최대 규모의 지상전으로, 일본 본토 침공의 참상을 예고했다.",routes:[["필리핀",122,13,"오키나와",127.8,26.34]]},
-      {id:"east-berlin",theater:"east",sortDate:"1945-04-16",date:"1945년 4월 16일~5월 2일",title:"베를린 전투",summary:"동쪽에서 소련군이 베를린을 포위·함락하고, 서쪽에서 진격한 미·영 연합군이 엘베강에서 소련군과 합류. 히틀러가 자살하고 나치 독일이 붕괴함.",routes:[["오데르강",14.64,52.57,"베를린",13.41,52.52,"soviet","land"],["루르",7.3,51.4,"엘베강",11.6,52.2,"allied","land"]]},
+      {id:"east-berlin",theater:"east",sortDate:"1945-04-16",date:"1945년 4월 16일~5월 2일",title:"베를린 전투",faction:"allied",summary:"동쪽에서 소련군이 베를린을 포위·함락하고, 서쪽에서 진격한 미·영 연합군이 엘베강에서 소련군과 합류. 히틀러가 자살하고 나치 독일이 붕괴함.",routes:[["오데르강",14.64,52.57,"베를린",13.41,52.52,"soviet","land"],["루르",7.3,51.4,"엘베강",11.6,52.2,"allied","land"]]},
       {id:"west-landsberg",theater:"west",sortDate:"1945-04-27",date:"1945년 4월 27일",title:"카우퍼링 수용소 발견",series:"bob",episode:"9",summary:"란츠베르크 인근 카우퍼링 강제수용소를 발견해 참상을 목격.",detail:"[9화 Why We Fight] 독일 남부로 진격하던 이지 중대가 숲속에서 나치의 카우퍼링(다하우 위성) 강제수용소를 우연히 발견한다. 굶주려 죽어가는 수감자들과 시신 더미를 목격한 병사들은 자신들이 왜 싸웠는지를 비로소 실감한다. 니슨이 유대인 수감자와 마주하는 장면, 마을 주민을 동원해 시신을 수습시키는 미군의 조치가 그려진다. 홀로코스트를 정면으로 다룬 화.",routes:[["아그누",7.79,48.82,"란츠베르크",10.87,48.05,"allied","para"]]},
       {id:"west-eagles-nest",theater:"west",sortDate:"1945-05-05",date:"1945년 5월 5일",title:"독수리 둥지 점령",series:"bob",episode:"10",summary:"히틀러의 산장 켈슈타인하우스(독수리 둥지)를 점령. 유럽전 종착점.",detail:"[10화 Points] 이지 중대가 히틀러의 알프스 산장 베르히테스가덴과 켈슈타인하우스(독수리 둥지, Eagle's Nest)를 무혈 점령한다. 나치 수뇌부의 저택에서 와인과 은식기를 노획하며 유럽 전쟁의 상징적 종착점을 맞는다. 이후 독일 항복(V-E Day)과 오스트리아 점령, 그리고 태평양 재배치를 앞둔 병사들의 제대 점수(points) 계산으로 이야기가 마무리된다.",routes:[["란츠베르크",10.87,48.05,"베르히테스가덴",13.04,47.63,"allied","para"]]},
       {id:"west-ve-day",theater:"west",sortDate:"1945-05-08",date:"1945년 5월 8일",title:"독일 항복(유럽 전승일)",summary:"독일이 무조건 항복하고 유럽에서의 전쟁이 끝남.",routes:[]},
       {id:"pacific-hiroshima",theater:"pacific",sortDate:"1945-08-06",date:"1945년 8월 6일",title:"히로시마 원자폭탄 투하",summary:"미군이 히로시마에 원자폭탄을 투하해 도시가 파괴되고 막대한 사상자가 발생.",routes:[["티니안",145.63,15.0,"히로시마",132.46,34.39]]},
-      {id:"east-manchuria",theater:"east",sortDate:"1945-08-08",date:"1945년 8월 8~9일",title:"소련의 대일 참전·만주 침공",summary:"소련이 일본에 선전포고하고 만주로 진격해 관동군을 붕괴시킴.",routes:[["치타",113.5,52.03,"하얼빈",126.53,45.8],["블라디보스토크",131.89,43.12,"지린",126.55,43.84]]},
+      {id:"east-manchuria",theater:"east",sortDate:"1945-08-08",date:"1945년 8월 8~9일",title:"소련의 대일 참전·만주 침공",faction:"allied",summary:"소련이 일본에 선전포고하고 만주로 진격해 관동군을 붕괴시킴.",routes:[["치타",113.5,52.03,"하얼빈",126.53,45.8],["블라디보스토크",131.89,43.12,"지린",126.55,43.84]]},
       {id:"pacific-nagasaki",theater:"pacific",sortDate:"1945-08-09",date:"1945년 8월 9일",title:"나가사키 원자폭탄 투하",summary:"미군이 나가사키에 두 번째 원자폭탄을 투하함.",routes:[["티니안",145.63,15.0,"나가사키",129.87,32.75]]},
       {id:"pacific-surrender-announce",theater:"pacific",sortDate:"1945-08-15",date:"1945년 8월 15일",title:"일본의 항복 발표",summary:"일왕이 라디오로 항복을 발표하며 사실상 전쟁이 종결됨.",routes:[]},
       {id:"pacific-surrender-sign",theater:"pacific",sortDate:"1945-09-02",date:"1945년 9월 2일",title:"항복 문서 조인",summary:"도쿄만의 미주리함에서 일본이 항복 문서에 서명하며 제2차 세계대전이 끝남.",routes:[["도쿄",139.69,35.69,"도쿄만",139.77,35.45]]}
@@ -220,7 +234,8 @@ const mapCountrySets = {
   manchuria:{"392":"axis","156":"axis","643":"soviet"},
   gloucester:{"392":"axis","840":"allied","036":"allied"},
   peleliu:{"392":"axis","840":"allied"},
-  mota:{"826":"allied","276":"axis"}
+  mota:{"826":"allied","276":"axis"},
+  atlantic:{"826":"allied","276":"axis","250":"axis","840":"allied"}
 };
 
 const detailedMapPresets = {
@@ -280,11 +295,23 @@ const detailedMapPresets = {
   "pacific-surrender-sign":{countries:"homeland",sides:"allied",types:"naval",view:[[138,34],[142,34],[142,37],[138,37]]},
   "pacific-gloucester":{countries:"gloucester",sides:"allied",types:"landing",view:[[146,-7.5],[151,-7.5],[151,-4],[146,-4]]},
   "pacific-peleliu":{countries:"peleliu",sides:"allied",types:"landing",view:[[122,2],[138,2],[138,13],[122,13]]},
+  "usaaf-bombing-begins":{countries:"mota",sides:"mota",types:"air",view:[[-3,48],[6,48],[6,54],[-3,54]]},
   "mota-bremen":{countries:"mota",sides:"mota",types:"air",view:[[-2,50],[12,50],[12,55],[-2,55]]},
   "mota-regensburg":{countries:"mota",sides:"mota",types:"air",view:[[-2,34],[15,34],[15,54],[-2,54]]},
   "mota-munster":{countries:"mota",sides:"mota",types:"air",view:[[-2,50],[10,50],[10,54],[-2,54]]},
   "mota-berlin":{countries:"mota",sides:"mota",types:"air",view:[[-2,50],[16,50],[16,54.5],[-2,54.5]]},
   "mota-frantic":{countries:"mota",sides:"mota",types:"air",view:[[-2,47],[37,47],[37,55],[-2,55]]},
+  "atlantic-begins":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-45,40],[10,40],[10,60],[-45,60]]},
+  "uboat-first":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-45,40],[5,40],[5,60],[-45,60]]},
+  "uboat-u230":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-45,42],[10,42],[10,62],[-45,62]]},
+  "uboat-biscay":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-12,43],[2,43],[2,50],[-12,50]]},
+  "uboat-bermuda":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-70,30],[2,30],[2,52],[-70,52]]},
+  "uboat-gibraltar":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-10,35],[10,35],[10,50],[-10,50]]},
+  "uboat-blackmay":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-45,42],[5,42],[5,60],[-45,60]]},
+  "uboat-u415":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-10,45],[2,45],[2,51],[-10,51]]},
+  "uboat-u415-sunk":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-8,46],[0,46],[0,50],[-8,50]]},
+  "uboat-escape":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-10,45],[12,45],[12,62],[-10,62]]},
+  "uboat-surrender":{countries:"atlantic",sides:"uboat",types:"uboat",view:[[-10,45],[12,45],[12,62],[-10,62]]},
   "west-carentan":{countries:"normandy",sides:"bob",types:"para",view:[[-1.6,49.1],[-0.8,49.1],[-0.8,49.6],[-1.6,49.6]]},
   "west-market-garden":{countries:"westLate",sides:["bob","bob"],types:["para","land"],view:[[4.8,51.2],[6.4,51.2],[6.4,52.2],[4.8,52.2]]},
   "west-the-island":{countries:"westLate",sides:"bob",types:"para",view:[[5.4,51.6],[6.4,51.6],[6.4,52.2],[5.4,52.2]]},
@@ -295,9 +322,9 @@ const detailedMapPresets = {
 };
 const detailedNoRouteEvents=["west-ve-day","pacific-surrender-announce"];
 
-const sideMapLabels={allied:"연합군",axis:"추축군",soviet:"소련군",finnish:"핀란드군",neutral:"중립",bob:"101 공수사단",mota:"제8공군 100폭격전대"};
-const unitMapLabels={land:"기갑",naval:"함대",air:"폭격기",landing:"상륙정",para:"공수"};
-const unitTypeByRoute={land:"tank",naval:"ship",air:"bomber",landing:"landing",para:"para"};
+const sideMapLabels={allied:"연합군",axis:"추축군",soviet:"소련군",finnish:"핀란드군",neutral:"중립",bob:"101 공수사단",mota:"제8공군 100폭격전대",uboat:"독일 U보트"};
+const unitMapLabels={land:"기갑",naval:"함대",air:"폭격기",landing:"상륙정",para:"공수",uboat:"잠수함"};
+const unitTypeByRoute={land:"tank",naval:"ship",air:"bomber",landing:"landing",para:"para",uboat:"uboat"};
 function routeMidpoint(route){const start=Number(route[1]),end=Number(route[4]);let delta=((end-start+540)%360)-180,lon=start+delta/2;if(lon>180)lon-=360;if(lon<-180)lon+=360;return [lon,(Number(route[2])+Number(route[5]))/2]}
 events.forEach(event=>{
   const preset=detailedMapPresets[event.id];if(!preset||!event.routes?.length)return;
@@ -346,6 +373,6 @@ window.timelineConfig = {
   historicalDataUrl:"data/world-1938.geojson",
   lanes,
   events,
-  seriesLabels:{bob:"BAND OF BROTHERS",pacific:"THE PACIFIC",mota:"MASTERS OF THE AIR"},
+  seriesLabels:{bob:"BAND OF BROTHERS",pacific:"THE PACIFIC",mota:"MASTERS OF THE AIR",ironcoffins:"IRON COFFINS · 강철의 관"},
   yearMarkers: ["1937-01-01","1939-01-01","1940-01-01","1941-01-01","1942-01-01","1943-01-01","1944-01-01","1945-01-01"]
 };

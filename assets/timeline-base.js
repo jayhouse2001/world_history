@@ -66,7 +66,7 @@
       const padding=Math.max(8,Math.min(width,height)*.08);return projection.fitExtent([[padding,padding],[width-padding,height-padding]],corners);
     }
     function routeFeature(route){return {type:"LineString",coordinates:[[route[1],route[2]],[route[4],route[5]]]}}
-    function routeSide(route){return ["allied","axis","soviet","finnish","bob","mota"].includes(route[6])?route[6]:"neutral"}
+    function routeSide(route){return ["allied","axis","soviet","finnish","bob","mota","uboat"].includes(route[6])?route[6]:"neutral"}
     function drawHistoricalPartitions(viewport,path,projection,event,width,height,labelRequests){
       if(!historicalData||!event.historicalPartitions?.length)return;
       const layer=viewport.append("g").attr("class","historical-control-layer");
@@ -97,7 +97,8 @@
         ["unit-ship",'<path d="M2 15h32l-5 7H8zM9 11h17v4H9zM13 7h9v4h-9zM17 3h2v4h-2zM8 9h5v2H8zM24 9h6v2h-6z"/>'],
         ["unit-bomber",'<path d="M17 2h2l2 8 12 5v3l-12-2-2 6h-2l-2-6-12 2v-3l12-5z"/>'],
         ["unit-landing",'<path d="M3 7h30l-4 15H7zM8 10h20v3H8zM10 15h16v2H10zM10 19h16v2H10zM27 4h5v6h-5z"/>'],
-        ["unit-para",'<path d="M4 9a14 8 0 0 1 28 0z"/><path d="M4 9l12 6M18 3v12M32 9l-12 6" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="18" cy="17" r="2.4"/><path d="M16.6 19h2.8l1.1 4h-5z"/>']
+        ["unit-para",'<path d="M4 9a14 8 0 0 1 28 0z"/><path d="M4 9l12 6M18 3v12M32 9l-12 6" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="18" cy="17" r="2.4"/><path d="M16.6 19h2.8l1.1 4h-5z"/>'],
+        ["unit-uboat",'<path d="M3 14h30q2 0 2 2t-2 2H3q-1.5 0-1.5-2T3 14z"/><path d="M12 10h9v4h-9z"/><path d="M15 4h2v6h-2z"/><rect x="14" y="3" width="4" height="2"/><path d="M8 15h20v1.5H8z" fill="var(--panel)"/>']
       ];
       symbols.forEach(([id,markup])=>{const symbol=defs.append("symbol").attr("id",id).attr("viewBox","0 0 36 24");symbol.html(markup)});
     }
@@ -317,6 +318,17 @@
       });timeline.appendChild(svg);
     }
 
+    function eventFaction(event){
+      if(event.faction)return event.faction;
+      const axisSides=new Set(["axis","uboat"]),alliedSides=new Set(["allied","bob","mota"]);
+      const axisSeries=new Set(["ironcoffins"]),alliedSeries=new Set(["bob","pacific","mota"]);
+      if(event.series){if(axisSeries.has(event.series))return "axis";if(alliedSeries.has(event.series))return "allied"}
+      const sides=(event.routes||[]).map(r=>r[6]).filter(Boolean);
+      const hasAxis=sides.some(s=>axisSides.has(s)),hasAllied=sides.some(s=>alliedSides.has(s));
+      if(hasAxis)return "axis";
+      if(hasAllied)return "allied";
+      return null;
+    }
     function updateStickyYear(){
       const stickyYear=document.getElementById("sticky-year");
       const stickyBar=document.getElementById("sticky-theater-bar");
@@ -361,7 +373,8 @@
         theaterEvents.forEach(event=>{
           const sameDateIndex=dateCounts.get(event.sortDate)||0;dateCounts.set(event.sortDate,sameDateIndex+1);
           const article=document.createElement("article");article.className=`event${event.kind==="reign"?" is-reign-event":""}${event.kind==="world"?" is-world-event":""}${event.related?" is-related-event":""}`;article.dataset.eventId=event.id;article.style.top=`${slotY.get(event.sortDate)-28+sameDateIndex*collisionGap}px`;
-          const card=document.createElement("div");card.className=`event-card${event.routes?.length||event.image?"":" no-map"}${event.kind==="reign"?" is-reign":""}${event.series?` is-series series-${event.series}`:""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
+          const faction=eventFaction(event);
+          const card=document.createElement("div");card.className=`event-card${event.routes?.length||event.image?"":" no-map"}${event.kind==="reign"?" is-reign":""}${event.series?` is-series series-${event.series}`:""}${faction?` faction-${faction}`:""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
           const copy=document.createElement("div");
           if(event.series&&seriesLabels[event.series]){const badge=document.createElement("span");badge.className="series-badge";badge.textContent=event.episode?`${seriesLabels[event.series]} · EP${event.episode}`:seriesLabels[event.series];copy.appendChild(badge)}
           const time=document.createElement("time");time.className="event-date";time.textContent=event.kind==="reign"&&eventEndDate(event)?`${event.date} · 총 ${reignLength(event.sortDate,eventEndDate(event))}`:event.date;
