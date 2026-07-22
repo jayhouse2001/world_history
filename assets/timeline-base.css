@@ -13,7 +13,7 @@
     .series-banner-img{flex:1 1 0;min-width:0;background-size:cover;background-position:center;background-repeat:no-repeat;filter:grayscale(.28) contrast(1.05) brightness(.92)}
     .series-banner-bob{background-image:url(../images/series-bob.jpg)}
     .series-banner-pacific{background-image:url(../images/series-pacific.webp);margin-left:-9%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18%,#000 82%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 18%,#000 82%,transparent 100%)}
-    .series-banner-mota{background-image:url(../images/series-mota.webp);background-position:center 32%;margin-left:-9%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18%,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 18%,#000 100%)}
+    .series-banner-mota{background-image:url(../images/series-mota.jpg);background-position:center center;margin-left:-9%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18%,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 18%,#000 100%)}
     .series-banner::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(20,22,18,.42),rgba(20,22,18,.12) 42%,rgba(20,22,18,.66) 100%)}
     .series-banner-title{position:absolute;top:0;left:0;z-index:1;padding:clamp(16px,3vw,30px) clamp(18px,4vw,44px)}
     .series-banner-title .eyebrow{margin:0 0 8px;color:#f0ede4;font-size:clamp(.58rem,1.2vw,.72rem);font-weight:800;letter-spacing:.2em;text-shadow:0 1px 4px rgba(0,0,0,.7)}
