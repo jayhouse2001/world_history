@@ -17,6 +17,7 @@
     const alwaysShowCountries = new Set(window.worldAlwaysShow||[]);
     const landmarks = window.worldLandmarks||[];
     const seriesLabels = timelineConfig.seriesLabels||{};
+    const seriesFilterLabels = timelineConfig.seriesFilterLabels||seriesLabels;
     const puppetStates = window.worldPuppetStates||[];
     const frontSnapshotFor = window.frontSnapshotFor||(()=>({}));
     const featureById = new Map(countries.map(feature=>[String(feature.id).padStart(3,"0"),feature]));
@@ -493,7 +494,7 @@
         const label=document.createElement("label");label.className=`series-toggle series-toggle-${key}`;
         const cb=document.createElement("input");cb.type="checkbox";cb.checked=!hidden.has(key);
         const dot=document.createElement("span");dot.className="series-toggle-dot";
-        const text=document.createElement("span");text.textContent=seriesLabels[key];
+        const text=document.createElement("span");text.textContent=seriesFilterLabels[key]||seriesLabels[key];
         cb.addEventListener("change",()=>{if(cb.checked)hidden.delete(key);else hidden.add(key);userState.hiddenSeries=[...hidden];saveState();apply(key)});
         label.append(cb,dot,text);host.appendChild(label);apply(key);
       });

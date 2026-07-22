@@ -395,5 +395,6 @@ window.timelineConfig = {
   lanes,
   events,
   seriesLabels:{bob:"BAND OF BROTHERS",pacific:"THE PACIFIC",mota:"MASTERS OF THE AIR",ironcoffins:"IRON COFFINS · 강철의 관",tiger:"TIGERS IN THE MUD · 진흙 속의 호랑이"},
+  seriesFilterLabels:{bob:"BAND OF BROTHERS",pacific:"THE PACIFIC",mota:"MASTERS OF THE AIR",ironcoffins:"IRON COFFINS",tiger:"TIGERS IN THE MUD"},
   yearMarkers: ["1937-01-01","1939-01-01","1940-01-01","1941-01-01","1942-01-01","1943-01-01","1944-01-01","1945-01-01"]
 };
