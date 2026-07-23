@@ -4,8 +4,8 @@
 
 .joseon-chronicle {
   display: grid;
-  grid-template-columns: minmax(390px, 430px) minmax(270px, 1fr) minmax(220px, 250px);
-  gap: clamp(18px, 2.5vw, 34px);
+  grid-template-columns: minmax(360px, 430px) minmax(120px, 168px) minmax(220px, 280px);
+  gap: clamp(12px, 1.4vw, 20px);
   align-items: start;
 }
 
@@ -23,8 +23,8 @@
 
 .joseon-page .timeline-board,
 .joseon-page .sticky-theater-track {
-  grid-template-columns: minmax(390px, 430px) minmax(270px, 1fr) minmax(220px, 250px);
-  gap: clamp(18px, 2.5vw, 34px);
+  grid-template-columns: minmax(360px, 430px) minmax(120px, 168px) minmax(220px, 280px);
+  gap: clamp(12px, 1.4vw, 20px);
   min-width: 0;
 }
 
@@ -158,16 +158,16 @@
   .joseon-page .timeline-scroll { overflow-x: auto; }
   .joseon-page .timeline-board,
   .joseon-page .sticky-theater-track {
-    grid-template-columns: 340px 180px 230px;
-    gap: 16px;
-    min-width: 862px;
+    grid-template-columns: 320px 104px 220px;
+    gap: 12px;
+    min-width: 668px;
   }
   .joseon-map-pane {
     position: absolute;
     z-index: 0;
     top: 96px;
-    left: 356px;
-    width: 180px;
+    left: 332px;
+    width: 104px;
     height: 760px;
     min-height: 0;
     opacity: .5;

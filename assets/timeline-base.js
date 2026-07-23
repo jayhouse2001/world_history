@@ -3,6 +3,10 @@
     const historicalData=timelineConfig.historicalDataUrl
       ? await d3.json(timelineConfig.historicalDataUrl).catch(error=>{console.warn("역사 경계 데이터를 불러오지 못해 기본 지도만 표시합니다.",error);return null})
       : null;
+    const locatorData=window.koreaLand
+      || (timelineConfig.locatorDataUrl
+        ? await d3.json(timelineConfig.locatorDataUrl).catch(error=>{console.warn("로케이터 지도 데이터를 불러오지 못했습니다.",error);return null})
+        : null);
     const theaterDefs=timelineConfig.lanes;
     const baseEvents=timelineConfig.events;
     const storageKey=timelineConfig.storageKey;
@@ -22,9 +26,11 @@
     const frontSnapshotFor = window.frontSnapshotFor||(()=>({}));
     const featureById = new Map(countries.map(feature=>[String(feature.id).padStart(3,"0"),feature]));
     const board = document.getElementById("timeline-board");
-    const laneWidth=theaterDefs.length===1?360:Math.max(1,theaterDefs.length)*288+92;
+    const singleWideLane=theaterDefs.length===1&&Boolean(timelineConfig.horizontalSameDate);
+    const laneWidth=singleWideLane?(timelineConfig.laneWidth||960):theaterDefs.length===1?360:Math.max(1,theaterDefs.length)*288+92;
     document.documentElement.style.setProperty("--lane-count",String(theaterDefs.length));
     document.documentElement.style.setProperty("--board-min-width",`${laneWidth}px`);
+    if(singleWideLane)board.classList.add("single-wide-lane");
     const rules = document.getElementById("time-rules");
     const timelineScroll = document.getElementById("timeline-scroll");
     const stickyTrack = document.getElementById("sticky-theater-track");
@@ -232,6 +238,78 @@
         if(event.mapNote)overlay.append("text").attr("class","map-note").attr("x",12).attr("y",height-10).text(event.mapNote);
       } else if(svgElement===dialogSvg.node()){dialogLabelContext=null}
     }
+    const photoWrapEl=document.getElementById("dialog-photo-wrap");
+    const photoViewport=document.getElementById("photo-viewport");
+    const photoImg=document.getElementById("dialog-image");
+    let photoTransform={k:1,x:0,y:0},photoDrag=null;
+    function applyPhotoTransform(){if(photoImg)photoImg.style.transform=`translate(${photoTransform.x}px,${photoTransform.y}px) scale(${photoTransform.k})`}
+    function resetPhotoTransform(){photoTransform={k:1,x:0,y:0};applyPhotoTransform()}
+    function zoomPhoto(factor){photoTransform.k=Math.min(6,Math.max(1,photoTransform.k*factor));if(photoTransform.k===1){photoTransform.x=0;photoTransform.y=0}applyPhotoTransform()}
+    const locatorLand=locatorData?.features||countries;
+    function drawLocator(event){
+      const svg=d3.select("#locator-map");svg.selectAll("*").remove();
+      const view=(event.mapView||[]).map(p=>[Number(p[0]),Number(p[1])]).filter(p=>p.every(Number.isFinite));
+      const W=150,H=210;svg.attr("viewBox",`0 0 ${W} ${H}`);
+      const frame=locatorData?locatorData:{type:"MultiPoint",coordinates:[[124,33],[131.2,43.2]]};
+      const projection=d3.geoMercator().fitExtent([[8,8],[W-8,H-8]],frame);
+      const path=d3.geoPath(projection);
+      svg.append("path").datum(d3.geoGraticule10()).attr("class","locator-graticule").attr("d",path);
+      svg.selectAll("path.locator-land").data(locatorLand).join("path").attr("class","locator-land").attr("d",path);
+      if(view.length>=2){
+        const lons=view.map(p=>p[0]),lats=view.map(p=>p[1]);
+        const box=[[Math.min(...lons),Math.max(...lats)],[Math.max(...lons),Math.max(...lats)],[Math.max(...lons),Math.min(...lats)],[Math.min(...lons),Math.min(...lats)]].map(projection);
+        svg.append("polygon").attr("class","locator-box").attr("points",box.map(p=>p.join(",")).join(" "));
+        const cx=(box[0][0]+box[2][0])/2,cy=(box[0][1]+box[2][1])/2;
+        svg.append("circle").attr("class","locator-dot").attr("cx",cx).attr("cy",cy).attr("r",2.4);
+      }
+    }
+    const frontFor=window.koreanWarFrontFor||(()=>null);
+    let frontMiniSeq=0;
+    function drawFrontMini(svg,date,{W=118,H=168,frame=null}={}){
+      const sel=d3.select(svg);sel.selectAll("*").remove();sel.attr("viewBox",`0 0 ${W} ${H}`);
+      const land=locatorData?.features||[];
+      const extent=frame||locatorData||{type:"MultiPoint",coordinates:[[124.5,34.0],[130.7,42.6]]};
+      const projection=d3.geoMercator().fitExtent([[6,6],[W-6,H-6]],extent);
+      const path=d3.geoPath(projection);
+      const uid=`fm${++frontMiniSeq}`;
+      const defs=sel.append("defs");
+      const landClip=defs.append("clipPath").attr("id",`${uid}-land`).attr("clipPathUnits","userSpaceOnUse");
+      land.forEach(f=>landClip.append("path").attr("d",path(f)));
+      const front=frontFor(date);
+      const pts=(front?.line||[]).map(p=>projection([Number(p[0]),Number(p[1])])).filter(Boolean);
+      sel.append("rect").attr("class","front-sea").attr("x",0).attr("y",0).attr("width",W).attr("height",H);
+      if(pts.length>=2){
+        const northPoly=[[0,0],[W,0],...pts.slice().reverse().map(p=>[p[0],p[1]]),[pts[0][0],0]];
+        const northArea=[[0,0],[W,0],[W,pts[pts.length-1][1]],...pts.slice().reverse(),[0,pts[0][1]]];
+        const southArea=[[0,pts[0][1]],...pts,[W,pts[pts.length-1][1]],[W,H],[0,H]];
+        sel.append("polygon").attr("class","front-north").attr("clip-path",`url(#${uid}-land)`).attr("points",northArea.map(p=>p.join(",")).join(" "));
+        sel.append("polygon").attr("class","front-south").attr("clip-path",`url(#${uid}-land)`).attr("points",southArea.map(p=>p.join(",")).join(" "));
+      } else {
+        sel.append("g").attr("clip-path",`url(#${uid}-land)`).append("rect").attr("class","front-neutral").attr("x",0).attr("y",0).attr("width",W).attr("height",H);
+      }
+      land.forEach(f=>sel.append("path").attr("class","front-outline").attr("d",path(f)));
+      if(pts.length>=2){
+        sel.append("polyline").attr("class","front-line").attr("points",pts.map(p=>p.join(",")).join(" "));
+      }
+    }
+    function openPhoto(event){
+      if(!photoWrapEl)return;
+      photoWrapEl.hidden=false;
+      photoImg.src=event.image;photoImg.alt=event.imageAlt||`${event.title} 지도`;
+      resetPhotoTransform();
+      const locatorWrap=document.getElementById("locator-wrap");
+      if(event.mapView?.length){locatorWrap.hidden=false;drawLocator(event)}else{locatorWrap.hidden=true}
+    }
+    if(photoViewport){
+      photoViewport.addEventListener("wheel",e=>{e.preventDefault();zoomPhoto(e.deltaY<0?1.15:1/1.15)},{passive:false});
+      photoViewport.addEventListener("pointerdown",e=>{if(photoTransform.k<=1)return;photoDrag={x:e.clientX,y:e.clientY,ox:photoTransform.x,oy:photoTransform.y};photoViewport.setPointerCapture(e.pointerId);photoViewport.classList.add("is-grabbing")});
+      photoViewport.addEventListener("pointermove",e=>{if(!photoDrag)return;photoTransform.x=photoDrag.ox+(e.clientX-photoDrag.x);photoTransform.y=photoDrag.oy+(e.clientY-photoDrag.y);applyPhotoTransform()});
+      const endDrag=()=>{photoDrag=null;photoViewport.classList.remove("is-grabbing")};
+      photoViewport.addEventListener("pointerup",endDrag);photoViewport.addEventListener("pointercancel",endDrag);
+      document.getElementById("photo-zoom-in")?.addEventListener("click",()=>zoomPhoto(1.4));
+      document.getElementById("photo-zoom-out")?.addEventListener("click",()=>zoomPhoto(1/1.4));
+      document.getElementById("photo-reset")?.addEventListener("click",resetPhotoTransform);
+    }
     let dialogEventId=null;
     function openMap(theater,event){
       dialogEventId=event.id;
@@ -239,13 +317,19 @@
       document.getElementById("dialog-date").textContent=seriesTag?`${event.date} · ${seriesTag}`:event.date;
       document.getElementById("dialog-title").textContent=`${theater.name} · ${event.title}`;
       document.getElementById("dialog-summary").textContent=event.detail||event.summary;
-      const dialogImageWrap=document.getElementById("dialog-image-wrap"),dialogImage=document.getElementById("dialog-image");
-      if(event.image){dialogImage.src=event.image;dialogImageWrap.hidden=false}else{dialogImage.removeAttribute("src");dialogImageWrap.hidden=true}
+      const photoMode=Boolean(event.image)&&!event.routes?.length;
       dialogSvg.select("title").text(`${theater.name}: ${event.date} ${event.title}`);
       dialogSvg.select("desc").text(event.detail||event.summary);
       const mapWrap=document.querySelector("#map-dialog .dialog-map-wrap");
-      if(event.routes?.length){mapWrap.hidden=false;drawMap(dialogSvg.node(),theater,event,960,510,true);dialogZoomTransform=d3.zoomIdentity;dialogSvg.call(dialogZoom.transform,dialogZoomTransform)}
-      else{mapWrap.hidden=true}
+      const photoWrap=document.getElementById("dialog-photo-wrap");
+      if(photoMode){
+        if(mapWrap)mapWrap.hidden=true;
+        openPhoto(event);
+      }else{
+        if(photoWrap)photoWrap.hidden=true;
+        if(event.routes?.length){mapWrap.hidden=false;drawMap(dialogSvg.node(),theater,event,960,510,true);dialogZoomTransform=d3.zoomIdentity;dialogSvg.call(dialogZoom.transform,dialogZoomTransform)}
+        else if(mapWrap)mapWrap.hidden=true;
+      }
       dialog.showModal();
     }
 
@@ -265,9 +349,9 @@
     const imageInput=document.getElementById("edit-image");
     const imagePreview=document.getElementById("edit-image-preview");
     const imagePreviewWrap=document.querySelector(".image-preview-wrap");
-    function setEditorImage(dataUrl){editorImage=dataUrl||null;if(editorImage){imagePreview.src=editorImage;imagePreviewWrap.hidden=false}else{imagePreview.removeAttribute("src");imagePreviewWrap.hidden=true;imageInput.value=""}}
-    imageInput.addEventListener("change",()=>{const file=imageInput.files?.[0];if(!file)return;if(file.size>4*1024*1024){alert("이미지가 너무 큽니다(4MB 이하 권장). 더 작은 파일을 사용해주세요.")}const reader=new FileReader();reader.onload=()=>setEditorImage(reader.result);reader.readAsDataURL(file)});
-    document.getElementById("edit-image-remove").addEventListener("click",()=>setEditorImage(null));
+    function setEditorImage(dataUrl){editorImage=dataUrl||null;if(!imagePreview||!imagePreviewWrap)return;if(editorImage){imagePreview.src=editorImage;imagePreviewWrap.hidden=false}else{imagePreview.removeAttribute("src");imagePreviewWrap.hidden=true;if(imageInput)imageInput.value=""}}
+    imageInput?.addEventListener("change",()=>{const file=imageInput.files?.[0];if(!file)return;if(file.size>4*1024*1024){alert("이미지가 너무 큽니다(4MB 이하 권장). 더 작은 파일을 사용해주세요.")}const reader=new FileReader();reader.onload=()=>setEditorImage(reader.result);reader.readAsDataURL(file)});
+    document.getElementById("edit-image-remove")?.addEventListener("click",()=>setEditorImage(null));
     const routePicker=document.getElementById("route-picker");
     const pickerSvg=d3.select(routePicker);
     const pickerZoom=d3.zoom().scaleExtent([.35,8]).on("zoom",event=>{pickerZoomTransform=event.transform;pickerSvg.select(".map-viewport").attr("transform",event.transform);keepMarkerSize(pickerSvg,event.transform.k)});
@@ -312,10 +396,11 @@
     function durationColor(index){const hue=Math.round((index*137.508+18)%360),light=matchMedia("(prefers-color-scheme: dark)").matches?68:39;return `hsl(${hue} 62% ${light}%)`}
     function addDurationLayer(timeline,theaterEvents,slotY,timelineHeight,colorMap){
       const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.classList.add("duration-layer");svg.setAttribute("height",timelineHeight);svg.setAttribute("aria-hidden","true");const defs=document.createElementNS(svg.namespaceURI,"defs");svg.appendChild(defs);
-      theaterEvents.filter(event=>eventEndDate(event)).forEach((event,index)=>{const endDate=eventEndDate(event),startY=slotY.get(event.sortDate),endY=slotY.get(endDate);if(startY==null||endY==null||endY<=startY)return;const color=colorMap.get(event.id),x=8+(index%4)*4,markerId=`duration-arrow-${event.id.replace(/[^a-zA-Z0-9_-]/g,"-")}`;
+      const baseX=Number.isFinite(timelineConfig.durationLayerX)?timelineConfig.durationLayerX:8;
+      theaterEvents.filter(event=>eventEndDate(event)).forEach((event,index)=>{const endDate=eventEndDate(event),startY=slotY.get(event.sortDate),endY=slotY.get(endDate);if(startY==null||endY==null||endY<=startY)return;const color=colorMap.get(event.id),x=baseX+(index%4)*4,markerId=`duration-arrow-${event.id.replace(/[^a-zA-Z0-9_-]/g,"-")}`;
         const marker=document.createElementNS(svg.namespaceURI,"marker");marker.id=markerId;marker.setAttribute("markerWidth","10");marker.setAttribute("markerHeight","10");marker.setAttribute("refX","8");marker.setAttribute("refY","5");marker.setAttribute("orient","auto");marker.setAttribute("markerUnits","userSpaceOnUse");const tip=document.createElementNS(svg.namespaceURI,"path");tip.setAttribute("d","M0,0 L10,5 L0,10 Z");tip.setAttribute("fill",color);marker.appendChild(tip);defs.appendChild(marker);
         const line=document.createElementNS(svg.namespaceURI,"line");line.classList.add("duration-line");line.setAttribute("x1",x);line.setAttribute("x2",x);line.setAttribute("y1",startY+7);line.setAttribute("y2",endY-7);line.setAttribute("stroke",color);line.setAttribute("marker-end",`url(#${markerId})`);svg.appendChild(line);
-        const label=document.createElementNS(svg.namespaceURI,"text");label.classList.add("duration-end-label");label.setAttribute("x","28");label.setAttribute("y",endY+4);label.setAttribute("fill",color);label.textContent=`${event.title.length>12?`${event.title.slice(0,12)}…`:event.title} · 끝`;svg.appendChild(label);
+        if(timelineConfig.durationLabels!==false){const label=document.createElementNS(svg.namespaceURI,"text");label.classList.add("duration-end-label");label.setAttribute("x",baseX+20);label.setAttribute("y",endY+4);label.setAttribute("fill",color);label.textContent=`${event.title.length>12?`${event.title.slice(0,12)}…`:event.title} · 끝`;svg.appendChild(label);}
       });timeline.appendChild(svg);
     }
 
@@ -346,9 +431,10 @@
       const scrollLeft=timelineScroll.scrollLeft;
       const events=allEvents();
       const {milestones,fillerYears}=milestoneDates(events);
+      const horizontalSameDate=Boolean(timelineConfig.horizontalSameDate);
       const slotGap=timelineConfig.slotGap||252,slotTop=76,collisionGap=timelineConfig.collisionGap||150,yearRuleGap=timelineConfig.yearRuleGap||slotGap;
       const slotY=new Map();let cursorY=slotTop;
-      milestones.forEach(date=>{slotY.set(date,cursorY);if(fillerYears.has(date)){cursorY+=yearRuleGap;return}const maxSameDate=Math.max(1,...theaterDefs.map(theater=>events.filter(event=>event.theater===theater.id&&event.sortDate===date).length));cursorY+=slotGap+(maxSameDate-1)*collisionGap});
+      milestones.forEach(date=>{slotY.set(date,cursorY);if(fillerYears.has(date)){cursorY+=yearRuleGap;return}const maxSameDate=horizontalSameDate?1:Math.max(1,...theaterDefs.map(theater=>events.filter(event=>event.theater===theater.id&&event.sortDate===date).length));cursorY+=slotGap+(maxSameDate-1)*collisionGap});
       const timelineHeight=cursorY+slotTop+170;
       currentTimelineMeta={milestones,slotY};
       const durationEvents=events.filter(event=>eventEndDate(event));const durationColors=new Map(durationEvents.map((event,index)=>[event.id,durationColor(index)]));
@@ -369,11 +455,15 @@
         const lane=document.createElement("section");lane.className="theater-lane";lane.setAttribute("aria-labelledby",`${theater.id}-title`);
         const heading=document.createElement("h3");heading.id=`${theater.id}-title`;heading.className="sr-only";heading.textContent=theater.name;
         const timeline=document.createElement("div");timeline.className="timeline";timeline.setAttribute("aria-label",`${theater.name} 사건 추가 영역. 길게 누르거나 우클릭하세요.`);lane.append(heading,timeline);
-        addDurationLayer(timeline,theaterEvents,slotY,timelineHeight,durationColors);
+        if(timelineConfig.durationLayer!==false)addDurationLayer(timeline,theaterEvents,slotY,timelineHeight,durationColors);
         const dateCounts=new Map();
+        const dateTotals=new Map();theaterEvents.forEach(event=>dateTotals.set(event.sortDate,(dateTotals.get(event.sortDate)||0)+1));
         theaterEvents.forEach(event=>{
           const sameDateIndex=dateCounts.get(event.sortDate)||0;dateCounts.set(event.sortDate,sameDateIndex+1);
-          const article=document.createElement("article");article.className=`event${event.kind==="reign"?" is-reign-event":""}${event.kind==="world"?" is-world-event":""}${event.related?" is-related-event":""}${event.series?` series-${event.series}`:""}`;article.dataset.eventId=event.id;article.style.top=`${slotY.get(event.sortDate)-28+sameDateIndex*collisionGap}px`;
+          const sameDateTotal=dateTotals.get(event.sortDate)||1;
+          const article=document.createElement("article");article.className=`event${event.kind==="reign"?" is-reign-event":""}${event.kind==="world"?" is-world-event":""}${event.related?" is-related-event":""}${event.series?` series-${event.series}`:""}`;article.dataset.eventId=event.id;
+          if(horizontalSameDate){article.style.top=`${slotY.get(event.sortDate)-28}px`;if(sameDateTotal>1){article.classList.add("is-side-by-side");article.style.setProperty("--col-count",String(sameDateTotal));article.style.setProperty("--col-index",String(sameDateIndex))}}
+          else{article.style.top=`${slotY.get(event.sortDate)-28+sameDateIndex*collisionGap}px`}
           const faction=eventFaction(event);
           const card=document.createElement("div");card.className=`event-card${event.routes?.length||event.image?"":" no-map"}${event.kind==="reign"?" is-reign":""}${event.series?` is-series series-${event.series}`:""}${faction?` faction-${faction}`:""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
           const copy=document.createElement("div");
@@ -388,8 +478,27 @@
         attachLaneGesture(timeline,theater);
         board.appendChild(lane);
       });
+      if(timelineConfig.frontMiniMap)renderFrontRail(events,slotY);
       timelineScroll.scrollLeft=scrollLeft;
       updateStickyYear();
+    }
+    function renderFrontRail(events,slotY){
+      board.querySelectorAll(".front-rail").forEach(n=>n.remove());
+      const rail=document.createElement("div");rail.className="front-rail";rail.setAttribute("aria-hidden","false");
+      const dates=[...new Set(events.map(e=>e.sortDate))].sort();
+      let lastLabel=null;
+      dates.forEach(date=>{
+        const front=frontFor(date);const label=front?front.label:null;
+        if(label===lastLabel)return;
+        lastLabel=label;
+        const y=slotY.get(date);if(y==null)return;
+        const cell=document.createElement("figure");cell.className="front-rail-cell";cell.style.top=`${y-28}px`;
+        const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("class","front-mini");svg.setAttribute("role","img");svg.setAttribute("aria-label",`${date} 전선: ${label||"미상"}`);
+        const cap=document.createElement("figcaption");cap.className="front-cap";cap.textContent=label||"전선";
+        cell.append(svg,cap);rail.appendChild(cell);
+        drawFrontMini(svg,date);
+      });
+      board.appendChild(rail);
     }
 
     function attachEditGesture(card,event,theater){
@@ -503,8 +612,8 @@
     window.addEventListener("scroll",updateStickyYear,{passive:true});
     window.addEventListener("resize",updateStickyYear,{passive:true});
     updateStickyYear();
-    document.getElementById("dialog-zoom-in").addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1.45));document.getElementById("dialog-zoom-out").addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1/1.45));
-    document.getElementById("close-dialog").addEventListener("click",()=>dialog.close());
-    document.getElementById("dialog-edit").addEventListener("click",()=>{if(!dialogEventId)return;dialog.close();openEditor("edit",dialogEventId)});
+    document.getElementById("dialog-zoom-in")?.addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1.45));document.getElementById("dialog-zoom-out")?.addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1/1.45));
+    document.getElementById("close-dialog")?.addEventListener("click",()=>dialog.close());
+    document.getElementById("dialog-edit")?.addEventListener("click",()=>{if(!dialogEventId)return;dialog.close();openEditor("edit",dialogEventId)});
     dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});
     })();

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="6·25 전쟁의 주요 국면을 시간순으로 배치하고, 미 육군 공식 전사 지도로 각 시기의 전황을 살펴보는 페이지">
+  <title>6·25 전쟁 · 세계사 타임라인</title>
+  <link rel="stylesheet" href="assets/timeline-base.css">
+</head>
+<body data-timeline-config="data/korean-war-data.js">
+  <div class="page-shell">
+    <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">WH</span><span>세계사 타임라인</span></a><a class="back-link" href="index.html">← 사건 목록</a></header>
+    <main>
+      <section class="hero"><div><p class="eyebrow">1950 — 1953 · THE KOREAN WAR</p><h1>6·25<br>전쟁</h1></div><p class="hero-copy">개전부터 정전까지 전황을 시간순으로 따라가며, 각 시기의 미 육군 공식 전사 지도를 함께 살펴봅니다.</p></section>
+      <section class="timeline-section" aria-labelledby="timeline-heading">
+        <div class="section-heading"><h2 id="timeline-heading">전황 타임라인 · 1950~1953</h2><p>같은 날짜의 지도는 나란히 배치됩니다</p></div>
+        <div id="sticky-theater-bar" class="sticky-theater-bar" aria-hidden="true"><div id="sticky-year" class="sticky-year"></div><div id="sticky-theater-track" class="sticky-theater-track"></div></div>
+        <div id="timeline-scroll" class="timeline-scroll" aria-label="6·25 전쟁 타임라인 영역"><div id="timeline-board" class="timeline-board"><div id="time-rules" class="time-rules" aria-hidden="true"></div></div></div>
+        <div class="timeline-note"><span class="edit-hint">타임라인·여백 길게 누르기: 그 위치에 사건 추가</span><span>사건 카드 길게 누르기: 추가·편집·삭제</span><span>같은 날짜 사건은 가로로 나란히 표시</span><span>지도: 미 육군 군사사연구소(CMH) 공식 전사 · 원본 링크</span></div>
+      </section>
+    </main>
+    <footer class="site-footer"><span>WORLD HISTORY ARCHIVE</span><span>6·25 전쟁 전황 지도</span></footer>
+  </div>
+
+  <dialog id="map-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-header"><div><span id="dialog-date" class="dialog-date"></span><h3 id="dialog-title"></h3></div><div class="dialog-header-actions"><button id="dialog-edit" class="dialog-edit-btn" type="button">✎ 편집</button><button id="close-dialog" class="close-button" type="button" aria-label="확대 지도 닫기">✕</button></div></div>
+    <div class="dialog-map-wrap"><div class="interactive-map"><svg id="dialog-map" class="dialog-map" role="img" aria-labelledby="dialog-map-title dialog-map-desc"></svg><div class="map-zoom-controls" aria-label="지도 확대 축소"><button id="dialog-zoom-in" type="button" aria-label="지도 확대">＋</button><button id="dialog-zoom-out" type="button" aria-label="지도 축소">−</button></div></div></div>
+    <div id="dialog-photo-wrap" class="dialog-photo-wrap" hidden>
+      <div id="photo-viewport" class="photo-viewport"><img id="dialog-image" alt="지도"></div>
+      <div class="map-zoom-controls" aria-label="지도 확대 축소"><button id="photo-zoom-in" type="button" aria-label="지도 확대">＋</button><button id="photo-zoom-out" type="button" aria-label="지도 축소">−</button><button id="photo-reset" type="button" aria-label="지도 원래대로">⤢</button></div>
+      <figure id="locator-wrap" class="locator-wrap" aria-label="한반도 전체에서 이 지도의 위치"><svg id="locator-map" role="img" aria-label="한반도 위치 표시 지도"></svg><figcaption>이 지도의 대략적 범위</figcaption></figure>
+    </div>
+    <p id="dialog-summary" class="dialog-summary"></p>
+  </dialog>
+
+  <div id="event-menu" class="event-menu" role="menu" aria-label="사건 편집 메뉴">
+    <button type="button" data-action="add" role="menuitem">＋ 사건 추가</button>
+    <button type="button" data-action="edit" role="menuitem">✎ 사건 편집</button>
+    <button type="button" data-action="delete" class="delete-action" role="menuitem">− 사건 삭제</button>
+  </div>
+
+  <dialog id="editor-dialog" class="editor-dialog" aria-labelledby="editor-title">
+    <form id="editor-form" class="editor-form">
+      <div class="dialog-header"><div><span class="dialog-date">내 타임라인</span><h3 id="editor-title">사건 편집</h3></div><button id="close-editor" class="close-button" type="button" aria-label="편집 창 닫기">✕</button></div>
+      <label class="form-field"><span>구분</span><select id="edit-theater" required></select></label>
+      <label class="form-field"><span>날짜 (정렬 기준)</span><input id="edit-sort-date" type="date" min="1950-01-01" max="1953-12-31" required></label>
+      <label class="form-field"><span>종료 날짜 (기간 사건만)</span><input id="edit-end-date" type="date" min="1950-01-01" max="1953-12-31"></label>
+      <label class="form-field"><span>카드에 표시할 날짜</span><input id="edit-date" type="text" required placeholder="예: 1950년 9월 15일"></label>
+      <label class="form-field"><span>사건명</span><input id="edit-title" type="text" required maxlength="60"></label>
+      <label class="form-field"><span>요약</span><textarea id="edit-summary" required maxlength="220"></textarea></label>
+      <label class="form-field"><span>상세 설명 (선택)</span><textarea id="edit-detail" maxlength="1600" placeholder="카드를 눌러 열었을 때 보일 자세한 내용"></textarea></label>
+      <div class="form-field image-field"><span>참조 이미지 (선택)</span>
+        <input id="edit-image" type="file" accept="image/*">
+        <div class="image-preview-wrap" hidden><img id="edit-image-preview" alt="참조 이미지 미리보기"><button id="edit-image-remove" class="clear-route" type="button">이미지 제거</button></div>
+      </div>
+      <label class="map-editor-toggle"><input id="edit-has-map" type="checkbox">지도 이동 경로 추가</label>
+      <div id="map-editor" class="map-editor" hidden>
+        <div class="interactive-map"><svg id="route-picker" class="route-picker" role="img" aria-label="출발점과 도착점을 선택하는 지도"></svg><div class="map-zoom-controls" aria-label="경로 선택 지도 확대 축소"><button id="picker-zoom-in" type="button" aria-label="경로 선택 지도 확대">＋</button><button id="picker-zoom-out" type="button" aria-label="경로 선택 지도 축소">−</button></div></div>
+        <div class="picker-actions"><button id="pick-start" class="is-active" type="button">① 출발점 선택</button><button id="pick-end" type="button">② 도착점 선택</button><button id="clear-route" class="clear-route" type="button">경로 제거</button></div>
+        <div class="route-fields"><label class="form-field"><span>출발지 이름</span><input id="edit-start-name" type="text" placeholder="예: 인천"></label><label class="form-field"><span>도착지 이름</span><input id="edit-end-name" type="text" placeholder="예: 서울"></label></div>
+        <div id="coordinate-readout" class="coordinate-readout">지도에서 출발점과 도착점을 차례로 선택하세요.</div>
+      </div>
+      <p class="editor-help">지도 경로를 켜고 출발점·도착점을 지도에서 차례로 누르면 화살표 지도가 생성됩니다.</p>
+      <div class="form-actions"><button id="cancel-edit" class="cancel-edit" type="button">취소</button><button class="save-edit" type="submit">저장</button></div>
+    </form>
+  </dialog>
+
+  <script src="assets/d3.min.js"></script>
+  <script src="assets/topojson-client.min.js"></script>
+  <script src="assets/world-atlas.js"></script>
+  <script src="data/korea-10m.js"></script>
+  <script src="data/korean-war-fronts.js"></script>
+  <script src="data/korean-war-data.js"></script>
+  <script src="assets/timeline-base.js"></script>
+</body>
+</html>
