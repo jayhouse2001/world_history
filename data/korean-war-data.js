@@ -11,9 +11,9 @@ const events = [
     endDate:"1953-07-27",
     summary:"한국전쟁의 무대가 된 동중앙아시아 전역을 보여주는 개관 지도. 한반도를 중심으로 중국·만주, 소련, 일본이 배치되어 전쟁의 지정학적 배경을 나타낸다.",
     detail:"이 지도는 특정 전투가 아니라 미 육군 군사사연구소(CMH) 공식 전사 '밀물과 썰물(Ebb and Flow, 1950.11~1951.7)' 권의 첫 번째 방위 개관 지도(Map 1, 4쪽)로, 한국전쟁이 벌어진 동중앙아시아 전역의 지정학적 무대를 제시한다. 지도에는 한반도(평양·서울·부산)를 중심으로 서쪽에 중국·만주(북경·묵던), 북동쪽에 소련(블라디보스토크), 동쪽에 일본(도쿄·요코하마)이 표시되어 있다. 만주와 압록강 너머 중국은 1950년 10월 중국인민지원군이 개입해 온 방향이었고, 부산은 일본과 미국 본토로부터의 병력·물자 보급선의 핵심 종착항이었다. 특히 일본은 사세보·요코스카·요코하마 등의 항만을 통해 유엔군의 후방 병참기지 역할을 하여, 지도상의 일본 배치는 전쟁 수행의 병참 배경을 함축한다. 지도의 출처 표기는 'Ebb And Flow, November 1950-July 1951, Center of Military History, 1990, By Billy C. Mossman'이다.",
-    image:"https://www.koreanwar2.org/kwp2/maps/truce/map1.jpg",
+    image:"https://www.koreanwar2.org/kwp2/maps/ebb/map1_full.jpg",
     imageAlt:"동중앙아시아 전역도 (한국전쟁 개관) 지도 (미 육군 CMH)",
-    mapView:[[116,30],[143,44]]
+    mapView:[[116,30],[143,44]], hideLocator:true
   },
   {
     id:"kw-snk-map-i-1000w", theater:"kw", sortDate:"1950-06-25",

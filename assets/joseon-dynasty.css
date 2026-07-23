@@ -189,3 +189,29 @@
   .joseon-page .event.is-world-event { width: min(210px, calc(100% - 18px)); }
   .joseon-map-pane { opacity: .3; }
 }
+
+.hero-joseon .hero-photos { background: #1c140c; }
+.hero-joseon .hero-photo-irworobongdo {
+  background-image: url(../images/joseon-hero-irworobongdo.jpg);
+  background-position: center 46%;
+  filter: saturate(.82) contrast(1.02) brightness(.86);
+}
+.hero-joseon .hero-photo-scholars {
+  background-image: url(../images/joseon-scholars-1863.jpg);
+  background-position: center 38%;
+  margin-left: -8%;
+  filter: sepia(.32) contrast(1.05) brightness(.92);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 16%, #000 84%, transparent 100%);
+}
+.hero-joseon .hero-photo-gyeongbokgung {
+  background-image: url(../images/joseon-hero-gyeongbokgung-1906.jpg);
+  background-position: center 44%;
+  margin-left: -8%;
+  filter: sepia(.22) contrast(1.06) brightness(.9);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16%, #000 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 16%, #000 100%);
+}
+.hero-joseon.has-photo-bg::after {
+  background: linear-gradient(105deg, rgba(24, 16, 8, .84) 0, rgba(24, 16, 8, .5) 42%, rgba(24, 16, 8, .28) 70%, rgba(24, 16, 8, .52) 100%);
+}

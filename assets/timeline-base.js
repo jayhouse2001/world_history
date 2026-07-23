@@ -278,8 +278,9 @@
       const front=frontFor(date);
       const pts=(front?.line||[]).map(p=>projection([Number(p[0]),Number(p[1])])).filter(Boolean);
       sel.append("rect").attr("class","front-sea").attr("x",0).attr("y",0).attr("width",W).attr("height",H);
-      if(pts.length>=2){
-        const northPoly=[[0,0],[W,0],...pts.slice().reverse().map(p=>[p[0],p[1]]),[pts[0][0],0]];
+      if(front?.fill==="north"||front?.fill==="south"){
+        sel.append("g").attr("clip-path",`url(#${uid}-land)`).append("rect").attr("class",`front-${front.fill}`).attr("x",0).attr("y",0).attr("width",W).attr("height",H);
+      } else if(pts.length>=2){
         const northArea=[[0,0],[W,0],[W,pts[pts.length-1][1]],...pts.slice().reverse(),[0,pts[0][1]]];
         const southArea=[[0,pts[0][1]],...pts,[W,pts[pts.length-1][1]],[W,H],[0,H]];
         sel.append("polygon").attr("class","front-north").attr("clip-path",`url(#${uid}-land)`).attr("points",northArea.map(p=>p.join(",")).join(" "));
@@ -287,6 +288,11 @@
       } else {
         sel.append("g").attr("clip-path",`url(#${uid}-land)`).append("rect").attr("class","front-neutral").attr("x",0).attr("y",0).attr("width",W).attr("height",H);
       }
+      (front?.enclaves||[]).forEach(enc=>{
+        const ep=(enc.poly||[]).map(p=>projection([Number(p[0]),Number(p[1])])).filter(Boolean);
+        if(ep.length<3)return;
+        sel.append("polygon").attr("class",`front-${enc.side==="north"?"north":"south"}`).attr("clip-path",`url(#${uid}-land)`).attr("points",ep.map(p=>p.join(",")).join(","));
+      });
       land.forEach(f=>sel.append("path").attr("class","front-outline").attr("d",path(f)));
       if(pts.length>=2){
         sel.append("polyline").attr("class","front-line").attr("points",pts.map(p=>p.join(",")).join(" "));
@@ -298,7 +304,7 @@
       photoImg.src=event.image;photoImg.alt=event.imageAlt||`${event.title} 지도`;
       resetPhotoTransform();
       const locatorWrap=document.getElementById("locator-wrap");
-      if(event.mapView?.length){locatorWrap.hidden=false;drawLocator(event)}else{locatorWrap.hidden=true}
+      if(event.mapView?.length&&!event.hideLocator){locatorWrap.hidden=false;drawLocator(event)}else{locatorWrap.hidden=true}
     }
     if(photoViewport){
       photoViewport.addEventListener("wheel",e=>{e.preventDefault();zoomPhoto(e.deltaY<0?1.15:1/1.15)},{passive:false});
