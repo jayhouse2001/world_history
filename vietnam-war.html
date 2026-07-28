@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="베트남전쟁의 네 군단전술지역에서 동시에 진행된 주요 군사작전을 비교하는 타임라인">
+  <title>베트남전쟁 · 세계사 타임라인</title>
+  <link rel="stylesheet" href="assets/timeline-base.css?v=20260728-2">
+</head>
+<body data-timeline-config="data/vietnam-war-data.js">
+  <div class="page-shell">
+    <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">WH</span><span>세계사 타임라인</span></a><a class="back-link" href="index.html">← 사건 목록</a></header>
+    <main>
+      <section class="hero has-photo-bg hero-vietnam">
+        <div class="hero-photos vietnam-hero" role="img" aria-label="1969년 정글 작전, 1966년 와히아와 작전의 헬리본 투입, 1968년 후에 시가전을 담은 베트남전쟁 사진 합성 배경" aria-hidden="true">
+          <div class="hero-photo hero-photo-vn-jungle"></div>
+          <div class="hero-photo hero-photo-vn-huey"></div>
+          <div class="hero-photo hero-photo-vn-hue"></div>
+        </div>
+        <div class="hero-text"><p class="eyebrow">1955 — 1975 · FOUR CORPS TACTICAL ZONES</p><h1>베트남<br>전쟁</h1></div>
+        <p class="hero-copy">남베트남의 실제 군사 구역인 I·II·III·IV 군단전술지역을 기준으로, 같은 시기에 벌어진 작전과 전투를 나란히 살펴봅니다.</p>
+      </section>
+      <section class="timeline-section" aria-labelledby="timeline-heading">
+        <div class="section-heading"><h2 id="timeline-heading">군사작전 타임라인 · 1959~1975</h2><p>정치·국내 상황을 제외하고 전투·작전·보급로만 표시합니다</p></div>
+        <div id="sticky-theater-bar" class="sticky-theater-bar" aria-hidden="true"><div id="sticky-year" class="sticky-year"></div><div id="sticky-theater-track" class="sticky-theater-track"></div></div>
+        <div id="timeline-scroll" class="timeline-scroll" aria-label="베트남전쟁 네 전술지역 가로 스크롤 영역"><div id="timeline-board" class="timeline-board"><div id="time-rules" class="time-rules" aria-hidden="true"></div></div></div>
+        <div class="timeline-note"><span class="edit-hint">지역 타임라인·여백 길게 누르기: 사건 추가</span><span>사건 카드 길게 누르기: 추가·편집·삭제</span><span>작전 범위·침투로는 개략 표시</span><span>지도 기준: 미 육군 CMH 전사</span></div>
+      </section>
+    </main>
+    <footer class="site-footer"><span>WORLD HISTORY ARCHIVE</span><span>베트남전쟁 군사작전 지도</span></footer>
+  </div>
+
+  <dialog id="map-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-header"><div><span id="dialog-date" class="dialog-date"></span><h3 id="dialog-title"></h3></div><div class="dialog-header-actions"><button id="dialog-edit" class="dialog-edit-btn" type="button">✎ 편집</button><button id="close-dialog" class="close-button" type="button" aria-label="확대 지도 닫기">✕</button></div></div>
+    <div class="dialog-map-wrap"><div class="interactive-map"><svg id="dialog-map" class="dialog-map" role="img" aria-labelledby="dialog-map-title dialog-map-desc"></svg><div class="map-zoom-controls" aria-label="지도 확대 축소"><button id="dialog-zoom-in" type="button">＋</button><button id="dialog-zoom-out" type="button">−</button></div></div></div>
+    <div id="dialog-photo-wrap" class="dialog-photo-wrap" hidden><div id="photo-viewport" class="photo-viewport"><img id="dialog-image" alt="참조 지도"></div><figure id="locator-wrap" class="locator-wrap" hidden><svg id="locator-map"></svg></figure></div>
+    <p id="dialog-summary" class="dialog-summary"></p>
+  </dialog>
+
+  <div id="event-menu" class="event-menu" role="menu" aria-label="사건 편집 메뉴"><button type="button" data-action="add">＋ 사건 추가</button><button type="button" data-action="edit">✎ 사건 편집</button><button type="button" data-action="delete" class="delete-action">− 사건 삭제</button></div>
+
+  <dialog id="editor-dialog" class="editor-dialog" aria-labelledby="editor-title">
+    <form id="editor-form" class="editor-form">
+      <div class="dialog-header"><div><span class="dialog-date">내 타임라인</span><h3 id="editor-title">사건 편집</h3></div><button id="close-editor" class="close-button" type="button">✕</button></div>
+      <label class="form-field"><span>전술지역</span><select id="edit-theater" required></select></label>
+      <label class="form-field"><span>날짜</span><input id="edit-sort-date" type="date" required></label>
+      <label class="form-field"><span>종료 날짜</span><input id="edit-end-date" type="date"></label>
+      <label class="form-field"><span>카드 표시 날짜</span><input id="edit-date" type="text" required></label>
+      <label class="form-field"><span>사건명</span><input id="edit-title" type="text" required maxlength="60"></label>
+      <label class="form-field"><span>요약</span><textarea id="edit-summary" required maxlength="220"></textarea></label>
+      <label class="form-field"><span>상세 설명</span><textarea id="edit-detail" maxlength="1600"></textarea></label>
+      <div class="form-field image-field"><span>참조 이미지</span><input id="edit-image" type="file" accept="image/*"><div class="image-preview-wrap" hidden><img id="edit-image-preview" alt="미리보기"><button id="edit-image-remove" class="clear-route" type="button">이미지 제거</button></div></div>
+      <label class="map-editor-toggle"><input id="edit-has-map" type="checkbox">지도 이동 경로 추가</label>
+      <div id="map-editor" class="map-editor" hidden>
+        <div class="interactive-map"><svg id="route-picker" class="route-picker" role="img" aria-label="경로 선택 지도"></svg><div class="map-zoom-controls"><button id="picker-zoom-in" type="button">＋</button><button id="picker-zoom-out" type="button">−</button></div></div>
+        <div class="picker-actions"><button id="pick-start" class="is-active" type="button">① 출발점</button><button id="pick-end" type="button">② 도착점</button><button id="clear-route" class="clear-route" type="button">경로 제거</button></div>
+        <div class="route-fields"><label class="form-field"><span>출발지</span><input id="edit-start-name" type="text"></label><label class="form-field"><span>도착지</span><input id="edit-end-name" type="text"></label></div>
+        <div id="coordinate-readout" class="coordinate-readout">출발점과 도착점을 선택하세요.</div>
+      </div>
+      <div class="form-actions"><button id="cancel-edit" class="cancel-edit" type="button">취소</button><button class="save-edit" type="submit">저장</button></div>
+    </form>
+  </dialog>
+
+  <script src="assets/d3.min.js"></script>
+  <script src="assets/topojson-client.min.js"></script>
+  <script src="assets/world-atlas.js"></script>
+  <script src="data/world-rivers-50m.js"></script>
+  <script src="data/world-capitals.js"></script>
+  <script src="data/world-landmarks.js"></script>
+  <script src="data/vietnam-war-data.js"></script>
+  <script src="assets/timeline-base.js?v=20260728-2"></script>
+</body>
+</html>

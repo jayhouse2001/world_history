@@ -14,6 +14,7 @@
     function loadState(){try{return {...emptyState,...JSON.parse(localStorage.getItem(storageKey)||"{}")}}catch{return structuredClone(emptyState)}}
     let userState = loadState();
     const countries = topojson.feature(worldAtlas,worldAtlas.objects.countries).features;
+    const drawableCountries = countries.filter(feature=>String(feature.id).padStart(3,"0")!=="010");
     const rivers = (window.worldRivers?.features)||[];
     const capitalsByCountry = window.worldCapitals||{};
     const countryNameOverrides = window.worldCountryNames||{};
@@ -34,6 +35,22 @@
     const rules = document.getElementById("time-rules");
     const timelineScroll = document.getElementById("timeline-scroll");
     const stickyTrack = document.getElementById("sticky-theater-track");
+    const stickyYearControl = document.getElementById("sticky-year");
+    function enableScrollToTop(node,label){
+      if(!node)return;
+      node.setAttribute("role","button");
+      node.setAttribute("tabindex","0");
+      node.setAttribute("aria-label",`${label} · 페이지 맨 위로 이동`);
+      node.setAttribute("title","클릭하면 맨 위로 이동");
+      const goTop=()=>window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+      node.addEventListener("click",goTop);
+      node.addEventListener("keydown",event=>{
+        if(event.key!=="Enter"&&event.key!==" ")return;
+        event.preventDefault();
+        goTop();
+      });
+    }
+    enableScrollToTop(stickyYearControl,"현재 연도");
     const dialog = document.getElementById("map-dialog");
     const dialogSvg = d3.select("#dialog-map");
     dialogSvg.append("title").attr("id","dialog-map-title");
@@ -105,6 +122,9 @@
         ["unit-bomber",'<path d="M17 2h2l2 8 12 5v3l-12-2-2 6h-2l-2-6-12 2v-3l12-5z"/>'],
         ["unit-landing",'<path d="M3 7h30l-4 15H7zM8 10h20v3H8zM10 15h16v2H10zM10 19h16v2H10zM27 4h5v6h-5z"/>'],
         ["unit-para",'<path d="M4 9a14 8 0 0 1 28 0z"/><path d="M4 9l12 6M18 3v12M32 9l-12 6" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="18" cy="17" r="2.4"/><path d="M16.6 19h2.8l1.1 4h-5z"/>'],
+        ["unit-helicopter",'<path d="M9 11h15q5 0 7 4l-3 4H12q-5 0-6-4z"/><path d="M24 12l7-7h2l-4 8M7 14H2v2h5M16 9V5M7 5h18v2H7M12 20l-3 3M24 20l3 3" fill="none" stroke="currentColor" stroke-width="1.5"/>'],
+        ["unit-truck",'<path d="M3 9h19v10H3zM22 12h7l4 4v3H22z"/><circle cx="9" cy="20" r="3"/><circle cx="27" cy="20" r="3"/><path d="M6 12h12v4H6z" fill="var(--panel)"/>'],
+        ["unit-infantry",'<circle cx="18" cy="5" r="3"/><path d="M18 8v8M12 12l6-3 6 3M18 16l-5 7M18 16l5 7M23 8l9 12" fill="none" stroke="currentColor" stroke-width="2"/>'],
         ["unit-uboat",'<path d="M3 14h30q2 0 2 2t-2 2H3q-1.5 0-1.5-2T3 14z"/><path d="M12 10h9v4h-9z"/><path d="M15 4h2v6h-2z"/><rect x="14" y="3" width="4" height="2"/><path d="M8 15h20v1.5H8z" fill="var(--panel)"/>']
       ];
       symbols.forEach(([id,markup])=>{const symbol=defs.append("symbol").attr("id",id).attr("viewBox","0 0 36 24");symbol.html(markup)});
@@ -161,6 +181,33 @@
       if(!rivers.length)return;
       layer.selectAll("path.river").data(rivers).join("path").attr("class","river").attr("d",path);
     }
+    function drawEventZones(layer,path,event,labelRequests){
+      (event.zones||[]).forEach((zone,index)=>{
+        const coordinates=(zone.coordinates||[]).map(point=>[Number(point[0]),Number(point[1])]);
+        if(coordinates.length<3)return;
+        const ring=coordinates.slice();
+        let signedArea=0;
+        for(let pointIndex=0;pointIndex<ring.length;pointIndex+=1){
+          const current=ring[pointIndex];
+          const next=ring[(pointIndex+1)%ring.length];
+          signedArea+=(current[0]*next[1])-(next[0]*current[1]);
+        }
+        // D3 구면 GeoJSON 외곽 고리는 시계방향이어야 한다. 반대 방향이면
+        // 지정 구역이 아니라 지구의 나머지 전체가 채워져 바다까지 진영색으로 보인다.
+        if(signedArea>0)ring.reverse();
+        const first=ring[0],last=ring[ring.length-1];
+        if(first[0]!==last[0]||first[1]!==last[1])ring.push([...first]);
+        const feature={type:"Feature",properties:{},geometry:{type:"Polygon",coordinates:[ring]}};
+        layer.append("path")
+          .datum(feature)
+          .attr("class",`event-zone zone-${zone.kind||"operation"} zone-${zone.side||"neutral"}`)
+          .attr("d",path);
+        if(zone.label&&zone.labelAt){
+          const point=path.projection()(zone.labelAt);
+          if(point)labelRequests.push({text:zone.label,x:point[0],y:point[1],priority:68,className:"zone-label"});
+        }
+      });
+    }
     function collectPlaceAnchors(event){
       const routeCoords=(event.routes||[]).flatMap(route=>[[Number(route[1]),Number(route[2])],[Number(route[4]),Number(route[5])]]);
       const nearRoutePoint=(lon,lat)=>routeCoords.some(([rLon,rLat])=>Math.abs(rLon-lon)<0.6&&Math.abs(rLat-lat)<0.6);
@@ -204,15 +251,21 @@
       drawCollisionLabels(layer,requests,width,height,[],currentLegendBox?[currentLegendBox]:[]);
     }
     function drawMap(svgElement,theater,event,width,height,labels){
-      const detailed=event.mapDesign==="war-v1";const map=d3.select(svgElement); map.attr("viewBox",`0 0 ${width} ${height}`).classed("war-map-detailed",detailed); map.selectAll("g,defs").remove();if(detailed)installWarSymbols(map);
+      const detailed=event.mapDesign==="war-v1";const map=d3.select(svgElement); map.attr("viewBox",`0 0 ${width} ${height}`).classed("war-map-detailed",detailed); map.selectAll("g,defs,rect.ocean-background").remove();if(detailed)installWarSymbols(map);
+      map.append("rect").attr("class","ocean-background").attr("width",width).attr("height",height);
       const projection=projectionFor(theater,width,height,event); const path=d3.geoPath(projection);const viewport=map.append("g").attr("class","map-viewport"); const base=viewport.append("g");
+      if(svgElement===dialogSvg.node()){
+        const worldMin=Math.max(.0001,Math.min(.35,(width*.9)/(2*Math.PI*projection.scale())));
+        dialogZoom.scaleExtent([worldMin,8]);
+      }
       const worldSides=detailed?{...frontSnapshotFor(event.sortDate||""),...(event.countrySides||{})}:(event.countrySides||{});
       base.append("path").datum(d3.geoGraticule10()).attr("class","graticule").attr("d",path);
-      base.selectAll("path.country").data(countries).join("path").attr("class",d=>{const id=String(d.id).padStart(3,"0"),side=worldSides[id];return side?`country country-side-${side}`:"country"}).attr("d",path);
+      base.selectAll("path.country").data(drawableCountries).join("path").attr("class",d=>{const id=String(d.id).padStart(3,"0"),side=worldSides[id];return side?`country country-side-${side}`:"country"}).attr("d",path);
       if(detailed&&labels)drawRivers(base.append("g").attr("class","river-layer"),path);
       const labelRequests=[],obstacles=[];
       drawHistoricalPartitions(viewport,path,projection,event,width,height,labelRequests);
       if(detailed)drawPuppetStates(viewport,projection,event,labelRequests,width,height);
+      if(detailed&&event.zones?.length)drawEventZones(viewport.append("g").attr("class","event-zone-layer"),path,event,labelRequests);
       const routeLayer=viewport.append("g").attr("class","route-layer"),unitLayer=viewport.append("g").attr("class","unit-layer");
       event.routes.forEach(route=>{
         const side=routeSide(route),routeClass=detailed?`route route-active route-${side}`:"route";
@@ -456,7 +509,7 @@
       stickyTrack.replaceChildren();
       theaterDefs.forEach(theater=>{
         const theaterEvents=events.filter(event=>event.theater===theater.id);
-        const stickyLabel=document.createElement("div");stickyLabel.className="sticky-theater-label";
+        const stickyLabel=document.createElement("div");stickyLabel.className="sticky-theater-label";enableScrollToTop(stickyLabel,theater.name);
         const name=document.createElement("strong");name.textContent=theater.name;const count=document.createElement("span");count.textContent=`${theaterEvents.length}개 사건`;stickyLabel.append(name,count);stickyTrack.appendChild(stickyLabel);
         const lane=document.createElement("section");lane.className="theater-lane";lane.setAttribute("aria-labelledby",`${theater.id}-title`);
         const heading=document.createElement("h3");heading.id=`${theater.id}-title`;heading.className="sr-only";heading.textContent=theater.name;
@@ -478,7 +531,7 @@
           const title=document.createElement("h4");title.className="event-title";title.textContent=event.title;const summary=document.createElement("p");summary.className="event-summary";summary.textContent=event.summary;copy.append(time,title,summary);
           if(event.kind==="reign"){const meta=document.createElement("dl");meta.className="reign-meta";for(const [label,value] of [["혈연",event.relation],["계승",event.succession],["섭정",event.regency]]){if(!value)continue;const row=document.createElement("div"),term=document.createElement("dt"),detail=document.createElement("dd");term.textContent=label;detail.textContent=value;row.append(term,detail);meta.appendChild(row)}copy.appendChild(meta)}card.appendChild(copy);
           if(event.image){const button=document.createElement("button");button.className="image-thumb";button.type="button";button.setAttribute("aria-label",`${event.title} 참조 이미지·상세 보기`);const img=document.createElement("img");img.src=event.image;img.alt="";const text=document.createElement("span");text.textContent="자세히 보기";button.append(img,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button)}
-          else if(event.routes?.length){const button=document.createElement("button");button.className="map-thumb";button.type="button";button.setAttribute("aria-label",`${theater.name} ${event.date} ${event.title} 지도 확대`);const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("role","img");svg.setAttribute("aria-label",`${event.title} 이동 경로 축소 지도`);const text=document.createElement("span");text.textContent="지도 확대";button.append(svg,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button);drawMap(svg,theater,event,130,88,false)}
+          else if(event.routes?.length){const button=document.createElement("button");button.className="map-thumb";button.type="button";button.setAttribute("aria-label",`${theater.name} ${event.date} ${event.title} 지도 확대`);const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("role","img");svg.setAttribute("aria-label",`${event.title} 이동 경로 축소 지도`);svg.setAttribute("preserveAspectRatio","xMidYMid slice");const text=document.createElement("span");text.textContent="지도 확대";button.append(svg,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button);drawMap(svg,theater,event,130,88,false)}
           attachEditGesture(card,event,theater);article.appendChild(card);timeline.appendChild(article);
         });
         attachLaneGesture(timeline,theater);
@@ -541,7 +594,7 @@
     function koreanDate(value){const [y,m,d]=value.split("-").map(Number);return `${y}년 ${m}월 ${d}일`}
     function drawPicker(){
       const theater=theaterDefs.find(item=>item.id===theaterSelect.value);const width=520,height=260;const map=d3.select(routePicker);map.attr("viewBox",`0 0 ${width} ${height}`);map.selectAll("*").remove();pickerProjection=projectionFor(theater,width,height,pickerProjectionEvent);const path=d3.geoPath(pickerProjection);
-      const viewport=map.append("g").attr("class","map-viewport");viewport.append("g").selectAll("path").data(countries).join("path").attr("class","country").attr("d",path);
+      const viewport=map.append("g").attr("class","map-viewport");viewport.append("g").selectAll("path").data(drawableCountries).join("path").attr("class","country").attr("d",path);
       if(pickerPoints.start&&pickerPoints.end)viewport.append("path").datum({type:"LineString",coordinates:[pickerPoints.start,pickerPoints.end]}).attr("class","route").attr("d",path);
       for(const [key,label] of [["start","출발"],["end","도착"]]){const point=pickerPoints[key];if(!point)continue;const xy=pickerProjection(point);if(!xy)continue;if(key==="start"){viewport.append("circle").attr("class","start-dot").attr("data-base-r",6).attr("cx",xy[0]).attr("cy",xy[1]).attr("r",6)}else{const start=pickerPoints.start?pickerProjection(pickerPoints.start):[xy[0],xy[1]-20];const angle=Math.atan2(xy[1]-start[1],xy[0]-start[0])*180/Math.PI+90,endTransform=`translate(${xy[0]},${xy[1]}) rotate(${angle})`;viewport.append("path").attr("class","end-mark").attr("data-base-transform",endTransform).attr("d","M0,-10 L8,8 L-8,8 Z").attr("transform",endTransform)}viewport.append("text").attr("class","place-label").attr("x",xy[0]+10).attr("y",xy[1]-10).text(label)}
       map.call(pickerZoom).call(pickerZoom.transform,pickerZoomTransform);
@@ -618,7 +671,7 @@
     window.addEventListener("scroll",updateStickyYear,{passive:true});
     window.addEventListener("resize",updateStickyYear,{passive:true});
     updateStickyYear();
-    document.getElementById("dialog-zoom-in")?.addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1.45));document.getElementById("dialog-zoom-out")?.addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1/1.45));
+    document.getElementById("dialog-zoom-in")?.addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1.65));document.getElementById("dialog-zoom-out")?.addEventListener("click",()=>dialogSvg.call(dialogZoom.scaleBy,1/1.65));
     document.getElementById("close-dialog")?.addEventListener("click",()=>dialog.close());
     document.getElementById("dialog-edit")?.addEventListener("click",()=>{if(!dialogEventId)return;dialog.close();openEditor("edit",dialogEventId)});
     dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});

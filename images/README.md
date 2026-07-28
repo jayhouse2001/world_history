@@ -72,6 +72,40 @@
   - CC BY-SA 3.0
   - https://commons.wikimedia.org/wiki/File:Vietnam_war_1968-1969_map_de.svg
 
+- `ww1-hero-howitzer-1916.jpg`
+  - 8 inch Mk V howitzer Aveluy September 1916 IWM Q 1282.jpg
+  - Ernest Brooks (영국 육군성 공식 사진가), 1916년 9월
+  - Public domain (PD-UKGov)
+  - 내용: 솜 전투 중 아블뤼에서 사격 중인 영국군 8인치 Mk V 중곡사포와 포대원
+  - 출처: Imperial War Museums, 사진번호 Q 1282
+  - 제1차 세계대전 페이지 배너용 · 원본 5220×4012에서 폭 2200으로 축소
+  - https://commons.wikimedia.org/wiki/File:8_inch_Mk_V_howitzer_Aveluy_September_1916_IWM_Q_1282.jpg
+
+- `ww1-hero-tank-1916.jpg`
+  - British Mark I male tank Somme 25 September 1916.jpg
+  - Ernest Brooks (영국 육군성 공식 사진가), 1916년 9월 25일
+  - Public domain (PD-UKGov)
+  - 내용: 티에프발 부근의 영국군 마크 I 수컷 전차 C-15와 참호의 보병
+  - 출처: Imperial War Museums, 사진번호 Q 2486
+  - 제1차 세계대전 페이지 배너용 · 원본 3503×2480에서 폭 2200으로 축소
+  - https://commons.wikimedia.org/wiki/File:British_Mark_I_male_tank_Somme_25_September_1916.jpg
+
+- `vn-hero-huey-1966.jpg`
+  - UH-1D helicopters in Vietnam 1966.jpg
+  - James K. F. Dung, SFC (U.S. Army), 1966년 5월 16일
+  - Public domain (U.S. federal government work)
+  - 내용: 와히아와 작전 중 제25보병사단 제14보병연대 2대대의 헬리본 투입
+  - 베트남전쟁 페이지 배너용
+  - https://commons.wikimedia.org/wiki/File:UH-1D_helicopters_in_Vietnam_1966.jpg
+
+- `vn-hero-hue-1968.jpg`
+  - US Marines move through streets of Hue, Vietnam (1968).jpg
+  - USMC Archives (Quantico) / Jonathan Abel Collection (COLL/3611), 1968년
+  - CC BY 2.0 — 표시 의무 있음
+  - 내용: 구정 대공세 후에 전투 말기 시가전에서 전진하는 미 해병대
+  - 베트남전쟁 페이지 배너용
+  - https://commons.wikimedia.org/wiki/File:US_Marines_move_through_streets_of_Hue,_Vietnam_(1968).jpg
+
 - `series-bob.jpg`
   - Band of Brothers (HBO, 2001) 대표 이미지 / 키아트
   - © HBO / 저작권 자료 — 개인 열람용(비공개), 웹 재배포 금지
