@@ -120,3 +120,35 @@
   - Masters of the Air (Apple TV+, 2024) 대표 이미지 / 키아트
   - © Apple / 저작권 자료 — 개인 열람용(비공개), 웹 재배포 금지
   - 첫 화면 시리즈 배너용
+
+- `crusades-jerusalem-1099.png`
+  - The Siege of Jerusalem (1099), Part of the First Crusade
+  - 작자 미상, 프랑스 국립도서관 고문서 삽화
+  - Public domain
+  - 내용: 제1차 십자군의 1099년 예루살렘 공방전
+  - 십자군 전쟁 첫 화면 카드 사진 레이어
+  - https://commons.wikimedia.org/wiki/File:The_Siege_of_Jerusalem_(1099),_Part_of_the_First_Crusade.png
+
+- `crusades-states-1135.svg`
+  - The Crusader States in 1135
+  - Amitchell125, 2021
+  - CC BY-SA 4.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 에데사·안티오키아·트리폴리·예루살렘 십자군 국가와 주변 세력
+  - 십자군 전쟁 첫 화면 카드 지도 레이어
+  - https://commons.wikimedia.org/wiki/File:The_Crusader_States_in_1135.svg
+
+- `arab-israeli-rafa-1967.jpg`
+  - Six Day War. Israeli troops rolling into Rafa. June 1967. D326-032
+  - Government Press Office (Israel), 1967년 6월 5일
+  - Public domain
+  - 내용: 6일전쟁 중 라파로 진입하는 이스라엘 전차부대
+  - 아랍–이스라엘 전쟁 첫 화면 카드 사진 레이어
+  - https://commons.wikimedia.org/wiki/File:Six_Day_War._Israeli_troops_rolling_into_Rafa._June_1967._D326-032.jpg
+
+- `arab-israeli-war-1948.svg`
+  - 1948 Arab Israeli War - May 15–June 10
+  - Wikimedia Commons contributor, 2017
+  - Public domain
+  - 내용: 1948년 5월 15일부터 6월 10일까지의 주요 전선과 이동
+  - 아랍–이스라엘 전쟁 첫 화면 카드 지도 레이어
+  - https://commons.wikimedia.org/wiki/File:1948_Arab_Israeli_War_-_May_15-June_10.svg

@@ -110,17 +110,27 @@
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.62fr);
-      gap: clamp(40px, 8vw, 110px);
-      align-items: end;
-      padding: clamp(70px, 11vw, 145px) 0 74px;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
+      gap: clamp(28px, 5vw, 70px);
+      align-items: center;
+      min-height: 270px;
+      margin-top: 18px;
+      margin-bottom: 28px;
+      padding: 34px clamp(28px, 4vw, 54px);
+      overflow: hidden;
+      background:
+        linear-gradient(112deg, rgba(248,245,237,.98), rgba(228,220,205,.86)),
+        linear-gradient(135deg, rgba(166,65,50,.08), transparent 56%);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      box-shadow: 0 12px 34px rgba(45,39,29,.08);
     }
 
     .eyebrow {
       display: flex;
       align-items: center;
       gap: 13px;
-      margin: 0 0 22px;
+      margin: 0 0 12px;
       color: var(--accent-dark);
       font-size: 0.74rem;
       font-weight: 800;
@@ -141,7 +151,7 @@
       max-width: 760px;
       margin: 0;
       font-family: Georgia, "Noto Serif KR", serif;
-      font-size: clamp(3.2rem, 8.2vw, 7.4rem);
+      font-size: clamp(2.35rem, 4.4vw, 4.35rem);
       font-weight: 600;
       line-height: 0.98;
       letter-spacing: -0.07em;
@@ -157,15 +167,15 @@
     }
 
     .hero-copy {
-      padding-bottom: 10px;
+      padding-bottom: 0;
     }
 
     .hero-copy p {
       margin: 0;
       color: #51564f;
       font-family: Georgia, "Noto Serif KR", serif;
-      font-size: clamp(1.06rem, 1.8vw, 1.35rem);
-      line-height: 1.85;
+      font-size: clamp(.9rem, 1.3vw, 1.08rem);
+      line-height: 1.65;
       word-break: keep-all;
     }
 
@@ -178,7 +188,7 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-top: 32px;
+      margin-top: 18px;
       color: var(--muted);
       font-size: 0.76rem;
       letter-spacing: 0.12em;
@@ -192,7 +202,7 @@
     }
 
     .archive {
-      padding: 20px 0 120px;
+      padding: 8px 0 120px;
     }
 
     .section-heading {
@@ -237,14 +247,9 @@
       transition: transform 260ms ease, box-shadow 260ms ease;
     }
 
-    .event-card {
-      grid-column: span 3;
-      min-height: 570px;
-    }
-
     .event-card.is-featured {
-      grid-column: span 6;
-      min-height: 570px;
+      grid-column: span 3;
+      min-height: 500px;
     }
 
     .event-card:hover,
@@ -387,6 +392,27 @@
 
     .war-composite.vietnam-war .war-photo {
       object-position: center 48%;
+    }
+
+    .war-composite.crusades .war-map {
+      object-position: center 54%;
+      transform: scale(1.08);
+    }
+
+    .war-composite.crusades .war-photo {
+      height: 67%;
+      object-position: center 46%;
+      filter: grayscale(.46) sepia(.28) brightness(.76) contrast(1.15);
+    }
+
+    .war-composite.arab-israeli .war-map {
+      object-position: center 54%;
+      transform: scale(1.12);
+    }
+
+    .war-composite.arab-israeli .war-photo {
+      object-position: center 47%;
+      filter: grayscale(.78) sepia(.12) brightness(.79) contrast(1.16);
     }
 
     .war-composite.joseon .war-map {
@@ -578,21 +604,19 @@
     @media (max-width: 960px) {
       .hero {
         grid-template-columns: 1fr;
-        gap: 38px;
+        gap: 12px;
+        min-height: 0;
+        padding: 28px 32px 24px;
       }
 
       .hero-copy {
         max-width: 620px;
       }
 
-      .event-card.is-featured {
-        grid-column: span 12;
-        min-height: 540px;
-      }
-
+      .event-card.is-featured,
       .event-card:not(.is-featured) {
         grid-column: span 6;
-        min-height: 480px;
+        min-height: 500px;
       }
     }
 
@@ -610,11 +634,28 @@
       }
 
       .hero {
-        padding: 65px 0 58px;
+        margin-top: 12px;
+        margin-bottom: 22px;
+        padding: 22px 20px 20px;
       }
 
       h1 {
-        font-size: clamp(3.15rem, 18vw, 5rem);
+        font-size: clamp(1.9rem, 8.4vw, 2.2rem);
+        line-height: 1.03;
+      }
+
+      .eyebrow {
+        margin-bottom: 8px;
+        font-size: .62rem;
+      }
+
+      .hero-copy p {
+        font-size: .82rem;
+        line-height: 1.55;
+      }
+
+      .period-rule {
+        margin-top: 12px;
       }
 
       .section-heading {
@@ -688,6 +729,24 @@
       </div>
 
       <div class="event-grid" aria-label="시작 시점이 오래된 순서로 정렬된 역사 주제">
+        <a class="event-card is-featured is-upcoming" href="#" data-start-year="1095" data-upcoming="true" aria-label="십자군 전쟁 타임라인 준비 중">
+          <div class="card-art war-composite crusades" role="img" aria-label="1099년 예루살렘 공방전 고문서 삽화와 1135년 십자군 국가 지도">
+            <img class="war-map" src="images/crusades-states-1135.svg" alt="">
+            <img class="war-photo" src="images/crusades-jerusalem-1099.png" alt="">
+          </div>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="card-index">1095</span>
+            <span class="status">준비 중</span>
+          </div>
+          <div class="card-body">
+            <span class="event-period">1095 — 1291</span>
+            <h3>십자군 전쟁</h3>
+            <p class="card-description">예루살렘을 둘러싼 원정과 십자군 국가의 성립·쇠퇴.</p>
+            <span class="card-action">준비 중</span>
+          </div>
+        </a>
+
         <a class="event-card is-featured" href="joseon-dynasty.html" data-start-year="1392" aria-label="조선왕조와 근대 한국 상세 타임라인 보기">
           <div class="card-art war-composite joseon" role="img" aria-label="대동여지도 위로 1863년 조선 사람들의 흑백사진이 겹쳐진 이미지">
             <img class="war-map" src="images/daedongyeojido.png" alt="">
@@ -784,6 +843,24 @@
             <h3>제2차 세계대전</h3>
             <p class="card-description">유럽, 지중해·북아프리카, 동부전선, 아시아·태평양에서 동시에 전개된 전쟁의 흐름을 살펴봅니다.</p>
             <span class="card-action">타임라인 보기</span>
+          </div>
+        </a>
+
+        <a class="event-card is-featured is-upcoming" href="#" data-start-year="1948" data-upcoming="true" aria-label="아랍 이스라엘 전쟁 타임라인 준비 중">
+          <div class="card-art war-composite arab-israeli" role="img" aria-label="1967년 라파로 진입하는 이스라엘 전차부대 사진과 1948년 아랍–이스라엘 전쟁 지도">
+            <img class="war-map" src="images/arab-israeli-war-1948.svg" alt="">
+            <img class="war-photo" src="images/arab-israeli-rafa-1967.jpg" alt="">
+          </div>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="card-index">1948</span>
+            <span class="status">준비 중</span>
+          </div>
+          <div class="card-body">
+            <span class="event-period">1948 — 1982</span>
+            <h3>아랍–이스라엘 전쟁</h3>
+            <p class="card-description">시나이·예루살렘·골란고원에서 반복된 전쟁과 영토 변화.</p>
+            <span class="card-action">준비 중</span>
           </div>
         </a>
 
