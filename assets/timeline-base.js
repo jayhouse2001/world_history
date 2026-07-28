@@ -499,6 +499,21 @@
       const durationEvents=events.filter(event=>eventEndDate(event));const durationColors=new Map(durationEvents.map((event,index)=>[event.id,durationColor(index)]));
       board.style.setProperty("--timeline-height",`${timelineHeight}px`);
       rules.replaceChildren();
+      (timelineConfig.eraBands||[]).forEach(era=>{
+        const startY=slotY.get(era.startDate);
+        const endY=slotY.get(era.endDate);
+        if(startY==null||endY==null||endY<=startY)return;
+        const band=document.createElement("div");
+        band.className="era-band";
+        band.style.top=`${startY}px`;
+        band.style.height=`${endY-startY}px`;
+        if(era.color)band.style.setProperty("--era-color",era.color);
+        const label=document.createElement("span");
+        label.className="era-band-label";
+        label.textContent=era.label;
+        band.appendChild(label);
+        rules.appendChild(band);
+      });
       milestones.forEach(date=>{
         const info=formatRule(date);const isFiller=fillerYears.has(date);const rule=document.createElement("div");rule.className=`time-rule${info.yearLine?" is-year":""}${isFiller?" is-filler-year":""}`;rule.dataset.milestone=date;rule.style.top=`${slotY.get(date)}px`;
         const label=document.createElement("span");label.className="time-label";
@@ -520,15 +535,17 @@
         theaterEvents.forEach(event=>{
           const sameDateIndex=dateCounts.get(event.sortDate)||0;dateCounts.set(event.sortDate,sameDateIndex+1);
           const sameDateTotal=dateTotals.get(event.sortDate)||1;
-          const article=document.createElement("article");article.className=`event${event.kind==="reign"?" is-reign-event":""}${event.kind==="world"?" is-world-event":""}${event.related?" is-related-event":""}${event.series?` series-${event.series}`:""}`;article.dataset.eventId=event.id;
+          const article=document.createElement("article");article.className=`event${event.kind==="reign"?" is-reign-event":""}${event.kind==="world"?" is-world-event":""}${event.kind==="background"?" is-background-event":""}${event.related?" is-related-event":""}${event.series?` series-${event.series}`:""}`;article.dataset.eventId=event.id;
           if(horizontalSameDate){article.style.top=`${slotY.get(event.sortDate)-28}px`;if(sameDateTotal>1){article.classList.add("is-side-by-side");article.style.setProperty("--col-count",String(sameDateTotal));article.style.setProperty("--col-index",String(sameDateIndex))}}
           else{article.style.top=`${slotY.get(event.sortDate)-28+sameDateIndex*collisionGap}px`}
           const faction=eventFaction(event);
-          const card=document.createElement("div");card.className=`event-card${event.routes?.length||event.image?"":" no-map"}${event.kind==="reign"?" is-reign":""}${event.series?` is-series series-${event.series}`:""}${faction?` faction-${faction}`:""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
+          const card=document.createElement("div");card.className=`event-card${event.routes?.length||event.image?"":" no-map"}${event.kind==="reign"?" is-reign":""}${event.kind==="background"?" is-background":""}${event.series?` is-series series-${event.series}`:""}${faction?` faction-${faction}`:""}`;card.tabIndex=0;card.setAttribute("role","group");card.setAttribute("aria-label",`${event.date} ${event.title}. 길게 누르거나 우클릭하여 편집`);
           const copy=document.createElement("div");
           if(event.series&&seriesLabels[event.series]){const badge=document.createElement("span");badge.className="series-badge";badge.textContent=event.episode?`${seriesLabels[event.series]} · EP${event.episode}`:seriesLabels[event.series];copy.appendChild(badge)}
+          if(event.kind==="background"){const badge=document.createElement("span");badge.className="context-badge";badge.textContent="시대 배경";copy.appendChild(badge)}
           const time=document.createElement("time");time.className="event-date";time.textContent=event.kind==="reign"&&eventEndDate(event)?`${event.date} · 총 ${reignLength(event.sortDate,eventEndDate(event))}`:event.date;
           const title=document.createElement("h4");title.className="event-title";title.textContent=event.title;const summary=document.createElement("p");summary.className="event-summary";summary.textContent=event.summary;copy.append(time,title,summary);
+          if(event.href){const link=document.createElement("a");link.className="event-page-link";link.href=event.href;link.target="_blank";link.rel="noopener noreferrer";link.textContent="전쟁 카드 보기 ↗";link.setAttribute("aria-label",`${event.title} 상세 타임라인을 새 탭에서 열기`);copy.appendChild(link)}
           if(event.kind==="reign"){const meta=document.createElement("dl");meta.className="reign-meta";for(const [label,value] of [["혈연",event.relation],["계승",event.succession],["섭정",event.regency]]){if(!value)continue;const row=document.createElement("div"),term=document.createElement("dt"),detail=document.createElement("dd");term.textContent=label;detail.textContent=value;row.append(term,detail);meta.appendChild(row)}copy.appendChild(meta)}card.appendChild(copy);
           if(event.image){const button=document.createElement("button");button.className="image-thumb";button.type="button";button.setAttribute("aria-label",`${event.title} 참조 이미지·상세 보기`);const img=document.createElement("img");img.src=event.image;img.alt="";const text=document.createElement("span");text.textContent="자세히 보기";button.append(img,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button)}
           else if(event.routes?.length){const button=document.createElement("button");button.className="map-thumb";button.type="button";button.setAttribute("aria-label",`${theater.name} ${event.date} ${event.title} 지도 확대`);const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("role","img");svg.setAttribute("aria-label",`${event.title} 이동 경로 축소 지도`);svg.setAttribute("preserveAspectRatio","xMidYMid slice");const text=document.createElement("span");text.textContent="지도 확대";button.append(svg,text);button.addEventListener("click",()=>openMap(theater,event));card.appendChild(button);drawMap(svg,theater,event,130,88,false)}
@@ -566,7 +583,7 @@
       card.addEventListener("pointerdown",e=>{if(e.button!==0)return;startX=e.clientX;startY=e.clientY;longPressed=false;card.classList.add("is-pressed");timer=setTimeout(()=>{longPressed=true;openMenu(event.id,e.clientX,e.clientY);card.classList.remove("is-pressed")},620)});
       card.addEventListener("pointermove",e=>{if(Math.hypot(e.clientX-startX,e.clientY-startY)>10)cancel()});
       card.addEventListener("pointerup",cancel);card.addEventListener("pointercancel",cancel);card.addEventListener("pointerleave",cancel);
-      card.addEventListener("click",e=>{if(longPressed){e.preventDefault();e.stopPropagation();longPressed=false;return}if(e.target.closest("button"))return;openMap(theater,event)},true);
+      card.addEventListener("click",e=>{if(longPressed){e.preventDefault();e.stopPropagation();longPressed=false;return}if(e.target.closest("button,a"))return;openMap(theater,event)},true);
       card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openMap(theater,event)}else if(e.key==="ContextMenu"||(e.shiftKey&&e.key==="F10")){e.preventDefault();const box=card.getBoundingClientRect();openMenu(event.id,box.left+24,box.top+24)}});
       card.addEventListener("contextmenu",e=>{e.preventDefault();cancel();openMenu(event.id,e.clientX,e.clientY)});
     }

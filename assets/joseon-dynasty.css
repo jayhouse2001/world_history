@@ -66,7 +66,11 @@
 }
 
 .joseon-page .event.is-world-event {
-  width: min(190px, calc(100% - 12px));
+  width: min(190px, calc(100% - 38px));
+}
+
+.joseon-page .event.is-background-event {
+  width: min(205px, calc(100% - 38px));
 }
 
 .joseon-page .event-card {
@@ -94,6 +98,12 @@
   border-color: var(--accent);
   border-left: 4px solid var(--accent);
   background: color-mix(in srgb, var(--panel) 86%, var(--accent) 14%);
+}
+
+.joseon-page .event-card.is-background {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--line));
+  background: color-mix(in srgb, var(--panel) 90%, #d7c29b 10%);
 }
 
 .joseon-page .reign-meta {
@@ -208,7 +218,7 @@
   .joseon-page .time-rule::after { left: 66px; }
   .joseon-page .event { width: calc(100% - 28px); }
   .joseon-page .event:not(.is-reign-event) { width: min(195px, calc(100% - 28px)); }
-  .joseon-page .event.is-world-event { width: min(188px, calc(100% - 12px)); }
+  .joseon-page .event.is-world-event { width: min(188px, calc(100% - 38px)); }
   .joseon-map-pane { opacity: .3; }
 }
 
