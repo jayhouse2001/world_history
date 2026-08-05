@@ -1,5 +1,10 @@
 # 이미지 출처
 
+- `assets/icons/threads-of-time-master.png` 및 파생 아이콘
+  - 앱 이름 `History Point`를 위한 지도 구체와 시간의 궤적 문장
+  - OpenAI 이미지 생성 도구로 프로젝트 전용 생성, 2026-08-05
+  - 홈 화면 아이콘 원본 및 180px·192px·512px 파생본
+
 - `joseon-scholars-1863.jpg`
   - Koreans oldest pic group.jpg
   - 조선 사람들을 담은 초기 단체사진, 1863년, 작자 미상

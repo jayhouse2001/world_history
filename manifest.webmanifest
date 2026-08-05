@@ -1,0 +1,25 @@
+{
+  "name": "History Point: World Timeline",
+  "short_name": "History Point",
+  "description": "시대와 지역을 가로질러 세계사의 주요 사건을 연결해 보는 역사 타임라인",
+  "lang": "ko-KR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2eee5",
+  "theme_color": "#f2eee5",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
