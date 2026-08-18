@@ -158,12 +158,12 @@
   width: min(92%, 690px);
   max-height: 96%;
   object-fit: contain;
-  opacity: .46;
-  filter: sepia(.22) saturate(.7) contrast(.92);
+  opacity: .42;
+  filter: grayscale(.72) sepia(.18) brightness(1.16) contrast(1.38);
   mix-blend-mode: multiply;
   transform: translate(-50%, -50%);
-  -webkit-mask-image: radial-gradient(ellipse 63% 56% at center, #000 52%, rgba(0,0,0,.78) 68%, transparent 100%);
-  mask-image: radial-gradient(ellipse 63% 56% at center, #000 52%, rgba(0,0,0,.78) 68%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 66% at center, #000 54%, rgba(0,0,0,.72) 76%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 66% at center, #000 54%, rgba(0,0,0,.72) 76%, transparent 100%);
 }
 
 .joseon-map-pane figcaption {
@@ -177,8 +177,8 @@
 
 @media (prefers-color-scheme: dark) {
   .joseon-map-pane img {
-    opacity: .3;
-    filter: sepia(.35) saturate(.55) brightness(.86) contrast(.9);
+    opacity: .34;
+    filter: grayscale(1) invert(1) brightness(.72) contrast(3);
     mix-blend-mode: screen;
   }
 }
@@ -223,6 +223,30 @@
 }
 
 .hero-joseon .hero-photos { background: #1c140c; }
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .joseon-page .timeline-scroll { overflow-x: hidden; }
+  .joseon-page .timeline-board,
+  .joseon-page .sticky-theater-track {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    min-width: 0;
+    padding-left: 54px;
+  }
+  .joseon-page .theater-lane,
+  .joseon-page .sticky-theater-label { grid-column: auto !important; }
+  .joseon-page .event,
+  .joseon-page .event.is-reign-event,
+  .joseon-page .event.is-world-event,
+  .joseon-page .event.is-background-event {
+    right: 0;
+    width: auto;
+  }
+  .joseon-page .event-card.is-reign { padding: 8px; }
+  .joseon-page .reign-meta { font-size: .58rem; }
+  .joseon-page .reign-meta div { grid-template-columns: 25px minmax(0, 1fr); gap: 3px; }
+  .joseon-map-pane { display: none; }
+}
 .hero-joseon .hero-photo-irworobongdo {
   background-image: url(../images/joseon-hero-irworobongdo.jpg);
   background-position: center 46%;

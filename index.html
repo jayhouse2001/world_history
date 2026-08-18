@@ -425,8 +425,13 @@
     .war-composite.joseon .war-map {
       object-fit: contain;
       object-position: center 74%;
-      background: #26332c;
+      background: transparent;
+      opacity: .78;
+      filter: grayscale(1) invert(1) brightness(.86) contrast(1.58);
+      mix-blend-mode: screen;
       transform: scale(1.42);
+      -webkit-mask-image: radial-gradient(ellipse 70% 68% at center, #000 54%, rgba(0,0,0,.82) 74%, transparent 100%);
+      mask-image: radial-gradient(ellipse 70% 68% at center, #000 54%, rgba(0,0,0,.82) 74%, transparent 100%);
     }
 
     .war-composite.joseon .war-photo {
