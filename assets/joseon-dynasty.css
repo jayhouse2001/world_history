@@ -235,6 +235,7 @@
   }
   .joseon-page .theater-lane,
   .joseon-page .sticky-theater-label { grid-column: auto !important; }
+  .joseon-page .theater-lane { min-width: 0; padding-inline: 0; }
   .joseon-page .event,
   .joseon-page .event.is-reign-event,
   .joseon-page .event.is-world-event,
@@ -270,4 +271,28 @@
 }
 .hero-joseon.has-photo-bg::after {
   background: linear-gradient(105deg, rgba(24, 16, 8, .84) 0, rgba(24, 16, 8, .5) 42%, rgba(24, 16, 8, .28) 70%, rgba(24, 16, 8, .52) 100%);
+}
+
+@media (min-width: 761px) and (max-width: 1400px) and (orientation: portrait),
+       (min-width: 901px) and (max-width: 1400px) {
+  .joseon-page .timeline-scroll { overflow-x: hidden; }
+  .joseon-page .timeline-board,
+  .joseon-page .sticky-theater-track {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    min-width: 0;
+    padding-left: 72px;
+  }
+  .joseon-page .theater-lane,
+  .joseon-page .sticky-theater-label { grid-column: auto !important; }
+  .joseon-page .event,
+  .joseon-page .event.is-reign-event,
+  .joseon-page .event.is-world-event,
+  .joseon-page .event.is-background-event {
+    right: 0;
+    width: auto;
+  }
+  .joseon-page .event-card.is-reign { padding: 11px; }
+  .joseon-page .reign-meta { font-size: .68rem; }
+  .joseon-page .reign-meta div { grid-template-columns: 32px minmax(0, 1fr); gap: 4px; }
 }
