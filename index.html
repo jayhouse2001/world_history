@@ -423,6 +423,29 @@
       filter: grayscale(.78) sepia(.12) brightness(.79) contrast(1.16);
     }
 
+    .war-composite.egypt .war-map {
+      object-fit: cover;
+      object-position: 54% 42%;
+      transform: scale(1.16);
+    }
+
+    .war-composite.egypt .war-photo {
+      object-position: center 54%;
+      filter: grayscale(.68) sepia(.2) brightness(.84) contrast(1.12);
+    }
+
+    .war-composite.inca .war-map {
+      object-fit: contain;
+      object-position: center 60%;
+      background: #3d4a44;
+      transform: scale(1.34);
+    }
+
+    .war-composite.inca .war-photo {
+      object-position: center 52%;
+      filter: grayscale(.7) sepia(.14) brightness(.82) contrast(1.14);
+    }
+
     .war-composite.joseon .war-map {
       object-fit: contain;
       object-position: center 74%;
@@ -742,6 +765,24 @@
       </div>
 
       <div class="event-grid" aria-label="시작 시점이 오래된 순서로 정렬된 역사 주제">
+        <a class="event-card is-featured is-upcoming" href="#" data-start-year="-3100" data-upcoming="true" aria-label="이집트 타임라인 준비 중">
+          <div class="card-art war-composite egypt" role="img" aria-label="고대 이집트 지도 위로 기자의 대피라미드 사진이 겹쳐진 이미지">
+            <img class="war-map" src="images/egypt-ancient-map.svg" alt="">
+            <img class="war-photo" src="images/egypt-giza-pyramids.jpg" alt="">
+          </div>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="card-index">BC 3100</span>
+            <span class="status">준비 중</span>
+          </div>
+          <div class="card-body">
+            <span class="event-period">기원전 3100 — 1956</span>
+            <h3>이집트</h3>
+            <p class="card-description">상·하 이집트 통일과 피라미드 시대, 신왕국의 전성기부터 그리스·로마와 이슬람의 지배, 나폴레옹 원정과 영국 보호령을 거쳐 수에즈 위기까지.</p>
+            <span class="card-action">준비 중</span>
+          </div>
+        </a>
+
         <a class="event-card is-featured is-upcoming" href="#" data-start-year="1095" data-upcoming="true" aria-label="십자군 전쟁 타임라인 준비 중">
           <div class="card-art war-composite crusades" role="img" aria-label="1099년 예루살렘 공방전 고문서 삽화와 1135년 십자군 국가 지도">
             <img class="war-map" src="images/crusades-states-1135.svg" alt="">
@@ -756,6 +797,24 @@
             <span class="event-period">1095 — 1291</span>
             <h3>십자군 전쟁</h3>
             <p class="card-description">예루살렘을 둘러싼 원정과 십자군 국가의 성립·쇠퇴.</p>
+            <span class="card-action">준비 중</span>
+          </div>
+        </a>
+
+        <a class="event-card is-featured is-upcoming" href="#" data-start-year="1438" data-upcoming="true" aria-label="잉카 제국과 남아메리카 타임라인 준비 중">
+          <div class="card-art war-composite inca" role="img" aria-label="1438년 이후 잉카 제국의 확장 지도 위로 마추픽추 유적 사진이 겹쳐진 이미지">
+            <img class="war-map" src="images/inca-expansion-map.svg" alt="">
+            <img class="war-photo" src="images/inca-machu-picchu.jpg" alt="">
+          </div>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="card-index">1438</span>
+            <span class="status">준비 중</span>
+          </div>
+          <div class="card-body">
+            <span class="event-period">1438 — 1826</span>
+            <h3>잉카 제국과 남아메리카</h3>
+            <p class="card-description">안데스를 통일한 잉카의 번영에서 시작해, 콜럼버스 이후 스페인·포르투갈의 정복과 은광·엔코미엔다 식민 지배, 그리고 나폴레옹 전쟁이 촉발한 독립전쟁까지 유럽과 맞물린 흐름을 따라갑니다.</p>
             <span class="card-action">준비 중</span>
           </div>
         </a>

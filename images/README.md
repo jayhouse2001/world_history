@@ -157,3 +157,35 @@
   - 내용: 1948년 5월 15일부터 6월 10일까지의 주요 전선과 이동
   - 아랍–이스라엘 전쟁 첫 화면 카드 지도 레이어
   - https://commons.wikimedia.org/wiki/File:1948_Arab_Israeli_War_-_May_15-June_10.svg
+
+- `egypt-giza-pyramids.jpg`
+  - Kheops-Pyramid.jpg
+  - Nina (Nina Aldin Thune), 2005년 3월
+  - CC BY 2.5 — 저작자 표시 의무 있음
+  - 내용: 기자의 대피라미드(쿠푸 왕 피라미드)
+  - 이집트 첫 화면 카드 사진 레이어
+  - https://commons.wikimedia.org/wiki/File:Kheops-Pyramid.jpg
+
+- `egypt-ancient-map.svg`
+  - Ancient Egypt map-en.svg
+  - Jeff Dahl
+  - CC BY-SA 4.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 고대 이집트의 주요 도시와 나일강 유역, 상·하 이집트 구분
+  - 이집트 첫 화면 카드 지도 레이어
+  - https://commons.wikimedia.org/wiki/File:Ancient_Egypt_map-en.svg
+
+- `inca-machu-picchu.jpg`
+  - Machu Picchu, Peru.jpg
+  - Pedro Szekely, 2007년 8월 25일
+  - CC BY-SA 2.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 안데스 산중의 잉카 유적 마추픽추
+  - 잉카 제국과 남아메리카 첫 화면 카드 사진 레이어
+  - https://commons.wikimedia.org/wiki/File:Machu_Picchu,_Peru.jpg
+
+- `inca-expansion-map.svg`
+  - Expansion Imperio Inca-1.svg
+  - Pruxo, Moyogo / 파생 편집: rowanwindwhistler
+  - CC0 1.0
+  - 내용: 파차쿠티 시대(1438-1463) 잉카 제국의 확장 범위
+  - 잉카 제국과 남아메리카 첫 화면 카드 지도 레이어
+  - https://commons.wikimedia.org/wiki/File:Expansion_Imperio_Inca-1.svg
