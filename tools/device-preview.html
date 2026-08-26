@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>기기별 레이아웃 확인</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#161815;color:#e8e3d8;
+  font:14px/1.5 -apple-system,"Malgun Gothic",sans-serif;
+  display:flex;flex-direction:column;min-height:100vh}
+header{padding:14px 20px;background:#1f221e;border-bottom:1px solid #383b35;
+  position:sticky;top:0;z-index:10}
+.title{font-size:15px;font-weight:700;margin-bottom:3px}
+.hint{font-size:11px;color:#8f8a7f;margin-bottom:10px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+.tab{padding:8px 14px;background:#2b2e2a;color:#c9c4b8;border:1px solid #454840;
+  border-radius:6px;font-size:13px;cursor:pointer;white-space:nowrap}
+.tab:hover{background:#343831}
+.tab.on{background:#8c4436;color:#fff;border-color:#a5533f}
+.opts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select{padding:7px 10px;background:#2b2e2a;color:#e8e3d8;border:1px solid #454840;
+  border-radius:5px;font-size:13px;cursor:pointer}
+label.chk{display:flex;align-items:center;gap:5px;font-size:12px;color:#c9c4b8;cursor:pointer}
+.meta{margin-left:auto;display:flex;gap:10px;align-items:center;font-size:12px}
+.px{color:#8f8a7f}
+.verdict{font-weight:700;padding:3px 9px;border-radius:20px;font-size:11px}
+.ok{background:#1f3a24;color:#6ddc8a}
+.bad{background:#46211f;color:#ff8f80}
+.na{background:#333630;color:#9a958a}
+.stage{flex:1;display:flex;justify-content:center;align-items:flex-start;
+  padding:24px 20px 40px;overflow:auto}
+.screen{background:#000;border:3px solid #55584f;border-radius:16px;
+  overflow:hidden;box-shadow:0 16px 44px rgba(0,0,0,.55);flex:0 0 auto;position:relative}
+iframe{display:block;border:0;background:#f2eee5}
+.edge{position:absolute;top:0;bottom:0;width:3px;background:#ff8f80;
+  box-shadow:0 0 10px rgba(255,143,128,.8);pointer-events:none;display:none}
+</style></head><body>
+<header>
+  <div class="title">기기별 레이아웃 확인</div>
+  <div class="hint">탭으로 기기를 바꿉니다. 가로 스크롤이 있으면 화면 안에서 좌우로 드래그(또는 Shift+휠)해 보세요.</div>
+  <div class="tabs" id="tabs"></div>
+  <div class="opts">
+    <select id="page">
+      <option value="world-war-2.html">제2차 세계대전 (전선 4)</option>
+      <option value="world-war-1.html">제1차 세계대전 (전선 4)</option>
+      <option value="vietnam-war.html">베트남전쟁 (전선 4)</option>
+      <option value="joseon-dynasty.html">조선왕조와 근대 (전선 4)</option>
+      <option value="korean-war.html">6·25 전쟁 (단일 레인)</option>
+      <option value="index.html">첫 화면</option>
+    </select>
+    <select id="zoom">
+      <option value="1" selected>100% (실제 크기)</option>
+      <option value="0.85">85%</option>
+      <option value="0.7">70%</option>
+      <option value="0.55">55%</option>
+    </select>
+    <label class="chk"><input type="checkbox" id="bar" checked> 스크롤바 항상 표시</label>
+    <label class="chk"><input type="checkbox" id="mark"> 화면 끝 표시</label>
+    <div class="meta">
+      <span class="px" id="px"></span>
+      <span class="verdict na" id="verdict">측정중</span>
+    </div>
+  </div>
+</header>
+<div class="stage"><div class="screen" id="screen"><div class="edge" id="edge"></div></div></div>
+<script>
+const DEVICES=[
+  {nm:"아이폰 15 세로",w:393,h:852},
+  {nm:"아이폰 15 가로",w:852,h:393},
+  {nm:"아이패드 6세대 세로",w:768,h:1024},
+  {nm:"아이패드 6세대 가로",w:1024,h:768},
+  {nm:"아이패드 Air M3 11 세로",w:820,h:1180},
+  {nm:"아이패드 Air M3 11 가로",w:1180,h:820},
+  {nm:"PC 웹",w:1600,h:900}
+];
+let cur=2;
+const tabs=document.getElementById('tabs'),screen=document.getElementById('screen');
+const vd=document.getElementById('verdict'),pxEl=document.getElementById('px');
+const edge=document.getElementById('edge');
+DEVICES.forEach((d,i)=>{
+  const b=document.createElement('button');
+  b.className='tab'+(i===cur?' on':'');b.textContent=d.nm;
+  b.onclick=()=>{cur=i;[...tabs.children].forEach((c,k)=>c.className='tab'+(k===i?' on':''));render();};
+  tabs.appendChild(b);
+});
+function attachRail(fr,doc,sc){
+  // 실제 기기에서는 가로 스크롤바가 화면 안에 보인다.
+  // 이 컨테이너는 높이가 수만 px 이라 스크롤바가 문서 맨 아래에 붙어 화면 밖으로 나간다.
+  // 뷰포트 하단에 고정된 대체 스크롤바를 그려 실제 기기와 같게 보이도록 한다.
+  const ov=sc.scrollWidth-sc.clientWidth;
+  if(ov<=2)return;
+  const rail=doc.createElement('div');
+  rail.style.cssText='position:fixed;left:0;right:0;bottom:0;height:14px;'+
+    'background:rgba(20,22,19,.22);z-index:99999;pointer-events:auto;cursor:pointer';
+  const thumb=doc.createElement('div');
+  thumb.style.cssText='position:absolute;top:2px;height:10px;border-radius:5px;'+
+    'background:#a5533f;box-shadow:0 0 6px rgba(0,0,0,.35)';
+  rail.appendChild(thumb);
+  doc.body.appendChild(rail);
+  function sync(){
+    const vw=sc.clientWidth, tw=sc.scrollWidth;
+    const w=Math.max(28,(vw/tw)*vw);
+    const maxLeft=vw-w;
+    const p=sc.scrollLeft/(tw-vw);
+    thumb.style.width=w+'px';
+    thumb.style.left=(p*maxLeft)+'px';
+  }
+  sc.addEventListener('scroll',sync);
+  let drag=false,sx=0,sl=0;
+  rail.addEventListener('pointerdown',e=>{
+    drag=true;sx=e.clientX;sl=sc.scrollLeft;rail.setPointerCapture(e.pointerId);
+  });
+  rail.addEventListener('pointermove',e=>{
+    if(!drag)return;
+    const vw=sc.clientWidth,tw=sc.scrollWidth;
+    const w=Math.max(28,(vw/tw)*vw);
+    sc.scrollLeft=sl+(e.clientX-sx)*((tw-vw)/(vw-w));
+  });
+  rail.addEventListener('pointerup',e=>{drag=false;});
+  sync();
+}
+function render(){
+  const d=DEVICES[cur], z=parseFloat(document.getElementById('zoom').value);
+  const page=document.getElementById('page').value;
+  const showBar=document.getElementById('bar').checked;
+  const showMark=document.getElementById('mark').checked;
+  pxEl.textContent=d.w+' x '+d.h+' CSS px';
+  vd.textContent='측정중';vd.className='verdict na';
+  screen.style.width=(d.w*z)+'px';screen.style.height=(d.h*z)+'px';
+  [...screen.querySelectorAll('iframe')].forEach(n=>n.remove());
+  edge.style.display=showMark?'block':'none';
+  edge.style.left=(d.w*z-3)+'px';
+  const fr=document.createElement('iframe');
+  fr.width=d.w;fr.height=d.h;
+  fr.style.cssText='width:'+d.w+'px;height:'+d.h+'px;transform:scale('+z+');transform-origin:0 0';
+  fr.src="../"+page+'?t='+Date.now();
+  fr.onload=()=>setTimeout(()=>{
+    try{
+      const doc=fr.contentDocument;
+      const sc0=doc.getElementById('timeline-scroll');
+      if(showBar&&sc0){
+        const st=doc.createElement('style');
+        st.textContent='#timeline-scroll::-webkit-scrollbar{height:12px;-webkit-appearance:none}'+
+          '#timeline-scroll::-webkit-scrollbar-track{background:rgba(0,0,0,.14)}'+
+          '#timeline-scroll::-webkit-scrollbar-thumb{background:#a5533f;border-radius:6px;border:2px solid transparent;background-clip:padding-box}';
+        doc.head.appendChild(st);
+        attachRail(fr,doc,sc0);
+      }
+      const sc=doc.getElementById('timeline-scroll');
+      if(!sc){vd.textContent='해당없음';vd.className='verdict na';return;}
+      const ov=sc.scrollWidth-sc.clientWidth;
+      if(ov<=2){vd.textContent='가로 스크롤 없음';vd.className='verdict ok';}
+      else{vd.textContent='가로 스크롤 '+ov+'px';vd.className='verdict bad';}
+    }catch(e){vd.textContent='측정불가';vd.className='verdict na';}
+  },1500);
+  screen.appendChild(fr);
+}
+['page','zoom','bar','mark'].forEach(id=>document.getElementById(id).onchange=render);
+render();
+</script></body></html>
