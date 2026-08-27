@@ -191,9 +191,10 @@
   font-size: 15px;
   /* iOS Safari 는 paint-order 를 무시하는 경우가 있어 흰 테두리가 글자를 덮는다.
      stroke 대신 그림자로 배경과 분리한다. */
-  fill: #3b3225;
+  fill: #241d12;
   stroke: none;
   paint-order: normal;
+  font-weight: 700;
   text-shadow:
     0 0 3px #f6f1e4, 0 0 3px #f6f1e4,
     1px 1px 2px #f6f1e4, -1px -1px 2px #f6f1e4;
@@ -270,6 +271,7 @@
 }
 
 .mapzoom-body {
+  position: relative;   /* 확대·축소 버튼의 배치 기준 */
   /* 지도를 끌 때 글자가 선택되지 않게 한다. */
   user-select: none;
   -webkit-user-select: none;
@@ -288,7 +290,12 @@
 
 .mapzoom-body .place-label { font-size: 11px; }
 
-.mapzoom-dialog { position: relative; }
+/* dialog 는 showModal() 시 화면 중앙에 떠야 한다.
+   position:relative 로 덮으면 문서 흐름에 놓여 스크롤 맨 위에 나타난다. */
+.mapzoom-dialog {
+  position: fixed;
+  inset: 0;
+}
 
 .mapzoom-controls {
   position: absolute;
@@ -490,7 +497,7 @@
   }
   .egypt-map-sticky { top: 8px; }
   .egypt-map-caption { margin-top: 4px; font-size: .6rem; }
-  .map-place .place-label { font-size: 19px; stroke-width: 4.5; }
+  .map-place .place-label { font-size: 19px; }
   .rail-period { width: 88px; padding: 4px 6px; border-left-width: 3px; }
   .rail-period strong { font-size: .6rem; letter-spacing: -.01em; }
   .rail-period span { display: none; }
@@ -561,7 +568,7 @@
   /* 다른 기기와 같은 3열 구조. 옆으로 밀면 지도가 나온다. */
   .egypt-map-sticky { top: 8px; }
   .egypt-map-caption { margin-top: 4px; font-size: .56rem; }
-  .map-place .place-label { font-size: 22px; stroke-width: 5; }
+  .map-place .place-label { font-size: 22px; }
   .rail-period span { display: none; }
   .era-hud {
     top: 8px;
@@ -576,7 +583,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .map-place .place-dot { fill: #c9ab78; }
-  .map-place .place-label { fill: #ece5d6; }
+  /* 지도 배경(모래·바다)은 다크모드에서도 밝게 유지되므로
+     지명은 밝은 색으로 바꾸지 않는다. 그대로 진한 색이어야 읽힌다. */
   .egypt-map-frame { background: #2a2c27; }
 }
