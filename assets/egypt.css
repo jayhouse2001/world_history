@@ -495,6 +495,12 @@
     grid-template-columns: 76px minmax(0, 1fr) 210px;
     gap: 8px;
   }
+  /* page-shell 이 좌우 여백을 두어 지도가 화면 끝까지 가지 못한다.
+     지도 열만 오른쪽 여백만큼 밀어 화면 오른쪽에 붙인다. */
+  .egypt-map-pane {
+    justify-self: stretch;
+    margin-right: -24px;
+  }
   /* 화면 높이(393px)에 비해 지도가 짧아 오른쪽 아래가 비어 보인다.
      세로를 채우도록 늘린다. */
   .egypt-map-svg { max-height: calc(100vh - 74px); }
