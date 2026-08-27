@@ -1,0 +1,568 @@
+/* 이집트 페이지: 왼쪽 왕조 축 · 가운데 타임라인 · 오른쪽 지도 */
+
+.egypt-page {
+  --papyrus: #d9c9a3;
+  --sand-deep: #8a6b3f;
+  --nile: #4d7f96;
+}
+
+.hero-egypt .hero-photo-giza { background-image: url("../images/egypt-giza-pyramids.jpg"); }
+.hero-egypt .hero-photo-mask { background-image: url("../images/egypt-tutankhamun-mask.jpg"); }
+.hero-egypt .hero-photo-abusimbel { background-image: url("../images/egypt-abu-simbel.jpg"); }
+
+/* 세 단 배치는 안쪽 래퍼가 담당한다.
+   (좁은 화면에서 chronicle 을 가로 스크롤 컨테이너로 쓰기 위한 구조) */
+.egypt-scroll-inner {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr) 300px;
+  gap: 18px;
+  align-items: start;
+}
+
+/* ── 왼쪽 왕조 축 ─────────────────────────────── */
+
+.egypt-dynasty-rail {
+  position: relative;
+}
+
+.dynasty-rail {
+  position: relative;
+  width: 100%;
+}
+
+.rail-period {
+  position: absolute;
+  left: 0;
+  width: 128px;
+  min-height: 34px;
+  padding: 7px 8px;
+  border-radius: 4px;
+  border-left: 4px solid var(--band-color, var(--sand-deep));
+  background: color-mix(in srgb, var(--band-color, var(--sand-deep)) 15%, transparent);
+  color: var(--ink);
+  overflow: visible;
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+
+.rail-period.is-active {
+  background: color-mix(in srgb, var(--band-color, var(--sand-deep)) 34%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--band-color, var(--sand-deep)) 60%, transparent);
+}
+
+/* 띠가 수천 px 로 길어 글자가 맨 위에만 있으면 스크롤 중간에서는 빈 띠만 보인다.
+   글자를 띠 안에서 화면 상단에 붙여 따라오게 한다. */
+.rail-period-text {
+  position: sticky;
+  top: 96px;
+  display: block;
+}
+
+.rail-period strong {
+  display: block;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: .84rem;
+  line-height: 1.25;
+}
+
+.rail-period span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: .62rem;
+  line-height: 1.3;
+}
+
+.rail-dynasty-text {
+  position: sticky;
+  top: 150px;
+  display: block;
+}
+
+.rail-dynasty {
+  position: absolute;
+  left: 138px;
+  width: 92px;
+  padding-left: 8px;
+  border-left: 1px solid var(--line);
+  color: var(--muted);
+  font-size: .6rem;
+  line-height: 1.25;
+}
+
+.rail-dynasty span {
+  display: block;
+  padding-top: 2px;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+}
+
+/* ── 오른쪽 지도 ─────────────────────────────── */
+
+/* grid item 은 기본적으로 stretch 되지 않아 sticky 가 붙을 높이가 없다.
+   패널을 열 전체 높이로 늘려야 sticky 가 동작한다. */
+.egypt-map-pane {
+  margin: 0;
+  align-self: stretch;
+  height: 100%;
+}
+
+.egypt-map-sticky {
+  position: sticky;
+  top: 84px;
+}
+
+.egypt-map-frame {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--panel);
+}
+
+.egypt-map-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.map-sea { fill: #b8cdd8; }
+
+.map-country {
+  fill: #ded0ae;
+  stroke: #b6a481;
+  stroke-width: .5;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-country.is-egypt {
+  fill: #e6d5ab;
+  stroke: #9d8659;
+  stroke-width: .9;
+}
+
+.map-nile {
+  fill: none;
+  stroke: #5b86a8;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .9;
+}
+
+.map-canal {
+  fill: none;
+  stroke: #6f9ab8;
+  stroke-width: 1.6;
+  stroke-dasharray: 5 3;
+  stroke-linecap: round;
+  opacity: .8;
+}
+
+.map-place .place-mark {
+  fill: #8d6a3a;
+  opacity: .45;
+  transition: fill 200ms ease, opacity 200ms ease;
+}
+
+/* 주요 지점(수도·유적)은 평소에도 보이게 한다. */
+.map-place.is-capital .place-mark,
+.map-place.is-monument .place-mark {
+  opacity: .82;
+  stroke: #f4eee1;
+  stroke-width: 1;
+}
+
+.map-place.is-capital .place-label,
+.map-place.is-monument .place-label {
+  opacity: .78;
+}
+
+.map-place .place-halo {
+  fill: var(--accent);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.map-place .place-label {
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: 15px;
+  paint-order: stroke;
+  stroke: #f4eee1;
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+  fill: #4a3f2c;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+
+.map-place.is-active .place-mark {
+  fill: var(--accent);
+  opacity: 1;
+  stroke: #f4eee1;
+  stroke-width: 1.8;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(1.35);
+}
+
+.map-place.is-active .place-halo {
+  opacity: .22;
+}
+
+.map-place.is-active .place-label {
+  opacity: 1;
+  font-weight: 700;
+}
+
+.egypt-map-caption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: .72rem;
+  text-align: center;
+}
+
+
+/* 이집트는 전선이 하나뿐이라 보드 고정 폭이 필요 없다. 화면 폭에 맞춘다. */
+.egypt-page .timeline-board,
+.egypt-page .sticky-theater-track {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* 화면이 넉넉하면 가로 스크롤이 필요 없다.
+   좁은 화면에서는 카드를 읽을 수 있는 폭으로 두고 가로로 밀어서 본다. */
+@media (min-width: 761px) {
+  .egypt-page .timeline-scroll { overflow-x: hidden; }
+}
+.egypt-page .theater-lane { min-width: 0; }
+
+
+
+.egypt-map-frame { cursor: zoom-in; }
+
+.egypt-map-frame:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.mapzoom-dialog {
+  /* 화면의 65% 정도를 채우도록. 지도가 세로로 길어 높이를 기준으로 잡는다. */
+  width: min(calc(65vh * 420 / 760), calc(100% - 32px));
+  max-height: calc(100% - 40px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  overflow: auto;
+}
+
+.mapzoom-dialog::backdrop {
+  background: rgba(12, 14, 12, .78);
+  backdrop-filter: blur(3px);
+}
+
+.mapzoom-body {
+  /* 지도를 끌 때 글자가 선택되지 않게 한다. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.mapzoom-body .place-label {
+  pointer-events: none;
+}
+
+.mapzoom-body svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 72vh;
+}
+
+.mapzoom-body .place-label { font-size: 11px; }
+
+.mapzoom-dialog { position: relative; }
+
+.mapzoom-controls {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  left: 12px;
+  display: grid;
+  gap: 5px;
+}
+
+.mapzoom-controls button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  box-shadow: 0 4px 14px rgba(45, 39, 29, .12);
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.mapzoom-controls button:hover,
+.mapzoom-controls button:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.mapzoom-hint {
+  margin: 0;
+  padding: 8px 14px 12px;
+  color: var(--muted);
+  font-size: .72rem;
+  text-align: center;
+}
+
+/* ── 사진 확대 ─────────────────────────────── */
+
+.photo-dialog {
+  width: min(880px, calc(100% - 32px));
+  max-height: calc(100% - 40px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.photo-dialog::backdrop {
+  background: rgba(12, 14, 12, .78);
+  backdrop-filter: blur(3px);
+}
+
+.photo-image {
+  display: block;
+  width: 100%;
+  max-height: 74vh;
+  object-fit: contain;
+  background: #161815;
+}
+
+.photo-meta {
+  padding: 14px 18px 18px;
+}
+
+.photo-meta h3 {
+  margin: 0 0 4px;
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: 1.06rem;
+}
+
+.photo-meta p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.6;
+}
+
+.photo-close {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  color: #f4efe4;
+  background: rgba(20, 22, 19, .62);
+  border: 1px solid rgba(240, 235, 225, .3);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.photo-close:hover,
+.photo-close:focus-visible {
+  background: rgba(20, 22, 19, .84);
+  outline: none;
+}
+
+/* ── 왼쪽 위 고정 라벨 ───────────────────────── */
+
+.era-hud {
+  position: fixed;
+  z-index: 40;
+  top: 74px;
+  left: 18px;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 168px;
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  box-shadow: 0 10px 28px rgba(45, 39, 29, .18);
+  backdrop-filter: blur(4px);
+}
+
+/* 타임라인을 보고 있을 때만 나타난다. 기본은 완전히 숨긴다. */
+.era-hud.is-ready {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.era-hud-period {
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: .96rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.era-hud-dynasty {
+  font-size: .68rem;
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
+.era-hud-ruler {
+  margin-top: 3px;
+  font-size: .8rem;
+  color: var(--ink);
+}
+
+.era-hud-ruler:empty { display: none; }
+
+.era-hud-year {
+  color: var(--muted);
+  font-size: .68rem;
+}
+
+/* ── 반응형: DESIGN_GUIDE §26 의 네 구간 ───────── */
+
+/* 태블릿: 지도를 좁히고 왕조 축을 줄인다 */
+@media (min-width: 761px) and (max-width: 1400px) and (orientation: portrait),
+       (min-width: 901px) and (max-width: 1400px) {
+  .egypt-scroll-inner {
+    grid-template-columns: 150px minmax(0, 1fr) 180px;
+    gap: 10px;
+  }
+  .rail-period { width: 86px; padding: 6px 5px; }
+  .rail-period strong { font-size: .62rem; letter-spacing: -.02em; }
+  .rail-period span { font-size: .56rem; }
+  .rail-dynasty { left: 92px; width: 58px; font-size: .54rem; }
+  .egypt-map-sticky { top: 72px; }
+  .era-hud { min-width: 146px; padding: 7px 10px; }
+  .era-hud-period { font-size: .84rem; }
+}
+
+/* 아이폰 가로: 세 단을 모두 유지한다. 가로 공간이 있으므로 지도를 보여준다. */
+@media (max-width: 900px) and (orientation: landscape) {
+  /* 가로 화면은 높이가 낮아 세로 기준으로 잡으면 지도가 너무 좁아진다. */
+  .mapzoom-dialog { width: min(46vw, calc(100% - 24px)); }
+  .mapzoom-body svg { max-height: 84vh; }
+  .egypt-scroll-inner {
+    grid-template-columns: 88px minmax(0, 1fr) 150px;
+    gap: 7px;
+  }
+  .egypt-map-sticky { top: 8px; }
+  .egypt-map-caption { margin-top: 4px; font-size: .6rem; }
+  .map-place .place-label { font-size: 19px; stroke-width: 4.5; }
+  .rail-period { width: 88px; padding: 4px 6px; border-left-width: 3px; }
+  .rail-period strong { font-size: .6rem; letter-spacing: -.01em; }
+  .rail-period span { display: none; }
+  .rail-dynasty { display: none; }
+  .era-hud {
+    top: 8px;
+    left: 8px;
+    min-width: 0;
+    padding: 5px 9px;
+    gap: 0;
+  }
+  .era-hud-period { font-size: .7rem; }
+  .era-hud-dynasty, .era-hud-ruler, .era-hud-year { font-size: .58rem; }
+  .era-hud-ruler { margin-top: 2px; }
+}
+
+/* 아이폰 세로: 가로로 돌린 것처럼 세 단을 유지하고, 전체를 옆으로 밀어서 본다.
+   (좁다고 지도를 지우면 밀어도 볼 수 없다) */
+@media (max-width: 760px) {
+  /* 안쪽 타임라인 대신 세 단 전체가 함께 밀리도록 바깥에서 스크롤한다. */
+  .egypt-chronicle {
+    display: block;          /* grid 를 풀고 스크롤 컨테이너로만 쓴다 */
+    overflow-x: auto;
+    padding-right: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-color: var(--muted) transparent;
+    padding-bottom: 10px;
+  }
+  /* 실제 세 단은 안쪽 래퍼가 담당한다. */
+  .egypt-chronicle > .egypt-scroll-inner {
+    display: grid;
+    grid-template-columns: 66px 330px 168px;
+    gap: 8px;
+    align-items: start;
+    width: max-content;
+  }
+  /* 좁은 화면에서 사진을 카드 옆에 두면 본문 열이 0 이 되어 무너진다.
+     사진을 본문 아래로 내리고 높이를 고정한다. */
+  .egypt-page .event-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    min-height: 0;
+    padding: 10px;
+  }
+  .egypt-page .timeline-scroll { overflow-x: visible; }
+  .egypt-page .timeline-board { min-width: 0; }
+  .egypt-page .image-thumb,
+  .egypt-page .map-thumb {
+    width: 100%;
+    min-height: 0;
+    height: auto;
+  }
+  .egypt-page .image-thumb img {
+    width: 100%;
+    height: 76px;
+    object-fit: cover;
+  }
+  .egypt-page .image-thumb span { font-size: .56rem; }
+  .egypt-page .event-summary { font-size: .68rem; line-height: 1.4; }
+  .egypt-page .event-title { font-size: .84rem; line-height: 1.25; }
+  .egypt-page .reign-meta { font-size: .64rem; }
+  .egypt-page .reign-meta div { grid-template-columns: 34px minmax(0, 1fr); gap: 3px; }
+  /* 393px 폭에 세 단은 들어가지 않는다.
+     시대 띠만 남기고 왕조 세부 레이블은 접는다. */
+  .rail-dynasty { display: none; }
+  .rail-period { width: 66px; padding: 4px 5px; border-left-width: 3px; }
+  .rail-period strong { font-size: .5rem; letter-spacing: -.03em; }
+  /* 다른 기기와 같은 3열 구조. 옆으로 밀면 지도가 나온다. */
+  .egypt-map-sticky { top: 8px; }
+  .egypt-map-caption { margin-top: 4px; font-size: .56rem; }
+  .map-place .place-label { font-size: 22px; stroke-width: 5; }
+  .rail-period span { display: none; }
+  .era-hud {
+    top: 8px;
+    left: 8px;
+    min-width: 0;
+    padding: 6px 10px;
+    gap: 0;
+  }
+  .era-hud-period { font-size: .74rem; }
+  .era-hud-dynasty, .era-hud-ruler, .era-hud-year { font-size: .6rem; }
+  .era-hud-ruler { margin-top: 2px; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .map-place .place-dot { fill: #c9ab78; }
+  .map-place .place-label { fill: #ece5d6; }
+  .egypt-map-frame { background: #2a2c27; }
+}

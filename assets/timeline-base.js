@@ -451,7 +451,7 @@
       const milestones=[...new Set([...years,...eventDates,...yearRules])].sort();
       return {milestones,fillerYears};
     }
-    function formatRule(date){const [year,month,day]=date.split("-").map(Number);return {year:String(year),label:month===1&&day===1?"1월":`${month}월 ${day}일`,yearLine:month===1&&day===1}}
+    function formatRule(date){const [year,month,day]=date.split("-").map(Number);if(typeof timelineConfig.formatRuleYear==="function"){const custom=timelineConfig.formatRuleYear(year,month,day);if(custom)return custom}return {year:String(year),label:month===1&&day===1?"1월":`${month}월 ${day}일`,yearLine:month===1&&day===1}}
     function durationColor(index){const hue=Math.round((index*137.508+18)%360),light=matchMedia("(prefers-color-scheme: dark)").matches?68:39;return `hsl(${hue} 62% ${light}%)`}
     function addDurationLayer(timeline,theaterEvents,slotY,timelineHeight,colorMap){
       const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.classList.add("duration-layer");svg.setAttribute("height",timelineHeight);svg.setAttribute("aria-hidden","true");const defs=document.createElementNS(svg.namespaceURI,"defs");svg.appendChild(defs);
@@ -491,7 +491,7 @@
       const events=allEvents();
       const {milestones,fillerYears}=milestoneDates(events);
       const horizontalSameDate=Boolean(timelineConfig.horizontalSameDate);
-      const slotGap=timelineConfig.slotGap||252,slotTop=76,collisionGap=timelineConfig.collisionGap||150,yearRuleGap=timelineConfig.yearRuleGap||slotGap;
+      const slotGap=(typeof timelineConfig.slotGap==="function"?timelineConfig.slotGap():timelineConfig.slotGap)||252,slotTop=76,collisionGap=(typeof timelineConfig.collisionGap==="function"?timelineConfig.collisionGap():timelineConfig.collisionGap)||150,yearRuleGap=timelineConfig.yearRuleGap||slotGap;
       const slotY=new Map();let cursorY=slotTop;
       milestones.forEach(date=>{slotY.set(date,cursorY);if(fillerYears.has(date)){cursorY+=yearRuleGap;return}const maxSameDate=horizontalSameDate?1:Math.max(1,...theaterDefs.map(theater=>events.filter(event=>event.theater===theater.id&&event.sortDate===date).length));cursorY+=slotGap+(maxSameDate-1)*collisionGap});
       const timelineHeight=cursorY+slotTop+170;

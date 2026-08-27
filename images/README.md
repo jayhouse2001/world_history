@@ -189,3 +189,122 @@
   - 내용: 파차쿠티 시대(1438-1463) 잉카 제국의 확장 범위
   - 잉카 제국과 남아메리카 첫 화면 카드 지도 레이어
   - https://commons.wikimedia.org/wiki/File:Expansion_Imperio_Inca-1.svg
+
+- `egypt-sphinx.jpg`
+  - Great Sphinx of Giza - 20080716a.jpg
+  - Barcex, 2008년 7월 16일
+  - CC BY-SA 3.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 기자의 대스핑크스
+  - 카프레 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Great_Sphinx_of_Giza_-_20080716a.jpg
+
+- `egypt-tutankhamun-mask.jpg`
+  - CairoEgMuseumTaaMaskMostlyPhotographed.jpg
+  - Roland Unger
+  - Public domain
+  - 내용: 투탕카멘의 황금 마스크 (카이로 이집트 박물관)
+  - 투탕카멘·투탕카멘 무덤 발굴 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:CairoEgMuseumTaaMaskMostlyPhotographed.jpg
+
+- `egypt-step-pyramid.jpg`
+  - Saqqara pyramid ver 2.jpg
+  - Charles J. Sharp, 2007년 2월 16일
+  - CC BY-SA 3.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 사카라의 조세르 계단 피라미드
+  - 조세르·계단 피라미드 완성 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Saqqara_pyramid_ver_2.jpg
+
+- `egypt-abu-simbel.jpg`
+  - Abu Simbel Temple May 30 2007.jpg
+  - Than217 (English Wikipedia), 2007년
+  - Public domain
+  - 내용: 아부심벨 대신전의 람세스 2세 거상
+  - 람세스 2세·카데시 전투 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Abu_Simbel_Temple_May_30_2007.jpg
+
+- `egypt-rosetta-stone.jpg`
+  - Rosetta Stone.JPG
+  - Hans Hillewaert, 2007년 11월 21일
+  - CC BY-SA 4.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 대영박물관에 있는 로제타석
+  - 로제타석 발견 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Rosetta_Stone.JPG
+
+- `egypt-narmer-palette.jpg`
+  - Narmer Palette.jpg
+  - 작자 미상, 기원전 31세기경 유물
+  - Public domain
+  - 내용: 나르메르 팔레트 - 상하 이집트 통일을 새긴 기념 석판
+  - 나르메르 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Narmer_Palette.jpg
+
+- `egypt-nefertiti-bust.jpg`
+  - Nofretete Neues Museum.jpg
+  - Philip Pikart, 2009년 11월 8일
+  - CC BY-SA 3.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 네페르티티 흉상 (베를린 신박물관)
+  - 아켄아텐·아마르나 천도 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Nofretete_Neues_Museum.jpg
+
+- `egypt-hatshepsut-temple.jpg`
+  - Thebes, Luxor, Egypt, Temple of Hatshepsut, Deir el-Bahari.jpg
+  - Vyacheslav Argenberg, 2007년 5월 21일
+  - CC BY 4.0 — 저작자 표시 의무 있음
+  - 내용: 데이르 엘 바하리의 하트셉수트 장제전
+  - 하트셉수트 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Thebes,_Luxor,_Egypt,_Temple_of_Hatshepsut,_Deir_el-Bahari.jpg
+
+- `egypt-map.svg` (삭제됨)
+  - 직접 그린 개략 지도였으나 실제 지리와 맞지 않아 제거했다.
+  - 현재 이집트 페이지 지도는 코드에서 아래 데이터로 그린다.
+    - 국가 경계: Natural Earth 1:110m (`assets/world-atlas.js`)
+    - 나일강·삼각주 지류·수에즈 운하: Natural Earth 1:50m 하천 (`data/world-rivers-50m.js`)
+    - 지점은 실제 위경도(WGS84)로 표시하며 D3 메르카토르 투영을 쓴다.
+  - 손으로 찍은 좌표로 강을 그리면 실제 물길과 어긋나므로 쓰지 않는다.
+- `egypt-bent-pyramid.jpg`
+  - Bent Pyramid of Snofru.jpg
+  - Darer101, 2023년 3월 13일
+  - CC BY-SA 4.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 다슈르의 굴절 피라미드
+  - 굴절 피라미드 건설 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Bent_Pyramid_of_Snofru.jpg
+
+- `egypt-red-pyramid.jpg`
+  - Red Pyramid at Dahshur.jpg
+  - Darer101, 2023년 3월 13일
+  - CC BY 4.0 — 저작자 표시 의무 있음
+  - 내용: 다슈르의 붉은 피라미드
+  - 붉은 피라미드 완성 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Red_Pyramid_at_Dahshur.jpg
+
+- `egypt-valley-kings.jpg`
+  - Valley of the Kings panorama.jpg
+  - Nikola Smolenski
+  - CC BY-SA 3.0 RS — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 테베 서쪽 왕가의 계곡 전경
+  - 왕가의 계곡 조성 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Valley_of_the_Kings_panorama.jpg
+
+- `egypt-karnak.jpg`
+  - Templo de Karnak, Luxor, Egipto, 2022-04-03, DD 146.jpg
+  - Diego Delso, 2022년 4월 3일
+  - CC BY-SA 4.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 카르나크 신전의 다주실 기둥
+  - 카르나크 대신전 확장 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Templo_de_Karnak,_Luxor,_Egipto,_2022-04-03,_DD_146.jpg
+
+- `egypt-nefertari-temple.jpg`
+  - Templo de Nefertari, Abu Simbel, Egipto, 2022-04-02, DD 153.jpg
+  - Diego Delso, 2022년 4월 2일
+  - CC BY-SA 4.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 아부심벨 소신전(네페르타리 신전) 정면
+  - 아부심벨 신전 건설 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Templo_de_Nefertari,_Abu_Simbel,_Egipto,_2022-04-02,_DD_153.jpg
+
+- `egypt-pharos.jpg`
+  - Pharos of Alexandria, reconstruction 2021.jpg
+  - Віщун, 2021년 11월 21일
+  - CC BY-SA 4.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 알렉산드리아 등대 복원 상상도. 실물 사진이 아니다
+  - 알렉산드리아 등대 완공 카드 참고 이미지
+  - https://commons.wikimedia.org/wiki/File:Pharos_of_Alexandria,_reconstruction_2021.jpg
