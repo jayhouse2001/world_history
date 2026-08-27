@@ -513,8 +513,23 @@
 
     let dragging = false;
     let last = null;
+    // 터치 핀치 줌을 위해 포인터를 모두 추적한다.
+    const points = new Map();
+    let pinchDist = 0;
+    const dist = () => {
+      const [p1, p2] = [...points.values()];
+      return Math.hypot(p1.x - p2.x, p1.y - p2.y);
+    };
+
     svg.addEventListener("pointerdown", (ev) => {
       ev.preventDefault();
+      points.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      if (points.size === 2) {
+        // 두 손가락이 닿으면 끌기를 멈추고 핀치 줌으로 전환한다.
+        dragging = false;
+        pinchDist = dist();
+        return;
+      }
       dragging = true;
       last = toLocal(ev);
       svg.style.cursor = "grabbing";
@@ -524,6 +539,20 @@
     svg.addEventListener("selectstart", (ev) => ev.preventDefault());
     svg.addEventListener("dragstart", (ev) => ev.preventDefault());
     svg.addEventListener("pointermove", (ev) => {
+      if (points.has(ev.pointerId)) points.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      if (points.size === 2) {
+        ev.preventDefault();
+        const now = dist();
+        if (pinchDist > 0 && now > 0) {
+          const r = svg.getBoundingClientRect();
+          const [p1, p2] = [...points.values()];
+          const midX = view.x + (((p1.x + p2.x) / 2 - r.left) / r.width) * view.w;
+          const midY = view.y + (((p1.y + p2.y) / 2 - r.top) / r.height) * view.h;
+          zoomAt(pinchDist / now, midX, midY);
+        }
+        pinchDist = now;
+        return;
+      }
       if (!dragging || !last) return;
       const now = toLocal(ev);
       view.x -= now.x - last.x;
@@ -532,6 +561,8 @@
       apply();
     });
     const stop = (ev) => {
+      if (ev && ev.pointerId !== undefined) points.delete(ev.pointerId);
+      if (points.size < 2) pinchDist = 0;
       dragging = false;
       last = null;
       svg.style.cursor = "grab";
@@ -581,6 +612,17 @@
         if (typeof dialog.showModal === "function") dialog.showModal();
       };
       frame.addEventListener("click", open);
+      // iOS 에서 가로 스크롤 컨테이너 안의 click 이 씹히는 경우가 있어
+      // 짧게 탭한 경우를 직접 처리한다(스크롤·드래그와 구분).
+      let tapX = 0, tapY = 0, tapT = 0;
+      frame.addEventListener("pointerdown", (ev) => {
+        tapX = ev.clientX; tapY = ev.clientY; tapT = ev.timeStamp;
+      }, { passive: true });
+      frame.addEventListener("pointerup", (ev) => {
+        if (ev.pointerType === "mouse") return;   // 마우스는 click 이 처리
+        const moved = Math.hypot(ev.clientX - tapX, ev.clientY - tapY);
+        if (moved < 12 && ev.timeStamp - tapT < 600) open();
+      });
       frame.addEventListener("keydown", (ev) => {
         if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(); }
       });

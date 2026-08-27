@@ -189,11 +189,14 @@
 .map-place .place-label {
   font-family: Georgia, "Noto Serif KR", serif;
   font-size: 15px;
-  paint-order: stroke;
-  stroke: #f4eee1;
-  stroke-width: 3.5;
-  stroke-linejoin: round;
-  fill: #4a3f2c;
+  /* iOS Safari 는 paint-order 를 무시하는 경우가 있어 흰 테두리가 글자를 덮는다.
+     stroke 대신 그림자로 배경과 분리한다. */
+  fill: #3b3225;
+  stroke: none;
+  paint-order: normal;
+  text-shadow:
+    0 0 3px #f6f1e4, 0 0 3px #f6f1e4,
+    1px 1px 2px #f6f1e4, -1px -1px 2px #f6f1e4;
   opacity: 0;
   transition: opacity 200ms ease;
   pointer-events: none;
@@ -253,6 +256,7 @@
   /* 화면의 65% 정도를 채우도록. 지도가 세로로 길어 높이를 기준으로 잡는다. */
   width: min(calc(65vh * 420 / 760), calc(100% - 32px));
   max-height: calc(100% - 40px);
+  margin: auto;
   padding: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -468,8 +472,18 @@
 /* 아이폰 가로: 세 단을 모두 유지한다. 가로 공간이 있으므로 지도를 보여준다. */
 @media (max-width: 900px) and (orientation: landscape) {
   /* 가로 화면은 높이가 낮아 세로 기준으로 잡으면 지도가 너무 좁아진다. */
-  .mapzoom-dialog { width: min(46vw, calc(100% - 24px)); }
-  .mapzoom-body svg { max-height: 84vh; }
+  /* 화면 높이가 낮아 세로 기준으로 잡으면 대화상자가 화면 밖으로 나간다.
+     높이를 화면 안에 가두고 내용이 넘치면 스크롤한다. */
+  .mapzoom-dialog {
+    width: min(52vw, calc(100% - 24px));
+    max-height: calc(100% - 16px);
+    margin: auto;
+  }
+  .mapzoom-body { max-height: calc(100vh - 96px); overflow: auto; }
+  .mapzoom-body svg { max-height: none; }
+  .mapzoom-hint { padding: 5px 10px 7px; font-size: .6rem; }
+  .mapzoom-controls { top: 8px; left: 8px; gap: 4px; }
+  .mapzoom-controls button { width: 30px; height: 30px; font-size: .9rem; }
   .egypt-scroll-inner {
     grid-template-columns: 88px minmax(0, 1fr) 150px;
     gap: 7px;
