@@ -464,7 +464,7 @@
 @media (min-width: 761px) and (max-width: 1400px) and (orientation: portrait),
        (min-width: 901px) and (max-width: 1400px) {
   .egypt-scroll-inner {
-    grid-template-columns: 150px minmax(0, 1fr) 180px;
+    grid-template-columns: 150px minmax(0, 1fr) clamp(180px, 20vw, 260px);
     gap: 10px;
   }
   .rail-period { width: 86px; padding: 6px 5px; }
@@ -492,9 +492,13 @@
   .mapzoom-controls { top: 8px; left: 8px; gap: 4px; }
   .mapzoom-controls button { width: 30px; height: 30px; font-size: .9rem; }
   .egypt-scroll-inner {
-    grid-template-columns: 88px minmax(0, 1fr) 150px;
-    gap: 7px;
+    grid-template-columns: 76px minmax(0, 1fr) 210px;
+    gap: 8px;
   }
+  /* 화면 높이(393px)에 비해 지도가 짧아 오른쪽 아래가 비어 보인다.
+     세로를 채우도록 늘린다. */
+  .egypt-map-svg { max-height: calc(100vh - 74px); }
+  .egypt-map-frame { display: flex; }
   .egypt-map-sticky { top: 8px; }
   .egypt-map-caption { margin-top: 4px; font-size: .6rem; }
   .map-place .place-label { font-size: 19px; }
@@ -502,16 +506,22 @@
   .rail-period strong { font-size: .6rem; letter-spacing: -.01em; }
   .rail-period span { display: none; }
   .rail-dynasty { display: none; }
+  /* 왼쪽은 왕조 축, 오른쪽 위는 지도라 둘 다 가린다.
+     타임라인 위쪽 가운데 빈 자리에 가로로 눕혀 둔다. */
   .era-hud {
-    top: 8px;
-    left: 8px;
+    top: 4px;
+    left: 116px;
+    right: auto;
     min-width: 0;
-    padding: 5px 9px;
-    gap: 0;
+    padding: 3px 9px;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+    border-left-width: 3px;
   }
-  .era-hud-period { font-size: .7rem; }
-  .era-hud-dynasty, .era-hud-ruler, .era-hud-year { font-size: .58rem; }
-  .era-hud-ruler { margin-top: 2px; }
+  .era-hud-period { font-size: .64rem; }
+  .era-hud-dynasty, .era-hud-ruler, .era-hud-year { font-size: .56rem; }
+  .era-hud-ruler { margin-top: 0; }
 }
 
 /* 아이폰 세로: 가로로 돌린 것처럼 세 단을 유지하고, 전체를 옆으로 밀어서 본다.
