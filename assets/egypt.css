@@ -499,7 +499,10 @@
      지도 열만 오른쪽 여백만큼 밀어 화면 오른쪽에 붙인다. */
   .egypt-map-pane {
     justify-self: stretch;
-    margin-right: -24px;
+    /* page-shell 좌우 여백(24px)에 더해, 아이폰 가로에서 Safari 가 노치 쪽에
+       넣는 안전영역만큼도 빼야 화면 오른쪽 끝에 닿는다. */
+    margin-right: calc(-24px - env(safe-area-inset-right, 0px));
+    padding-right: 0;
   }
   /* 화면 높이(393px)에 비해 지도가 짧아 오른쪽 아래가 비어 보인다.
      세로를 채우도록 늘린다. */
@@ -537,7 +540,7 @@
   .egypt-chronicle {
     display: block;          /* grid 를 풀고 스크롤 컨테이너로만 쓴다 */
     overflow-x: auto;
-    padding-right: 4px;
+    padding-right: 0;
     -webkit-overflow-scrolling: touch;
     scrollbar-color: var(--muted) transparent;
     padding-bottom: 10px;

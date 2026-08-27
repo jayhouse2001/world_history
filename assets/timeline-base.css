@@ -118,4 +118,8 @@
     .page-version{position:absolute;z-index:5;top:10px;right:0;padding:2px 8px;border:1px solid var(--line);border-radius:20px;background:color-mix(in srgb,var(--panel) 82%,transparent);color:var(--muted);font-size:.62rem;font-weight:700;letter-spacing:.04em;font-variant-numeric:tabular-nums;pointer-events:none}
     .series-banner .page-version{top:10px;right:10px;background:rgba(20,22,19,.62);border-color:rgba(240,235,225,.28);color:#efe9dc}
     @media(max-width:760px){.page-version{top:6px;padding:1px 6px;font-size:.56rem}}
+
+    /* viewport-fit=cover 를 쓰면 노치 아래로 내용이 들어간다.
+       페이지 껍데기에 안전영역만큼 여백을 줘 글자가 가리지 않게 한다. */
+    body{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
     @media(prefers-color-scheme:dark){:root{--ink:#eee9df;--muted:#b7b0a4;--paper:#1e201d;--panel:#272925;--land:#41453e;--water:#172b35;--accent:#c96757;--accent-dark:#e08b7d;--line:rgba(236,231,220,.18);--route:#e17664;--shadow:0 20px 54px rgba(0,0,0,.3)}}
