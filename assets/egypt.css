@@ -336,6 +336,14 @@
   text-align: center;
 }
 
+/* 사진 없는 사건 카드를 누르면 지도에서 그 위치를 짚어 준다.
+   어느 카드를 눌렀는지 보이도록 표시한다. */
+.egypt-page .event .event-card { cursor: pointer; }
+
+.egypt-page .event.is-place-pinned .event-card {
+  box-shadow: 0 0 0 2px var(--accent), 0 10px 26px rgba(45, 39, 29, .18);
+}
+
 /* ── 사진 확대 ─────────────────────────────── */
 
 .photo-dialog {

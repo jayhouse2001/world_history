@@ -258,7 +258,9 @@
 
   let activePlace = null;
 
-  function setActivePlace(placeId) {
+  function setActivePlace(placeId, fromClick) {
+    // 카드를 눌러 고정해 둔 위치가 있으면 스크롤로는 바꾸지 않는다.
+    if (!fromClick && pinnedPlace) return;
     if (placeId === activePlace) return;
     activePlace = placeId;
     if (!overlay) return;
@@ -637,12 +639,44 @@
     }
   }
 
+  // 사진도 지도 경로도 없는 사건 카드는 기본 엔진에서 누르면
+  // 카드와 똑같은 내용을 대화상자로 다시 띄운다. 의미가 없으므로,
+  // 대신 오른쪽 지도에서 그 사건이 일어난 곳을 짚어 준다.
+  let pinnedPlace = null;
+
+  function wireCardFocus() {
+    for (const card of board.querySelectorAll(".event")) {
+      if (card.dataset.focusWired) continue;
+      card.dataset.focusWired = "1";
+      const event = config.events.find((e) => e.id === card.dataset.eventId);
+      if (!event) continue;
+      // 지도 경로가 있는 사건만 원래 동작(경로 보기)을 남긴다.
+      // 사진은 카드 안 사진 버튼으로 따로 보므로, 본문을 누르면 위치를 짚어 준다.
+      if (event.routes && event.routes.length) continue;
+      if (!event.place) continue;
+
+      card.addEventListener("click", (ev) => {
+        if (ev.target.closest("button, a")) return;
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+        // 같은 카드를 다시 누르면 고정을 푼다.
+        pinnedPlace = pinnedPlace === event.id ? null : event.id;
+        for (const other of board.querySelectorAll(".event.is-place-pinned")) {
+          if (other !== card) other.classList.remove("is-place-pinned");
+        }
+        card.classList.toggle("is-place-pinned", pinnedPlace === event.id);
+        setActivePlace(event.place, true);
+      }, true);
+    }
+  }
+
   function init() {
     renderMap();
     renderRail();
     wirePhotoLightbox();
     observeCards();
     wireMapZoom();
+    wireCardFocus();
     updateHud();
     updateHudVisibility();
   }

@@ -308,3 +308,11 @@
   - 내용: 알렉산드리아 등대 복원 상상도. 실물 사진이 아니다
   - 알렉산드리아 등대 완공 카드 참고 이미지
   - https://commons.wikimedia.org/wiki/File:Pharos_of_Alexandria,_reconstruction_2021.jpg
+
+- `egypt-menkaure-pyramid.jpg`
+  - Menkaure's pyramid.jpg
+  - kallerna, 2010년
+  - CC BY-SA 3.0 — 표시 및 동일조건변경허락 의무 있음
+  - 내용: 기자의 멘카우레 피라미드
+  - 멘카우레 카드 유물 사진
+  - https://commons.wikimedia.org/wiki/File:Menkaure%27s_pyramid.jpg
