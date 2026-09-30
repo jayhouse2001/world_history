@@ -843,7 +843,7 @@ detailedMapPresets["west-carentan"] = {countries:"normandy", sides:"bob", types:
 - 편집 폼에서 `detail`·`image`를 넣고 지운다. 이미지는 4MB 이하 권장, data URL로 localStorage 저장.
 - 헤딩 옆 **시리즈 필터 칩** — 기본 전부 보이기, 끄면 그 시리즈 `.event` 숨김(`board`에 `hide-series-<key>` 클래스). 상태는 `userState.hiddenSeries`로 localStorage 저장.
 - **스티키 헤더에 현재 스크롤 연도** 표시(`#sticky-year`).
-- **확대·축소** — 상단 `세계사 타임라인` 옆 `− / 100% / ＋ / 전체` 버튼(`.timeline-zoom`, `timeline-base.js` 가 자동 삽입). `.timeline-section` 전체에 CSS `zoom` 을 걸어 통째로 줄인다. `전체`는 타임라인 전체가 한 화면에 들어오게 맞춘다.
+- **확대·축소** — 상단 헤더 맨 오른쪽의 작은 `− / 100% / ＋ / reset` 버튼(`.timeline-zoom`, `timeline-base.js` 가 자동 삽입). `← 사건 목록`은 헤더 맨 왼쪽. 헤더를 뺀 `main`(배너+타임라인)에 CSS `zoom` 을 걸고, `main` 의 폭을 줌 전 폭으로 고정해 카드 배치를 다시 계산하지 않고 그림처럼 통째로 줄인다(가운데 정렬). `−/＋`는 화면 가운데 보던 지점을 유지하고, 타임라인이 화면 가운데보다 아래에 있으면 스크롤하지 않는다. `reset`은 100%로 되돌린다.
   - `zoom` 상태에서는 `getBoundingClientRect` 값이 축소된 값이므로, 화면 좌표를 타임라인 좌표(`offsetTop`·`slotY`)와 비교할 때는 `zoomRatio()`(보드 실제 높이 / `offsetHeight`)로 나눈다. `timeline-base.js`·`egypt.js` 가 이 방식이다.
 
 ### 25.9 지도 표현(요약, 상세는 §11~24)

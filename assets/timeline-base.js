@@ -51,28 +51,29 @@
       });
     }
     enableScrollToTop(stickyYearControl,"현재 연도");
-    const timelineSection=board.closest(".timeline-section");
+    const zoomTarget=board.closest("main");
     const zoomLevels=[1,.8,.65,.5,.4,.3,.22,.16,.12,.08,.05];
     let zoomLevel=1;
     function zoomRatio(){return board.offsetHeight?board.getBoundingClientRect().height/board.offsetHeight:1}
-    function setZoom(level,anchorTop){
-      if(!timelineSection)return;
-      const oldRatio=zoomRatio(),localY=anchorTop?0:Math.max(0,-board.getBoundingClientRect().top/oldRatio);
+    function setZoom(level){
+      if(!zoomTarget)return;
+      const anchorY=innerHeight/2,localY=(anchorY-board.getBoundingClientRect().top)/zoomRatio();
       zoomLevel=Math.min(1,Math.max(.01,level));
-      timelineSection.style.zoom=zoomLevel===1?"":String(zoomLevel);
-      window.scrollBy(0,board.getBoundingClientRect().top+localY*zoomRatio());
+      if(zoomLevel===1){zoomTarget.style.zoom=zoomTarget.style.width=zoomTarget.style.marginLeft=""}
+      else{const width=zoomTarget.style.width?parseFloat(zoomTarget.style.width):zoomTarget.getBoundingClientRect().width;zoomTarget.style.width=`${width}px`;zoomTarget.style.marginLeft=`${width*(1-zoomLevel)/2/zoomLevel}px`;zoomTarget.style.zoom=String(zoomLevel)}
+      if(localY>0)window.scrollBy(0,board.getBoundingClientRect().top+localY*zoomRatio()-anchorY);
       zoomLabel.textContent=`${Math.round(zoomLevel*100)}%`;
-      zoomIn.disabled=zoomLevel>=1;zoomOut.disabled=zoomLevel<=zoomLevels.at(-1);
+      zoomIn.disabled=zoomReset.disabled=zoomLevel>=1;zoomOut.disabled=zoomLevel<=zoomLevels.at(-1);
       updateStickyYear();
     }
     const zoomBar=document.createElement("div");zoomBar.className="timeline-zoom";zoomBar.setAttribute("role","group");zoomBar.setAttribute("aria-label","타임라인 확대 축소");
-    const zoomOut=document.createElement("button"),zoomLabel=document.createElement("span"),zoomIn=document.createElement("button"),zoomFit=document.createElement("button");
-    for(const [button,text,label] of [[zoomOut,"−","타임라인 축소"],[zoomIn,"＋","타임라인 확대"],[zoomFit,"전체","타임라인 전체 보기"]]){button.type="button";button.textContent=text;button.setAttribute("aria-label",label);button.title=label}
-    zoomLabel.className="timeline-zoom-level";zoomLabel.textContent="100%";zoomIn.disabled=true;
+    const zoomOut=document.createElement("button"),zoomLabel=document.createElement("span"),zoomIn=document.createElement("button"),zoomReset=document.createElement("button");
+    for(const [button,text,label] of [[zoomOut,"−","타임라인 축소"],[zoomIn,"＋","타임라인 확대"],[zoomReset,"reset","확대 축소 초기화"]]){button.type="button";button.textContent=text;button.setAttribute("aria-label",label);button.title=label}
+    zoomLabel.className="timeline-zoom-level";zoomLabel.textContent="100%";zoomIn.disabled=zoomReset.disabled=true;
     zoomOut.addEventListener("click",()=>setZoom(zoomLevels.find(level=>level<zoomLevel-.001)??zoomLevels.at(-1)));
     zoomIn.addEventListener("click",()=>setZoom([...zoomLevels].reverse().find(level=>level>zoomLevel+.001)??1));
-    zoomFit.addEventListener("click",()=>setZoom(Math.min(1,(innerHeight-24)/Math.max(1,board.offsetHeight)),true));
-    zoomBar.append(zoomOut,zoomLabel,zoomIn,zoomFit);
+    zoomReset.addEventListener("click",()=>setZoom(1));
+    zoomBar.append(zoomOut,zoomLabel,zoomIn,zoomReset);
     document.querySelector(".site-header .brand")?.after(zoomBar);
     const dialog = document.getElementById("map-dialog");
     const dialogSvg = d3.select("#dialog-map");
