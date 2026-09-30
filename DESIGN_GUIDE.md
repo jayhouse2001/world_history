@@ -757,7 +757,8 @@ drawLabelTextOnTop();
 
 - `from` 이 현재 연도 표시 기준 날짜 이하인 마지막 항목을 보여준다.
 - 바뀌는 날짜가 정확히 반영되려면 그 날짜에 사건(또는 `yearMarkers`)이 있어야 한다. 베트남전쟁은 취임·승계일에 카드를 둔다.
-- 스타일: `timeline-base.css` 의 `.sticky-theater-status`.
+- 항목에 `to`(끝 날짜)와 `end`(끝난 사유, 예: `암살`·`사임`)를 넣으면 그 열에 임기 구간 띠를 깔고 경계마다 `▲ 임기 끝` / `▼ 취임` 표시를 붙인다. 경계선은 카드 위쪽 50px 에 둔다.
+- 스타일: `timeline-base.css` 의 `.sticky-theater-status`, `.term-band`, `.term-start`, `.term-end`.
 
 ### 25.3 route 형식과 side/type
 

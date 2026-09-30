@@ -463,6 +463,20 @@
       });timeline.appendChild(svg);
     }
 
+    function addTermLayer(timeline,status,milestones,slotY,timelineHeight){
+      const layer=document.createElement("div");layer.className="term-layer";layer.setAttribute("aria-hidden","true");
+      const first=milestones[0],last=milestones.at(-1),lift=50;
+      const yOf=date=>{if(date<first)return 0;if(date>last)return timelineHeight;const at=milestones.find(item=>item>=date);return Math.max(0,slotY.get(at)-lift)};
+      const dateText=date=>{const [year,month,day]=date.split("-").map(Number);return `${year}년 ${month}월 ${day}일`};
+      status.forEach((item,index)=>{
+        const end=item.to||status[index+1]?.from;const top=yOf(item.from),bottom=end?yOf(end):timelineHeight;if(bottom<=top)return;
+        const band=document.createElement("div");band.className=`term-band${index%2?" is-alt":""}`;band.style.top=`${top}px`;band.style.height=`${bottom-top}px`;
+        const start=document.createElement("span");start.className="term-start";start.textContent=`▼ ${item.label} 취임 · ${dateText(item.from)}`;band.appendChild(start);
+        if(end){const finish=document.createElement("span");finish.className="term-end";finish.textContent=`▲ ${item.label} 임기 끝 · ${dateText(end)}${item.end?` (${item.end})`:""}`;band.appendChild(finish)}
+        layer.appendChild(band);
+      });
+      timeline.prepend(layer);
+    }
     function eventFaction(event){
       if(event.faction)return event.faction;
       const axisSides=new Set(["axis","uboat","tiger"]),alliedSides=new Set(["allied","bob","mota"]);
@@ -531,6 +545,7 @@
         const heading=document.createElement("h3");heading.id=`${theater.id}-title`;heading.className="sr-only";heading.textContent=theater.name;
         const timeline=document.createElement("div");timeline.className="timeline";timeline.setAttribute("aria-label",`${theater.name} 사건 추가 영역. 길게 누르거나 우클릭하세요.`);lane.append(heading,timeline);
         if(timelineConfig.durationLayer!==false)addDurationLayer(timeline,theaterEvents,slotY,timelineHeight,durationColors);
+        if(theater.status?.length)addTermLayer(timeline,theater.status,milestones,slotY,timelineHeight);
         const dateCounts=new Map();
         const dateTotals=new Map();theaterEvents.forEach(event=>dateTotals.set(event.sortDate,(dateTotals.get(event.sortDate)||0)+1));
         theaterEvents.forEach(event=>{
