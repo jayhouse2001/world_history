@@ -279,6 +279,10 @@
   // 카드가 화면 밖으로 나가도 항상 하나가 선택되게 한다.
   let cardIndex = null;
 
+  function zoomRatio() {
+    return board.offsetHeight ? board.getBoundingClientRect().height / board.offsetHeight : 1;
+  }
+
   function buildCardIndex() {
     cardIndex = [...board.querySelectorAll(".event")].map((card) => {
       const event = config.events.find((e) => e.id === card.dataset.eventId) || null;
@@ -290,9 +294,8 @@
   function currentEvent() {
     if (!cardIndex || !cardIndex.length) buildCardIndex();
     if (!cardIndex.length) return null;
-    const boardTop = board.getBoundingClientRect().top + window.scrollY;
     // 화면 위에서 42% 지점을 읽고 있는 위치로 본다.
-    const focusY = window.scrollY + window.innerHeight * 0.42 - boardTop;
+    const focusY = (window.innerHeight * 0.42 - board.getBoundingClientRect().top) / zoomRatio();
     let best = cardIndex[0];
     let bestDist = Infinity;
     for (const entry of cardIndex) {
@@ -357,7 +360,7 @@
     // transform 을 걷어낸 원래 위치를 기준으로 매번 새로 계산한다(누적 방지).
     sticky.style.transform = "";
     const paneTop = pane.getBoundingClientRect().top;
-    const want = 8 - paneTop;
+    const want = (8 - paneTop) / zoomRatio();
     const max = Math.max(0, pane.offsetHeight - sticky.offsetHeight - 8);
     const shift = Math.max(0, Math.min(max, want));
     sticky.style.transform = `translateY(${shift}px)`;

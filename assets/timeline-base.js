@@ -51,6 +51,29 @@
       });
     }
     enableScrollToTop(stickyYearControl,"현재 연도");
+    const timelineSection=board.closest(".timeline-section");
+    const zoomLevels=[1,.8,.65,.5,.4,.3,.22,.16,.12,.08,.05];
+    let zoomLevel=1;
+    function zoomRatio(){return board.offsetHeight?board.getBoundingClientRect().height/board.offsetHeight:1}
+    function setZoom(level,anchorTop){
+      if(!timelineSection)return;
+      const oldRatio=zoomRatio(),localY=anchorTop?0:Math.max(0,-board.getBoundingClientRect().top/oldRatio);
+      zoomLevel=Math.min(1,Math.max(.01,level));
+      timelineSection.style.zoom=zoomLevel===1?"":String(zoomLevel);
+      window.scrollBy(0,board.getBoundingClientRect().top+localY*zoomRatio());
+      zoomLabel.textContent=`${Math.round(zoomLevel*100)}%`;
+      zoomIn.disabled=zoomLevel>=1;zoomOut.disabled=zoomLevel<=zoomLevels.at(-1);
+      updateStickyYear();
+    }
+    const zoomBar=document.createElement("div");zoomBar.className="timeline-zoom";zoomBar.setAttribute("role","group");zoomBar.setAttribute("aria-label","타임라인 확대 축소");
+    const zoomOut=document.createElement("button"),zoomLabel=document.createElement("span"),zoomIn=document.createElement("button"),zoomFit=document.createElement("button");
+    for(const [button,text,label] of [[zoomOut,"−","타임라인 축소"],[zoomIn,"＋","타임라인 확대"],[zoomFit,"전체","타임라인 전체 보기"]]){button.type="button";button.textContent=text;button.setAttribute("aria-label",label);button.title=label}
+    zoomLabel.className="timeline-zoom-level";zoomLabel.textContent="100%";zoomIn.disabled=true;
+    zoomOut.addEventListener("click",()=>setZoom(zoomLevels.find(level=>level<zoomLevel-.001)??zoomLevels.at(-1)));
+    zoomIn.addEventListener("click",()=>setZoom([...zoomLevels].reverse().find(level=>level>zoomLevel+.001)??1));
+    zoomFit.addEventListener("click",()=>setZoom(Math.min(1,(innerHeight-24)/Math.max(1,board.offsetHeight)),true));
+    zoomBar.append(zoomOut,zoomLabel,zoomIn,zoomFit);
+    document.querySelector(".site-header .brand")?.after(zoomBar);
     const dialog = document.getElementById("map-dialog");
     const dialogSvg = d3.select("#dialog-map");
     dialogSvg.append("title").attr("id","dialog-map-title");
@@ -493,7 +516,7 @@
       const stickyBar=document.getElementById("sticky-theater-bar");
       if(!stickyYear||!stickyBar||!currentTimelineMeta)return;
       const {milestones,slotY}=currentTimelineMeta;if(!milestones.length)return;
-      const y=stickyBar.getBoundingClientRect().bottom-board.getBoundingClientRect().top;
+      const y=(stickyBar.getBoundingClientRect().bottom-board.getBoundingClientRect().top)/zoomRatio();
       let current=milestones[0];
       for(const date of milestones){if(slotY.get(date)<=y)current=date;else break}
       const year=Number(current.slice(0,4));
@@ -604,7 +627,7 @@
       card.addEventListener("contextmenu",e=>{e.preventDefault();cancel();openMenu(event.id,e.clientX,e.clientY)});
     }
     function dateAtPosition(timeline,clientY){
-      const y=clientY-timeline.getBoundingClientRect().top;const {milestones,slotY}=currentTimelineMeta;
+      const y=(clientY-timeline.getBoundingClientRect().top)/zoomRatio();const {milestones,slotY}=currentTimelineMeta;
       if(y<=slotY.get(milestones[0]))return milestones[0];if(y>=slotY.get(milestones.at(-1)))return milestones.at(-1);
       for(let index=0;index<milestones.length-1;index++){
         const first=milestones[index],second=milestones[index+1],y1=slotY.get(first),y2=slotY.get(second);if(y<y1||y>y2)continue;
