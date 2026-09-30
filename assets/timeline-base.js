@@ -54,13 +54,14 @@
     const zoomTarget=board.closest("main");
     const zoomLevels=[1,.8,.65,.5,.4,.3,.22,.16,.12,.08,.05];
     let zoomLevel=1;
+    const zoomBase={width:0,full:0};
     function zoomRatio(){return board.offsetHeight?board.getBoundingClientRect().height/board.offsetHeight:1}
     function setZoom(level){
       if(!zoomTarget)return;
       const anchorY=innerHeight/2,localY=(anchorY-board.getBoundingClientRect().top)/zoomRatio();
       zoomLevel=Math.min(1,Math.max(.01,level));
       if(zoomLevel===1){zoomTarget.style.zoom=zoomTarget.style.width=zoomTarget.style.marginLeft=""}
-      else{const width=zoomTarget.style.width?parseFloat(zoomTarget.style.width):zoomTarget.getBoundingClientRect().width;zoomTarget.style.width=`${width}px`;zoomTarget.style.marginLeft=`${width*(1-zoomLevel)/2/zoomLevel}px`;zoomTarget.style.zoom=String(zoomLevel)}
+      else{if(!zoomTarget.style.zoom){zoomBase.width=zoomTarget.getBoundingClientRect().width;zoomBase.full=zoomBase.width+Math.max(0,timelineScroll.scrollWidth-timelineScroll.clientWidth)}zoomTarget.style.zoom=String(zoomLevel);for(let pass=0;pass<3;pass++){const width=Math.min(zoomBase.width/zoomLevel,zoomBase.full);zoomTarget.style.width=`${width}px`;zoomTarget.style.marginLeft=`${Math.max(0,(zoomBase.width-width*zoomLevel)/2/zoomLevel)}px`;const extra=timelineScroll.scrollWidth-timelineScroll.clientWidth;if(extra<=0||width>=zoomBase.width/zoomLevel)break;zoomBase.full+=extra}}
       if(localY>0)window.scrollBy(0,board.getBoundingClientRect().top+localY*zoomRatio()-anchorY);
       zoomLabel.textContent=`${Math.round(zoomLevel*100)}%`;
       zoomIn.disabled=zoomReset.disabled=zoomLevel>=1;zoomOut.disabled=zoomLevel<=zoomLevels.at(-1);
