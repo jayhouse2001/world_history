@@ -485,6 +485,7 @@
       const year=Number(current.slice(0,4));
       const label=year<0?`기원전 ${-year}년`:`${year}년`;
       if(stickyYear.textContent!==label)stickyYear.textContent=label;
+      stickyBar.querySelectorAll(".sticky-theater-status").forEach(node=>{const status=theaterDefs.find(theater=>theater.id===node.dataset.laneId)?.status||[];const text=status.filter(item=>item.from<=current).at(-1)?.label||"";if(node.textContent!==text)node.textContent=text});
     }
     function render(){
       const scrollLeft=timelineScroll.scrollLeft;
@@ -525,7 +526,7 @@
       theaterDefs.forEach(theater=>{
         const theaterEvents=events.filter(event=>event.theater===theater.id);
         const stickyLabel=document.createElement("div");stickyLabel.className="sticky-theater-label";enableScrollToTop(stickyLabel,theater.name);
-        const name=document.createElement("strong");name.textContent=theater.name;const count=document.createElement("span");count.textContent=`${theaterEvents.length}개 사건`;stickyLabel.append(name,count);stickyTrack.appendChild(stickyLabel);
+        const name=document.createElement("strong");name.textContent=theater.name;const count=document.createElement("span");if(theater.status?.length){count.className="sticky-theater-status";count.dataset.laneId=theater.id}else count.textContent=`${theaterEvents.length}개 사건`;stickyLabel.append(name,count);stickyTrack.appendChild(stickyLabel);
         const lane=document.createElement("section");lane.className="theater-lane";lane.setAttribute("aria-labelledby",`${theater.id}-title`);
         const heading=document.createElement("h3");heading.id=`${theater.id}-title`;heading.className="sr-only";heading.textContent=theater.name;
         const timeline=document.createElement("div");timeline.className="timeline";timeline.setAttribute("aria-label",`${theater.name} 사건 추가 영역. 길게 누르거나 우클릭하세요.`);lane.append(heading,timeline);
