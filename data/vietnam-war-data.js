@@ -65,7 +65,12 @@ const events = [
     id:"vietnam-us-tonkin",theater:"usa",sortDate:"1964-08-07",
     date:"1964년 8월 2일 교전 · 8월 7일 결의 통과",title:"통킹만 사건 · 통킹만 결의",
     summary:"통킹만에서 미 구축함과 북베트남 어뢰정의 교전이 보고되자, 의회가 대통령에게 군사력 사용 권한을 넘겨주는 결의를 통과시켰다.",
-    detail:"8월 2일 구축함 매덕스함이 북베트남 어뢰정과 교전했고, 8월 4일 두 번째 공격이 보고됐다. 두 번째 공격은 이후 실제로 없었던 것으로 밝혀졌다.\n\n결의안은 하원 416 대 0, 상원 88 대 2로 통과됐다. 선전포고 없이 전쟁을 확대할 법적 근거가 됐다."
+    detail:"8월 2일 구축함 매덕스함이 북베트남 어뢰정과 교전했고, 8월 4일 두 번째 공격이 보고됐다. 두 번째 공격은 이후 실제로 없었던 것으로 밝혀졌다.\n\n결의안은 하원 416 대 0, 상원 88 대 2로 통과됐다. 선전포고 없이 전쟁을 확대할 법적 근거가 됐다.",
+    mapDesign:"war-v1",mapNote:commonNote,mapView:[[103.65,15.81],[110.63,15.81],[110.63,20.29],[103.65,20.29]],
+    routes:[["다낭 앞바다",108.6,16.4,"혼메섬 앞바다",106.4,19.2,"allied","naval"],["혼메섬",105.93,19.37,"8월 2일 교전 해역",106.75,19.7,"axis","naval"],["제7함대 항모",108.2,17.9,"빈 유류시설",105.68,18.68,"allied","air"]],
+    zones:[{kind:"contested",side:"neutral",coordinates:[[106.8,19],[107.25,19],[107.25,19.4],[106.8,19.4]],label:"8월 4일 보고 해역 (실제 공격 없음)",labelAt:[107.02,19.2]}],
+    units:[{type:"ship",side:"allied",at:[106.75,19.55],heading:200,label:"매덕스함",showLabel:false},{type:"ship",side:"axis",at:[106.3,19.55],heading:60,label:"북베트남 어뢰정",showLabel:false},{type:"bomber",side:"allied",at:[107,18.3],heading:250,label:"8월 5일 보복 공습",showLabel:false}],
+    legend:{title:"표현 범례",territories:[alliedTerritory,axisTerritory],routes:[{side:"allied",label:"매덕스함 항로·보복 공습"},{side:"axis",label:"어뢰정 출격"}],units:[{type:"ship",side:"allied",label:"매덕스함"},{type:"ship",side:"axis",label:"북베트남 어뢰정"},{type:"bomber",side:"allied",label:"보복 공습"}],colors:[{side:"allied",label:"파랑: 미 해군"},{side:"axis",label:"주황: 북베트남군"}]}
   },
   {
     id:"vietnam-us-escalation",theater:"usa",sortDate:"1965-03-02",
@@ -289,13 +294,23 @@ const events = [
     id:"vietnam-kr-dove",theater:"korea",sortDate:"1965-02-25",
     date:"1965년 2월 25일부터 도착",title:"비둘기부대 · 건설지원단 파견",
     summary:"공병과 경비 병력 약 2천 명으로 이뤄진 건설지원단 비둘기부대가 사이공 북쪽 디안에 자리 잡았다. 도로·교량 건설과 대민 지원을 맡았다.",
-    detail:"비둘기부대는 비전투부대였지만 자체 경비를 위한 무장 병력을 포함했다. 미국은 이 무렵부터 한국에 전투부대 파병을 본격적으로 요청하기 시작했다."
+    detail:"비둘기부대는 비전투부대였지만 자체 경비를 위한 무장 병력을 포함했다. 미국은 이 무렵부터 한국에 전투부대 파병을 본격적으로 요청하기 시작했다.",
+    mapDesign:"war-v1",mapNote:commonNote,mapView:[[106.38,10.13],[107.73,10.13],[107.73,11.03],[106.38,11.03]],
+    routes:[["남중국해",107.4,10.25,"사이공",106.71,10.77,"allied","naval"],["사이공",106.71,10.77,"디안",106.77,10.91,"allied","land"]],
+    zones:[],
+    units:[{type:"truck",side:"allied",at:[106.77,10.91],heading:0,label:"비둘기부대",showLabel:false}],
+    legend:{title:"표현 범례",territories:[alliedTerritory],routes:[{side:"allied",label:"비둘기부대 이동"}],units:[{type:"truck",side:"allied",label:"건설지원단"}],colors:[{side:"allied",label:"파랑: 한국군"}]}
   },
   {
     id:"vietnam-kr-combat-troops",theater:"korea",sortDate:"1965-10-09",
     date:"1965년 10월 9일 청룡 · 10월 맹호 상륙",title:"청룡·맹호부대 · 전투부대 파병",
     summary:"국회가 8월 13일 전투부대 파병을 동의한 뒤, 해병 제2여단 청룡부대가 깜라인에, 수도사단 맹호부대가 꾸이년에 상륙했다.",
-    detail:"파병 대가로 한국은 한국군 현대화 지원과 주한미군 유지, 경제 원조를 요구했다. 파병 반대 여론과 야당의 반발 속에 동의안이 통과됐다.\n\n한국군은 중부 해안의 빈딘·푸옌·꽝응아이 일대를 맡아 독자적인 작전 지역을 운영했다."
+    detail:"파병 대가로 한국은 한국군 현대화 지원과 주한미군 유지, 경제 원조를 요구했다. 파병 반대 여론과 야당의 반발 속에 동의안이 통과됐다.\n\n한국군은 중부 해안의 빈딘·푸옌·꽝응아이 일대를 맡아 독자적인 작전 지역을 운영했다.",
+    mapDesign:"war-v1",mapNote:commonNote,mapView:[[107.38,11.39],[111.54,11.39],[111.54,14.13],[107.38,14.13]],
+    routes:[["깜라인 앞바다",109.75,11.75,"깜라인",109.17,11.92,"allied","landing"],["꾸이년 앞바다",109.75,13.65,"꾸이년",109.22,13.77,"allied","landing"]],
+    zones:[],
+    units:[{type:"landing",side:"allied",at:[109.3,11.9],heading:270,label:"청룡부대",showLabel:false},{type:"landing",side:"allied",at:[109.35,13.75],heading:270,label:"맹호부대",showLabel:false}],
+    legend:{title:"표현 범례",territories:[alliedTerritory],routes:[{side:"allied",label:"청룡·맹호부대 상륙"}],units:[{type:"landing",side:"allied",label:"한국군 상륙부대"}],colors:[{side:"allied",label:"파랑: 한국군"}]}
   },
   {
     id:"vietnam-kr-brown-memo",theater:"korea",sortDate:"1966-03-07",
@@ -307,13 +322,23 @@ const events = [
     id:"vietnam-kr-duc-co",theater:"korea",sortDate:"1966-08-09",
     date:"1966년 8월 9~10일",title:"두코 전투",
     summary:"캄보디아 국경 가까운 두코에서 맹호부대 기갑연대 9중대가 북베트남군 대대 규모의 야간 공격을 막아냈다.",
-    detail:"중대는 국경 작전에서 막 돌아온 상태였다. 자정 무렵 기지 서쪽에서 공격이 시작됐고 백병전까지 벌어진 끝에 진지를 지켰다.\n\n한국군이 북베트남 정규군과 정면으로 맞선 초기 대표 전투로 꼽힌다."
+    detail:"중대는 국경 작전에서 막 돌아온 상태였다. 자정 무렵 기지 서쪽에서 공격이 시작됐고 백병전까지 벌어진 끝에 진지를 지켰다.\n\n한국군이 북베트남 정규군과 정면으로 맞선 초기 대표 전투로 꼽힌다.",
+    mapDesign:"war-v1",mapNote:commonNote,mapView:[[107,13.39],[108.25,13.39],[108.25,14.21],[107,14.21]],
+    routes:[["캄보디아 국경",107.47,13.72,"두코 9중대 진지",107.63,13.79,"axis","land"]],
+    zones:[{kind:"operation",side:"allied",coordinates:[[107.6,13.76],[107.66,13.76],[107.66,13.82],[107.6,13.82]]}],
+    units:[{type:"infantry",side:"allied",at:[107.63,13.79],heading:250,label:"맹호부대 기갑연대 9중대",showLabel:false},{type:"infantry",side:"axis",at:[107.53,13.75],heading:70,label:"북베트남군",showLabel:false}],
+    legend:{title:"표현 범례",territories:[alliedTerritory,axisTerritory],routes:[{side:"axis",label:"북베트남군 야간 공격"}],units:[{type:"infantry",side:"allied",label:"맹호부대 9중대"},{type:"infantry",side:"axis",label:"북베트남군"}],colors:[{side:"allied",label:"파랑: 한국군"},{side:"axis",label:"주황: 북베트남군"}]}
   },
   {
     id:"vietnam-kr-tra-binh-dong",theater:"korea",sortDate:"1967-02-14",
     date:"1967년 2월 14~15일",title:"짜빈동 전투",
     summary:"꽝응아이성 짜빈동에서 청룡부대 11중대가 연대 규모 북베트남군·베트콩의 기습을 약 4시간 근접전 끝에 격퇴했다.",
-    detail:"중대 진지는 새벽에 철조망이 뚫리며 안쪽까지 밀렸지만 역습으로 되찾았다. 중대원 전원이 1계급 특진했다.\n\n`신화를 남긴 해병`이라는 구호가 이 전투에서 나왔다."
+    detail:"중대 진지는 새벽에 철조망이 뚫리며 안쪽까지 밀렸지만 역습으로 되찾았다. 중대원 전원이 1계급 특진했다.\n\n`신화를 남긴 해병`이라는 구호가 이 전투에서 나왔다.",
+    mapDesign:"war-v1",mapNote:commonNote,mapView:[[108.26,14.92],[109.19,14.92],[109.19,15.53],[108.26,15.53]],
+    routes:[["서쪽 산지",108.6,15.2,"짜빈동 11중대 진지",108.72,15.25,"axis","land"]],
+    zones:[{kind:"operation",side:"allied",coordinates:[[108.7,15.23],[108.74,15.23],[108.74,15.27],[108.7,15.27]]}],
+    units:[{type:"infantry",side:"allied",at:[108.72,15.25],heading:240,label:"청룡부대 11중대",showLabel:false},{type:"infantry",side:"axis",at:[108.65,15.22],heading:60,label:"북베트남군·베트콩",showLabel:false}],
+    legend:{title:"표현 범례",territories:[alliedTerritory,axisTerritory],routes:[{side:"axis",label:"연대 규모 기습"}],units:[{type:"infantry",side:"allied",label:"청룡부대 11중대"},{type:"infantry",side:"axis",label:"북베트남군·베트콩"}],colors:[{side:"allied",label:"파랑: 한국군"},{side:"axis",label:"주황: 공산군"}]}
   },
   {
     id:"vietnam-kr-jan21",theater:"korea",sortDate:"1968-01-21",
@@ -331,7 +356,12 @@ const events = [
     id:"vietnam-kr-an-khe",theater:"korea",sortDate:"1972-04-11",
     date:"1972년 4월 11~26일",title:"안케 패스 전투 · 638고지",
     summary:"부활절 대공세 중 북베트남군이 19번 도로 안케 고개를 끊자, 맹호부대가 16일간의 전투로 638고지를 되찾고 도로를 다시 열었다.",
-    detail:"안케 고개는 해안 꾸이년과 중부고원 쁠래이꾸를 잇는 보급로의 요충지였다. 한국군은 173명이 전사하고 400여 명이 다쳤다.\n\n철수를 앞둔 한국군의 마지막 대규모 전투였다."
+    detail:"안케 고개는 해안 꾸이년과 중부고원 쁠래이꾸를 잇는 보급로의 요충지였다. 한국군은 173명이 전사하고 400여 명이 다쳤다.\n\n철수를 앞둔 한국군의 마지막 대규모 전투였다.",
+    mapDesign:"war-v1",mapNote:commonNote,mapView:[[108.04,13.09],[110.01,13.09],[110.01,14.39],[108.04,14.39]],
+    routes:[["쁠래이꾸 방면",108.3,14,"안케 고개",108.76,13.98,"axis","land"],["꾸이년",109.22,13.77,"638고지",108.8,13.97,"allied","land"]],
+    zones:[{kind:"contested",side:"axis",coordinates:[[108.7,13.93],[108.84,13.93],[108.84,14.03],[108.7,14.03]],label:"19번 도로 차단 구간",labelAt:[108.77,14]}],
+    units:[{type:"infantry",side:"axis",at:[108.74,14],heading:90,label:"북베트남군",showLabel:false},{type:"tank",side:"allied",at:[108.95,13.9],heading:290,label:"맹호부대",showLabel:false}],
+    legend:{title:"표현 범례",territories:[alliedTerritory,axisTerritory],routes:[{side:"axis",label:"북베트남군 도로 차단"},{side:"allied",label:"맹호부대 탈환"}],units:[{type:"infantry",side:"axis",label:"북베트남군"},{type:"tank",side:"allied",label:"맹호부대"}],colors:[{side:"allied",label:"파랑: 한국군"},{side:"axis",label:"주황: 북베트남군"}]}
   },
   {
     id:"vietnam-kr-withdrawal",theater:"korea",sortDate:"1973-01-30",

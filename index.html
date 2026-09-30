@@ -1025,6 +1025,18 @@
       .sort((a, b) => Number(a.dataset.startYear) - Number(b.dataset.startYear))
       .forEach((card) => eventGrid.appendChild(card));
 
+    eventCards
+      .filter((card) => card.dataset.upcoming !== 'true')
+      .forEach(async (card) => {
+        try {
+          const response = await fetch(card.getAttribute('href'), { cache: 'no-cache' });
+          if (!response.ok) return;
+          const version = (await response.text()).match(/class="page-version">\s*(v[\d.]+)/)?.[1];
+          const status = card.querySelector('.status');
+          if (version && status) status.textContent = `열람 가능 · ${version}`;
+        } catch {}
+      });
+
     document.querySelectorAll('[data-upcoming="true"]').forEach((card) => {
       card.addEventListener('click', (event) => {
         event.preventDefault();
